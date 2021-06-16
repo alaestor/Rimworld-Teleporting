@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using Verse;
@@ -86,30 +86,13 @@ namespace alaestor_teleporting
 			{
 				yield return new Command_Action
 				{
-					defaultLabel = "Cooldown",
-					defaultDesc = "Reset cooldown to 0",
+					defaultLabel = "MakeCoolDebugGizmo_Label".Translate(),
+					defaultDesc = "MakeCoolDebugGizmo_Desc".Translate(), //"Reset cooldown to 0",
 					activateSound = SoundDef.Named("Click"),
 					action = delegate { this.Reset(); }
 				};
-
-				/*
-				// Key-Binding 1
-				Command_Action opt1;
-				opt1 = new Command_Action();
-				opt1.icon = X2_Building_AIRobotRechargeStation.UI_ButtonGoLeft;
-				opt1.defaultLabel = "";// "LEFT";
-				opt1.defaultDesc = "Go 4 left";
-				opt1.hotKey = KeyBindingDefOf.Misc5;
-				opt1.activateSound = SoundDef.Named("Click");
-				opt1.action = delegate { Debug_ForceGotoDistance(-4, 0); };
-				opt1.disabled = false;
-				opt1.disabledReason = "";
-				opt1.groupKey = 1234567 + 1;
-				yield return opt1;
-				*/
 			}
 		}
-
 	}
 
 	public class CompProperties_Cooldown : CompProperties
