@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Verse;
@@ -8,9 +8,9 @@ namespace alaestor_teleporting
 	public class CompCooldown : ThingComp
 	{
 		public CompProperties_Cooldown Props => (CompProperties_Cooldown)this.props;
-		public int ShortCooldownTicks => Props != null ? Props.ShortCooldownTicks : 0;
-		public int LongCooldownTicks => Props != null ? Props.LongCooldownTicks : 0;
 		public int Remaining;
+
+		// TODO display seconds remaining (see refuelable fuel burn time)
 
 		public bool IsOnCooldown => this.Remaining > 0;
 		public static implicit operator bool(CompCooldown c) => c.IsOnCooldown;
@@ -22,9 +22,25 @@ namespace alaestor_teleporting
 			this.Remaining = 0;
 		}
 
+		public void Set(int ticks)
+		{
+			if (ticks > 0) this.Remaining = ticks;
+			else this.Remaining = 0;
+		}
+
+		public void SetSeconds(int seconds)
+		{
+			this.Set(seconds * 60);
+		}
+
 		public void Add(int ticks)
 		{
 			this.Remaining += ticks;
+		}
+
+		public void AddSeconds(int seconds)
+		{
+			this.Remaining += seconds * 60;
 		}
 
 		public void Subtract(int ticks)
@@ -33,18 +49,16 @@ namespace alaestor_teleporting
 			{
 				if (this.Remaining - ticks >= 0) this.Remaining -= ticks;
 				else this.Remaining = 0;
-
 			}
 		}
 
-		public void SetToShortCooldown(bool force = false)
+		public void SubtractSeconds(int seconds)
 		{
-			if (this.Remaining == 0 || force) this.Remaining = this.ShortCooldownTicks;
-		}
-
-		public void SetToLongCooldown(bool force = false)
-		{
-			if (this.Remaining == 0 || force) this.Remaining = this.LongCooldownTicks;
+			if (this.Remaining > 0)
+			{
+				if (this.Remaining - (seconds * 60) >= 0) this.Remaining -= seconds * 60;
+				else this.Remaining = 0;
+			}
 		}
 
 		public override void CompTick()
@@ -100,9 +114,6 @@ namespace alaestor_teleporting
 
 	public class CompProperties_Cooldown : CompProperties
 	{
-		public int ShortCooldownTicks;
-		public int LongCooldownTicks;
-
 		public CompProperties_Cooldown()
 		{
 			this.compClass = typeof(CompCooldown);
