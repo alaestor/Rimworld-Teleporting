@@ -101,23 +101,54 @@ namespace alaestor_teleporting
 
 		public void TryStartTeleport(Pawn controllingPawn, bool longRangeFlag)
 		{
-			if (this.cooldownComp)
-				return;
-
-			if (longRangeFlag)
-			{
-				// if fuel > big gulp, fuel-= big gulp, else return
-				this.cooldownComp.SetToLongCooldown();
+			if (TeleportingMod.settings.enableCooldown)
+			{ // sanity check
+				if (this.cooldownComp != null)
+				{
+					if (this.cooldownComp.IsOnCooldown)
+					{
+						Log.Error("Tried to start a teleport but console was on cooldown");
+						return;
+					}
+				}
+				else Log.Error("Teleporting: cooldown is enabled but cooldownComp is null");
 			}
-			else
+
+			if (TeleportBehavior.DoTeleport(longRangeFlag))
 			{
-				// if fuel > small gulp, fuel-= small gulp, else return
-				this.cooldownComp.SetToShortCooldown();
+				if (TeleportingMod.settings.enableCooldown)
+				{
+					int cooldownTicks = (longRangeFlag ? TeleportingMod.settings.longRange_CooldownDuration : TeleportingMod.settings.shortRange_CooldownDuration) * 60;
+					if (TeleportingMod.settings.enableIntelectDivisor)
+					{
+						int intelect = controllingPawn.skills.GetSkill(SkillDefOf.Intellectual).Level;
+						double multiplier = (double)intelect / TeleportingMod.settings.intelectDivisor;
+
+						
+						if (multiplier > 0.0)
+						{
+							if (multiplier >= 1.0)
+							{
+								cooldownTicks = 0; // no cooldown, >= 100% reduction
+							}
+							else cooldownTicks -= (int)(cooldownTicks * multiplier);
+						}
+						/*
+						Log.Message("intelect:   \t" + intelect.ToString());
+						Log.Message("divisor:    \t" + TeleportingMod.settings.intelectDivisor.ToString());
+						Log.Message("multiplier: \t" + multiplier.ToString() + " (" + ((double)intelect / TeleportingMod.settings.intelectDivisor).ToString() + ")" );
+						Log.Message("reduction:  \t" + (cooldownTicks * multiplier).ToString());
+						Log.Message("Cooldown:   \t" + cooldownTicks.ToString() + " (" + (cooldownTicks / 60).ToString() + " seconds) from " + ((longRangeFlag ? TeleportingMod.settings.longRange_CooldownDuration : TeleportingMod.settings.shortRange_CooldownDuration) * 60).ToString());
+						*/
+					}
+					this.cooldownComp.Set(cooldownTicks);
+				}
+
+				if (TeleportingMod.settings.enableFuel)
+				{
+					this.refuelableComp.ConsumeFuel(longRangeFlag ? TeleportingMod.settings.longRange_FuelCost : TeleportingMod.settings.shortRange_FuelCost);
+				}
 			}
-
-			//this.cooldownComp.subtract(controllingPawn intelect * 10);
-
-			TeleportBehavior.DoTeleport(longRangeFlag);
 		}
 
 		public override IEnumerable<Gizmo> GetGizmos()
