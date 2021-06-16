@@ -77,6 +77,15 @@ namespace alaestor_teleporting
 			}
 		}
 
+		public override string CompInspectStringExtra()
+		{
+			if (this.IsOnCooldown)
+			{
+				return "IsOnCooldown_Label".Translate() + ": " + ((int)(Remaining / 60)).ToString() + " seconds remaining";
+			}
+			else return "";
+		}
+
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
