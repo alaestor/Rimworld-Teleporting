@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--=============== Chemfuel ====================-->
+  
+  <ThingDef ParentName="ResourceBase">
+    <defName>TeleportCartridge</defName>
+    <label>Teleport Cartridge</label>
+    <description>A one-time use teleport cartridge which contains unique intraversal membrane entanglement equations and time-relative spatial waveform catalysts necessary to facilitate complex hyperdimensional space-time folding.\n\nAs one of the lead scientists on the project explained: "it makey the thingy go brrr"</description>
+    <tickerType>Normal</tickerType>
+    <graphicData>
+      <texPath>Things/Item/Resource/Chemfuel</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.85</drawSize>
+    </graphicData>
+    <stackLimit>30</stackLimit>
+    <healthAffectsPrice>false</healthAffectsPrice>
+    <statBases>
+      <MaxHitPoints>10</MaxHitPoints>
+      <MarketValue>100</MarketValue> <!-- TODO calc -->
+      <Mass>0.02</Mass>
+      <Flammability>1.5</Flammability>
+      <DeteriorationRate>1.0</DeteriorationRate>
+    </statBases>
+    <thingCategories><li>Manufactured</li></thingCategories>
+    <!--comps></comps-->
+  </ThingDef>
+  
+</Defs>

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>TeleportConsole</defName>
+    <label>teleport console</label>
+    <description>Placeholder text</description>
+    <!--thingClass>Building_CommsConsole</thingClass-->
+	<thingClass>alaestor_teleporting.Building_TeleportConsole</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Misc/CommsConsole</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(5,4)</drawSize>
+      <damageData><rect>(0,0,3,1.8)</rect><cornerBL>Damage/Corner</cornerBL><cornerBR>Damage/Corner</cornerBR></damageData>
+      <shadowData><volume>(3,0.5,2)</volume></shadowData>
+    </graphicData>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <blockWind>true</blockWind>
+    <castEdgeShadows>false</castEdgeShadows>
+    <fillPercent>0.5</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases><MaxHitPoints>250</MaxHitPoints><WorkToBuild>2200</WorkToBuild><Flammability>0.6</Flammability></statBases>
+    <size>(3,2)</size>
+    <building><destroySound>BuildingDestroyed_Metal_Big</destroySound></building>
+    <costList>
+      <Steel>120</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <defaultPlacingRot>South</defaultPlacingRot>
+    <interactionCellOffset>(0,0,1)</interactionCellOffset>
+    <hasInteractionCell>true</hasInteractionCell>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <designationCategory>Misc</designationCategory>
+	<tickerType>Normal</tickerType>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <shortCircuitInRain>true</shortCircuitInRain>
+        <basePowerConsumption>200</basePowerConsumption>
+      </li>
+	  <li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+	  <li Class="CompProperties_Refuelable">
+        <fuelConsumptionRate>0</fuelConsumptionRate>
+        <fuelCapacity>30.0</fuelCapacity>
+        <fuelFilter><thingDefs><li>TeleportCartridge</li></thingDefs></fuelFilter>
+        <showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
+      </li>
+	  <li Class="CompProperties_Flickable"/>
+      <li Class="CompProperties_Breakdownable"/>
+    </comps>
+    <designationHotKey>Misc3</designationHotKey>
+    <placeWorkers>
+      <li>PlaceWorker_PreventInteractionSpotOverlap</li>
+    </placeWorkers>
+    <!--researchPrerequisites>
+      <li>MicroelectronicsBasics</li>
+    </researchPrerequisites-->
+    <constructionSkillPrerequisite>15</constructionSkillPrerequisite>
+  </ThingDef>
+
+</Defs>

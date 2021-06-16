@@ -1,0 +1,5 @@
+*.dll
+Assemblies/
+Source/Teleporting/obj/
+Source/Teleporting/bin/
+Source/Teleporting/.vs/

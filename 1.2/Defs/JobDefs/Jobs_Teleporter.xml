@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>UseTeleportConsole_ShortRange</defName>
+    <driverClass>alaestor_teleporting.JobDriver_UseTeleportConsole_ShortRange</driverClass>
+    <reportString>using teleport console.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
+  <JobDef>
+    <defName>UseTeleportConsole_LongRange</defName>
+    <driverClass>alaestor_teleporting.JobDriver_UseTeleportConsole_LongRange</driverClass>
+    <reportString>using teleport console.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
+</Defs>
