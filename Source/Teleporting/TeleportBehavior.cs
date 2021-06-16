@@ -34,7 +34,7 @@ namespace alaestor_teleporting
 			// move from, to
 		}
 
-		public static void DoTeleport(bool longRangeFlag)
+		public static bool DoTeleport(bool longRangeFlag)
 		{
 			if (longRangeFlag)
 			{
@@ -48,6 +48,8 @@ namespace alaestor_teleporting
 			}
 
 			// actually teleport
+
+			return true;
 		}
 	}
 }// namespace alaestor_teleporting
