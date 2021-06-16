@@ -60,10 +60,10 @@ namespace alaestor_teleporting
 				return new FloatMenuOption((string)"CannotUseNoPower".Translate(), (Action)null);
 			else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
 				return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Manipulation.label, myPawn.Named("PAWN"))), (Action)null);
-			else if (this.cooldownComp != null && this.cooldownComp) // on cooldown
-				return new FloatMenuOption((string)"CannotUseCooldown".Translate(), (Action)null); // TODO lang
+			else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
+				return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
 			else if (this.CanUseConsoleNow)
-				return (FloatMenuOption)null;
+				return (FloatMenuOption)null; // yes
 			Log.Error(myPawn.ToString() + " could not use teleport console for unknown reason.");
 			return new FloatMenuOption("Cannot use now", (Action)null);
 		}
