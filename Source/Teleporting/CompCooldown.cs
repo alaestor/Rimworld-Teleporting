@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Verse;
@@ -8,24 +8,24 @@ namespace alaestor_teleporting
 	public class CompCooldown : ThingComp
 	{
 		public CompProperties_Cooldown Props => (CompProperties_Cooldown)this.props;
-		public int Remaining;
+		public int remaining;
 
 		// TODO display seconds remaining (see refuelable fuel burn time)
 
-		public bool IsOnCooldown => this.Remaining > 0;
+		public bool IsOnCooldown => this.remaining > 0;
 		public static implicit operator bool(CompCooldown c) => c.IsOnCooldown;
 
 		// TODO mote / cooldown icon
 
 		public void Reset()
 		{
-			this.Remaining = 0;
+			this.remaining = 0;
 		}
 
 		public void Set(int ticks)
 		{
-			if (ticks > 0) this.Remaining = ticks;
-			else this.Remaining = 0;
+			if (ticks > 0) this.remaining = ticks;
+			else this.remaining = 0;
 		}
 
 		public void SetSeconds(int seconds)
@@ -35,45 +35,45 @@ namespace alaestor_teleporting
 
 		public void Add(int ticks)
 		{
-			this.Remaining += ticks;
+			this.remaining += ticks;
 		}
 
 		public void AddSeconds(int seconds)
 		{
-			this.Remaining += seconds * 60;
+			this.remaining += seconds * 60;
 		}
 
 		public void Subtract(int ticks)
 		{
-			if (this.Remaining > 0)
+			if (this.remaining > 0)
 			{
-				if (this.Remaining - ticks >= 0) this.Remaining -= ticks;
-				else this.Remaining = 0;
+				if (this.remaining - ticks >= 0) this.remaining -= ticks;
+				else this.remaining = 0;
 			}
 		}
 
 		public void SubtractSeconds(int seconds)
 		{
-			if (this.Remaining > 0)
+			if (this.remaining > 0)
 			{
-				if (this.Remaining - (seconds * 60) >= 0) this.Remaining -= seconds * 60;
-				else this.Remaining = 0;
+				if (this.remaining - (seconds * 60) >= 0) this.remaining -= seconds * 60;
+				else this.remaining = 0;
 			}
 		}
 
 		public override void CompTick()
 		{ // ticks every 1/60th second (1t / 60tps)
 			base.CompTick();
-			if (this.Remaining > 0) --this.Remaining;
+			if (this.remaining > 0) --this.remaining;
 		}
 
 		public override void CompTickRare()
 		{ // ticks every 4.16 seconds (250t / 60tps)
 			base.CompTickRare();
-			if (this.Remaining > 0)
+			if (this.remaining > 0)
 			{
-				if (this.Remaining - 250 >= 0) this.Remaining -= 250;
-				else this.Remaining = 0;
+				if (this.remaining - 250 >= 0) this.remaining -= 250;
+				else this.remaining = 0;
 			}
 		}
 
@@ -81,7 +81,7 @@ namespace alaestor_teleporting
 		{
 			if (this.IsOnCooldown)
 			{
-				return "IsOnCooldown_Label".Translate() + ": " + ((int)(Remaining / 60)).ToString() + " seconds remaining";
+				return "IsOnCooldown_Label".Translate() + ": " + ((int)(remaining / 60)).ToString() + " seconds remaining";
 			}
 			else return "";
 		}
