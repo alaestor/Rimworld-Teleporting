@@ -21,16 +21,22 @@ namespace alaestor_teleporting
 
 			// Cooldowns
 			l.GapLine();
-			l.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown);
+			l.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "enableCooldown_tooltip".Translate());
 			if (settings.enableCooldown)
 			{
+				l.CheckboxLabeled("enableIntelectDivisor".Translate(), ref settings.enableIntelectDivisor, tooltip: "intelectDivisor_tooltip".Translate());
+				if (settings.enableIntelectDivisor)
+				{
+					l.TextFieldNumericLabeled<int>("intelectDivisor".Translate(), ref settings.intelectDivisor, ref settings.intelectDivisor_Buffer, min: 1, max: 100);
+					l.Gap();
+				}
 				l.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
 				l.TextFieldNumericLabeled<int>("longRange_CooldownDuration".Translate(), ref settings.longRange_CooldownDuration, ref settings.longRange_CooldownDuration_Buffer);
 			}
 
 			// Fuel
 			l.GapLine();
-			l.CheckboxLabeled("enableFuel".Translate(), ref settings.enableFuel);
+			l.CheckboxLabeled("enableFuel".Translate(), ref settings.enableFuel, tooltip: "enableFuel_tooltip".Translate());
 			if (settings.enableFuel)
 			{
 				l.Gap(10);
@@ -41,7 +47,7 @@ namespace alaestor_teleporting
 
 			// Debug options & Cheats
 			l.GapLine();
-			l.CheckboxLabeled("enableDebugGizmosInGodmode".Translate(), ref settings.enableDebugGizmosInGodmode);
+			l.CheckboxLabeled("enableDebugGizmosInGodmode".Translate(), ref settings.enableDebugGizmosInGodmode, tooltip: "enableDebugGizmosInGodmode_tooltip".Translate());
 
 			// Settings reset
 			l.Gap(100);
