@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -44,11 +44,9 @@ namespace alaestor_teleporting
 		{
 			get
 			{
-				if ((this.Spawned && this.Map.gameConditionManager.ElectricityDisabled) || (this.cooldownComp != null && this.cooldownComp.IsOnCooldown))
-				{
+				if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
 					return false;
-				}
-				else return this.powerComp == null || this.powerComp.PowerOn;
+				return this.powerComp == null || this.powerComp.PowerOn;
 			}
 		}
 
