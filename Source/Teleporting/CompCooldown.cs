@@ -77,6 +77,12 @@ namespace alaestor_teleporting
 			}
 		}
 
+		public override void PostExposeData()
+		{
+			base.PostExposeData();
+			Scribe_Values.Look<int>(ref this.remaining, "Remaining", 0);
+		}
+		
 		public override string CompInspectStringExtra()
 		{
 			if (this.IsOnCooldown)
