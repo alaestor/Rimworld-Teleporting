@@ -1,4 +1,3 @@
-﻿
 using Verse;
 
 namespace alaestor_teleporting
