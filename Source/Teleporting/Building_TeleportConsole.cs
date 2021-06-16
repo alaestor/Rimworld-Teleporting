@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -78,24 +78,43 @@ namespace alaestor_teleporting
 			}
 			else
 			{
-				// if fuel > FuelConsumption_ShortRange
-				string short_Label = "Teleport Short Range"; // (string)"CallOnRadio".Translate((NamedArgument)this.GetCallLabel());
+				string short_Label = "ShortRangeTeleport_Label".Translate();
 				Action short_Action = (Action)(() =>
 				{
-					//GiveUseTeleportJob(myPawn);
 					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_ShortRange, (LocalTargetInfo)(Thing)this);
 					myPawn.jobs.TryTakeOrderedJob(job);
 				});
-				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
 
-				// if fuel > FuelConsumption_LongRange
-				string long_Label = "Teleport Long Range"; // (string)"CallOnRadio".Translate((NamedArgument)this.GetCallLabel());
+				string long_Label = "LongRangeTeleport_Label".Translate();
 				Action long_Action = (Action)(() =>
 				{
 					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_LongRange, (LocalTargetInfo)(Thing)this);
 					myPawn.jobs.TryTakeOrderedJob(job);
 				});
-				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
+
+				if (TeleportingMod.settings.enableFuel)
+				{
+					if (this.refuelableComp != null)
+					{
+						if (this.refuelableComp.Fuel >= TeleportingMod.settings.shortRange_FuelCost)
+						{
+							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
+						}
+						else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), (Action)null);
+
+						if (this.refuelableComp.Fuel >= TeleportingMod.settings.longRange_FuelCost)
+						{
+							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
+						}
+						else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), (Action)null);
+					}
+					else Log.Error("Teleporting: fuel is enabled but refuelableComp is null");
+				}
+				else
+				{
+					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
+					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
+				}
 			}
 		}
 
