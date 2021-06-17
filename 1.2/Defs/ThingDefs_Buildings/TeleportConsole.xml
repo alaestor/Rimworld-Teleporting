@@ -2,7 +2,7 @@
 <Defs>
 
   <ThingDef ParentName="BuildingBase">
-    <defName>TeleportConsole</defName>
+    <defName>alaestor_teleporting_TeleportConsole</defName>
     <label>Teleport Console</label>
     <description>Placeholder text</description>
 	<thingClass>alaestor_teleporting.Building_TeleportConsole</thingClass>

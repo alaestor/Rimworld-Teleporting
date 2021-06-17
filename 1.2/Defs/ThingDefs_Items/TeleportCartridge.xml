@@ -4,10 +4,10 @@
   <!--=============== Chemfuel ====================-->
   
   <ThingDef ParentName="ResourceBase">
-    <defName>TeleportCartridge</defName>
+    <defName>alaestor_teleporting_TeleportCartridge</defName>
     <label>Teleport Cartridge</label>
     <description>A one-time use teleport cartridge which contains unique intraversal membrane entanglement equations and time-relative spatial waveform catalysts necessary to facilitate complex hyperdimensional space-time folding.\n\nAs one of the lead scientists on the project explained: "it makey the thingy go brrr"</description>
-    <tickerType>Normal</tickerType>
+    <tickerType>Rare</tickerType>
     <graphicData>
       <texPath>Things/Item/Resource/Chemfuel</texPath>
       <graphicClass>Graphic_Single</graphicClass>
