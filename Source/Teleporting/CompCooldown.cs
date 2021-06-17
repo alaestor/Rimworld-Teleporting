@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Verse;
+using UnityEngine;
 
 namespace alaestor_teleporting
 {
@@ -9,12 +10,8 @@ namespace alaestor_teleporting
 		public CompProperties_Cooldown Props => (CompProperties_Cooldown)this.props;
 		public int remaining;
 
-		// TODO display seconds remaining (see refuelable fuel burn time)
-
 		public bool IsOnCooldown => this.remaining > 0;
 		public static implicit operator bool(CompCooldown c) => c.IsOnCooldown;
-
-		// TODO mote / cooldown icon
 
 		public void Reset()
 		{
@@ -81,7 +78,20 @@ namespace alaestor_teleporting
 			base.PostExposeData();
 			Scribe_Values.Look<int>(ref this.remaining, "Remaining", 0);
 		}
-		
+
+		public override void PostDraw()
+		{
+			if (this.IsOnCooldown)
+			{// overlay cooldown icon on thing
+				Thing thing = this.parent;
+				float vanillaPulse = (float)(0.300000011920929 + (Math.Sin(((double)Time.realtimeSinceStartup + 397.0 * (double)(thing.thingIDNumber % 571)) * 4.0) + 1.0) * 0.5 * 0.699999988079071);
+				Material material = FadedMaterialPool.FadedVersionOf(MaterialPool.MatFrom("Overlay/Cooldown", ShaderDatabase.MetaOverlay), vanillaPulse);
+				Matrix4x4 matrix = new Matrix4x4();
+				matrix.SetTRS(thing.DrawPos, Quaternion.AngleAxis(0.0f, Vector3.up), new Vector3(0.6f, 1f, 0.6f));
+				Graphics.DrawMesh(MeshPool.plane14, matrix, material, 0);
+			}
+		}
+
 		public override string CompInspectStringExtra()
 		{
 			if (this.IsOnCooldown)
