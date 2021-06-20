@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="CompCooldown.cs" />
     <Compile Include="MyDefs.cs" />
+    <Compile Include="TeleportTargeter.cs" />
     <Compile Include="TeleportingMod.cs" />
     <Compile Include="TeleportingModSettings.cs" />
     <Compile Include="TeleportBehavior.cs" />
