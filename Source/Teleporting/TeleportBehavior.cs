@@ -1,4 +1,4 @@
-﻿using Verse;
+using Verse;
 
 namespace alaestor_teleporting
 {
@@ -34,7 +34,7 @@ namespace alaestor_teleporting
 			// move from, to
 		}
 
-		public static bool DoTeleport(bool longRangeFlag)
+		public static bool DoTeleport(bool longRangeFlag, Thing from)
 		{
 			if (longRangeFlag)
 			{

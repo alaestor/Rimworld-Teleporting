@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -133,7 +133,9 @@ namespace alaestor_teleporting
 				else Log.Error("Teleporting: cooldown is enabled but cooldownComp is null");
 			}
 
-			if (TeleportBehavior.DoTeleport(longRangeFlag))
+			// need to find a way to set cooldown only if teleport succeeds. Callback on success?
+
+			if (TeleportBehavior.DoTeleport(longRangeFlag, this))
 			{
 				if (TeleportingMod.settings.enableCooldown)
 				{
@@ -143,7 +145,7 @@ namespace alaestor_teleporting
 						int intelect = controllingPawn.skills.GetSkill(SkillDefOf.Intellectual).Level;
 						double multiplier = (double)intelect / TeleportingMod.settings.intelectDivisor;
 
-						
+
 						if (multiplier > 0.0)
 						{
 							if (multiplier >= 1.0)
@@ -182,7 +184,7 @@ namespace alaestor_teleporting
 					defaultLabel = "ShortTeleDebugGizmo_Label".Translate(), //"Tele Local",
 					defaultDesc = "ShortTeleDebugGizmo_Desc".Translate(), //"Teleport on map layer",
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { TeleportBehavior.DoTeleport(false); }
+					action = delegate { TeleportBehavior.DoTeleport(false, this); }
 				};
 
 				yield return new Command_Action
@@ -190,7 +192,7 @@ namespace alaestor_teleporting
 					defaultLabel = "LongTeleDebugGizmo_Label".Translate(), //"Tele Far",
 					defaultDesc = "LongTeleDebugGizmo_Desc".Translate(), //"Teleport on world layer",
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { TeleportBehavior.DoTeleport(true); }
+					action = delegate { TeleportBehavior.DoTeleport(true, this); }
 				};
 			}
 		}
