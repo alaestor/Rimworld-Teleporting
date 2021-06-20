@@ -6,7 +6,7 @@ using Verse;
 
 namespace alaestor_teleporting
 {
-	struct TeleportSelectionData
+	struct TeleportTargeterData
 	{
 		public Map destinationMap;
 		public IntVec3 destinationCell;
@@ -114,10 +114,10 @@ namespace alaestor_teleporting
 			}
 		}
 
-		public static void GlobalTeleport(Thing originator, Action<TeleportSelectionData> callback)
+		public static void GlobalTeleport(Thing originator, Action<TeleportTargeterData> callback)
 		{
 			// select map -> select target pawn -> select map -> select target cell
-			TeleportSelectionData tsd_out = new TeleportSelectionData();
+			TeleportTargeterData targeterData_out = new TeleportTargeterData();
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 
 			// select pawn
@@ -127,7 +127,7 @@ namespace alaestor_teleporting
 			{
 				if (targetFrom.IsValid && targetFrom.HasThing && targetFrom.Thing is Pawn pawn)
 				{
-					tsd_out.target = pawn;
+					targeterData_out.target = pawn;
 
 					// select destination
 					TeleportTargeter.StartChoosingMap(globalTarget, gotTo, canChooseLocation: true);
@@ -136,9 +136,9 @@ namespace alaestor_teleporting
 					{
 						if (targetTo.IsValid && targetTo.IsMapTarget && targetTo.Cell.IsValid)
 						{
-							tsd_out.destinationCell = targetTo.Cell;
-							tsd_out.destinationMap = targetTo.Map;
-							callback(tsd_out); // this is how we return the selected targets to the caller
+							targeterData_out.destinationCell = targetTo.Cell;
+							targeterData_out.destinationMap = targetTo.Map;
+							callback(targeterData_out); // this is how we return the selected targets to the caller
 						}
 						else
 						{
@@ -151,12 +151,11 @@ namespace alaestor_teleporting
 					// TODO debug log
 				}
 			}
-
 		}
 
-		public static void LocalTeleport(Thing originator, Action<TeleportSelectionData> callback)
+		public static void LocalTeleport(Thing originator, Action<TeleportTargeterData> callback)
 		{
-			TeleportSelectionData tsd_out = new TeleportSelectionData();
+			TeleportTargeterData targeterData_out = new TeleportTargeterData();
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 
 			// select pawn
@@ -166,7 +165,7 @@ namespace alaestor_teleporting
 			{
 				if (targetFrom.IsValid && targetFrom.HasThing && targetFrom.Thing is Pawn pawn)
 				{
-					tsd_out.target = pawn;
+					targeterData_out.target = pawn;
 
 					// select destination
 					TeleportTargeter.StartChoosingLocal(globalTarget, gotTo, canChooseLocation: true);
@@ -175,9 +174,9 @@ namespace alaestor_teleporting
 					{
 						if (targetTo.IsValid && targetTo.IsMapTarget && targetTo.Cell.IsValid)
 						{
-							tsd_out.destinationCell = targetTo.Cell;
-							tsd_out.destinationMap = targetTo.Map;
-							callback(tsd_out); // this is how we return the selected targets to the caller
+							targeterData_out.destinationCell = targetTo.Cell;
+							targeterData_out.destinationMap = targetTo.Map;
+							callback(targeterData_out); // this is how we return the selected targets to the caller
 						}
 						else
 						{

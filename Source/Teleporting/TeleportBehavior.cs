@@ -4,34 +4,18 @@ namespace alaestor_teleporting
 {
 	class TeleportBehavior
 	{
-		// protected static ??? selectMap()
-		// protected static ??? selectPawn()
-		// protected static ??? selectPos()
-
-		//static private bool ChoseWorldTarget(GlobalTargetInfo target) => ;
-
-		/*
-		struct TeleportSolution
+		public static void ExecuteTeleport(TeleportTargeterData targeterData)
 		{
-			from_map;
-			from_pawn;
-			to_map;
-			to_pos;
-		};
-		*/
-
-		public static void ExecuteTeleport(TeleportSelectionData tsd)
-		{
-			if (tsd.isValid)
+			if (targeterData.isValid)
 			{
 				Log.Message( // TODO remove, testing
-					"target: " + ((Pawn)tsd.target).Name.ToString() + "\n"
-					+ "map: " + tsd.destinationMap.ToString() + " is home: "
-						+ tsd.destinationMap.IsPlayerHome.ToString() + "\n"
-					+ "cell:" + tsd.destinationCell.ToString() + "\n"
+					"target: " + ((Pawn)targeterData.target).Name.ToString() + "\n"
+					+ "map: " + targeterData.destinationMap.ToString() + " is home: "
+						+ targeterData.destinationMap.IsPlayerHome.ToString() + "\n"
+					+ "cell:" + targeterData.destinationCell.ToString() + "\n"
 				);
 
-				TeleportBehavior.ExecuteTeleport(tsd.target, tsd.destinationMap, tsd.destinationCell);
+				TeleportBehavior.ExecuteTeleport(targeterData.target, targeterData.destinationMap, targeterData.destinationCell);
 			}
 			else
 			{
@@ -83,6 +67,10 @@ namespace alaestor_teleporting
 			}
 		}
 
+		// TODO implement callback for cooldown
+		// will probably need to make this class non-static
+		// also, rename DoTeleport and void return
+
 		public static bool DoTeleport(bool longRangeFlag, Thing from)
 		{
 			if (longRangeFlag)
@@ -95,9 +83,6 @@ namespace alaestor_teleporting
 				Log.Message("DoTeleport() SR");
 				TeleportTargeter.LocalTeleport(from, ExecuteTeleport);
 			}
-
-			// actually teleport
-
 			return true;
 		}
 	}
