@@ -6,16 +6,21 @@ using Verse;
 
 namespace alaestor_teleporting
 {
-	struct TeleportTargetSolution
+	struct TeleportSelectionData
 	{
-		public struct Targets
+		public Map destinationMap;
+		public IntVec3 destinationCell;
+		public Thing target;
+		public bool isValid
 		{
-			public GlobalTargetInfo global;
-			public LocalTargetInfo local;
+			get
+			{
+				return target != null
+					&& destinationMap != null
+					&& destinationCell != null
+					&& destinationCell.IsValid;
+			}
 		}
-
-		public TeleportTargetSolution.Targets from;
-		public TeleportTargetSolution.Targets to;
 	}
 
 	class TeleportTargeter
@@ -24,13 +29,13 @@ namespace alaestor_teleporting
 
 		private static void StartChoosingLocal(
 			GlobalTargetInfo globalTarget,
-			Action<TeleportTargetSolution.Targets> callback,
+			Action<GlobalTargetInfo> callback,
 			bool canChoosePawn = false,
 			bool canChooseLocation = false)
 		{
-			MapParent selectedMap = Find.WorldObjects.MapParentAt(globalTarget.Tile);
+			Map selectedMap = Find.WorldObjects.MapParentAt(globalTarget.Tile).Map;
 			//Map Originator = targetOriginator.Map;
-			Current.Game.CurrentMap = selectedMap.Map;
+			Current.Game.CurrentMap = selectedMap;
 			CameraJumper.TryHideWorld();
 
 			TargetingParameters targetParams = new TargetingParameters
@@ -49,23 +54,22 @@ namespace alaestor_teleporting
 			{
 				Find.WorldTargeter.StopTargeting();
 
-				TeleportTargetSolution.Targets ti = new TeleportTargetSolution.Targets();
-				ti.global = globalTarget;
-				ti.local = localTarget;
-
-				callback(ti);
+				if (localTarget.IsValid)
+				{
+					GlobalTargetInfo targetOut = localTarget.ToGlobalTargetInfo(selectedMap);
+					callback(targetOut);
+				}
 			}
 		}
 
 		private static void StartChoosingMap(
 			GlobalTargetInfo startingFrom,
-			Action<TeleportTargetSolution.Targets> callback,
+			Action<GlobalTargetInfo> callback,
 			bool canChoosePawn = false,
 			bool canChooseLocation = false)
 		{
 			CameraJumper.TryJump(startingFrom);
 			Find.WorldSelector.ClearSelection();
-			//int tile = this.targetOriginator.Map.Tile;
 
 			Find.WorldTargeter.BeginTargeting_NewTemp(
 				action: ChoseGlobalTarget,
@@ -85,6 +89,7 @@ namespace alaestor_teleporting
 				}
 				else
 				{
+					// TODO
 					Messages.Message(
 						"MessageTransportPodsDestinationIsInvalid".Translate(),
 						MessageTypeDefOf.RejectInput,
@@ -109,43 +114,80 @@ namespace alaestor_teleporting
 			}
 		}
 
-		public static void GlobalTeleport(Thing originator, Action<TeleportTargetSolution> callback)
+		public static void GlobalTeleport(Thing originator, Action<TeleportSelectionData> callback)
 		{
 			// select map -> select target pawn -> select map -> select target cell
-			TeleportTargetSolution tts = new TeleportTargetSolution();
+			TeleportSelectionData tsd_out = new TeleportSelectionData();
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
+
+			// select pawn
 			TeleportTargeter.StartChoosingMap(globalTarget, gotFrom, canChoosePawn: true);
 
-			void gotFrom(TeleportTargetSolution.Targets tiFrom)
+			void gotFrom(GlobalTargetInfo targetFrom)
 			{
-				tts.from = tiFrom;
-				TeleportTargeter.StartChoosingMap(globalTarget, gotTo, canChooseLocation: true);
-
-				void gotTo(TeleportTargetSolution.Targets tiTo)
+				if (targetFrom.IsValid && targetFrom.HasThing && targetFrom.Thing is Pawn pawn)
 				{
-					tts.to = tiTo;
-					callback(tts); // this is how we return the selected targets to the caller
+					tsd_out.target = pawn;
+
+					// select destination
+					TeleportTargeter.StartChoosingMap(globalTarget, gotTo, canChooseLocation: true);
+
+					void gotTo(GlobalTargetInfo targetTo)
+					{
+						if (targetTo.IsValid && targetTo.IsMapTarget && targetTo.Cell.IsValid)
+						{
+							tsd_out.destinationCell = targetTo.Cell;
+							tsd_out.destinationMap = targetTo.Map;
+							callback(tsd_out); // this is how we return the selected targets to the caller
+						}
+						else
+						{
+							// TODO debug log
+						}
+					}
+				}
+				else
+				{
+					// TODO debug log
 				}
 			}
 
 		}
 
-		public static void LocalTeleport(Thing originator, Action<TeleportTargetSolution> callback)
+		public static void LocalTeleport(Thing originator, Action<TeleportSelectionData> callback)
 		{
-			TeleportTargetSolution tts = new TeleportTargetSolution();
+			TeleportSelectionData tsd_out = new TeleportSelectionData();
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 
+			// select pawn
 			TeleportTargeter.StartChoosingLocal(globalTarget, gotFrom, canChoosePawn: true);
 
-			void gotFrom(TeleportTargetSolution.Targets tiFrom)
+			void gotFrom(GlobalTargetInfo targetFrom)
 			{
-				tts.from = tiFrom;
-				TeleportTargeter.StartChoosingLocal(globalTarget, gotTo, canChooseLocation: true);
-
-				void gotTo(TeleportTargetSolution.Targets tiTo)
+				if (targetFrom.IsValid && targetFrom.HasThing && targetFrom.Thing is Pawn pawn)
 				{
-					tts.to = tiTo;
-					callback(tts); // this is how we return the selected targets to the caller
+					tsd_out.target = pawn;
+
+					// select destination
+					TeleportTargeter.StartChoosingLocal(globalTarget, gotTo, canChooseLocation: true);
+
+					void gotTo(GlobalTargetInfo targetTo)
+					{
+						if (targetTo.IsValid && targetTo.IsMapTarget && targetTo.Cell.IsValid)
+						{
+							tsd_out.destinationCell = targetTo.Cell;
+							tsd_out.destinationMap = targetTo.Map;
+							callback(tsd_out); // this is how we return the selected targets to the caller
+						}
+						else
+						{
+							// TODO debug log
+						}
+					}
+				}
+				else
+				{
+					// TODO debug log
 				}
 			}
 		}

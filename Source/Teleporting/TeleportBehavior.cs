@@ -20,24 +20,67 @@ namespace alaestor_teleporting
 		};
 		*/
 
-		protected static void DoLongRangeTeleport(TeleportTargetSolution tts)
+		public static void ExecuteTeleport(TeleportSelectionData tsd)
 		{
-			// ?? from_map = selectMap();
-			// from_pawn = selectPawn(); // selectPawn(map)?
-			// to_map = selectMap();
-			// to_pos = selectPos(); // selectTile(map)?
-			// move from, to
-			Log.Message("From: tile " + tts.from.global.Tile.ToString() + " cell " + tts.from.local.Cell.ToString());
-			Log.Message("From: tile " + tts.to.global.Tile.ToString() + " cell " + tts.to.local.Cell.ToString());
+			if (tsd.isValid)
+			{
+				Log.Message( // TODO remove, testing
+					"target: " + ((Pawn)tsd.target).Name.ToString() + "\n"
+					+ "map: " + tsd.destinationMap.ToString() + " is home: "
+						+ tsd.destinationMap.IsPlayerHome.ToString() + "\n"
+					+ "cell:" + tsd.destinationCell.ToString() + "\n"
+				);
+
+				TeleportBehavior.ExecuteTeleport(tsd.target, tsd.destinationMap, tsd.destinationCell);
+			}
+			else
+			{
+				// TODO debug log
+			}
 		}
 
-		protected static void DoShortRangeTeleport(TeleportTargetSolution tts)
+		public static void ExecuteTeleport(Thing thing, Map destinationMap, IntVec3 destinationCell)
 		{
-			// from_pawn = selectPawn();
-			// to_pos = selectPos();
-			// move from, to
-			Log.Message("From: tile " + tts.from.global.Tile.ToString() + " cell " + tts.from.local.Cell.ToString());
-			Log.Message("From: tile " + tts.to.global.Tile.ToString() + " cell " + tts.to.local.Cell.ToString());
+			if (thing != null && destinationMap != null && thing.Position != destinationCell)
+			{
+				if (thing is Pawn pawn)
+				{
+					if (pawn.RaceProps.Animal)
+					{
+						pawn.DeSpawn(DestroyMode.Vanish);
+						GenSpawn.Spawn(pawn, destinationCell, destinationMap);
+					}
+					else
+					{
+						if (pawn.IsColonist)
+						{
+							bool drafted = pawn.Drafted;
+							pawn.drafter.Drafted = false;
+							pawn.DeSpawn(DestroyMode.Vanish);
+							GenSpawn.Spawn(pawn, destinationCell, destinationMap);
+							pawn.drafter.Drafted = drafted;
+						}
+						else
+						{
+							pawn.DeSpawn(DestroyMode.Vanish);
+							GenSpawn.Spawn(pawn, destinationCell, destinationMap);
+						}
+					}
+				}
+				/*
+				else
+				{
+					thing.DeSpawn(DestroyMode.Vanish);
+					GenSpawn.Spawn(thing, destination, destinationMap);
+				}
+				*/
+			}
+			else
+			{
+				if (thing == null) Log.Error("Teleport recieved invalid parameters: thing was null");
+				if (destinationMap == null) Log.Error("Teleport recieved invalid parameters: destinationMap was null");
+				if (thing.Position == destinationCell) Log.Error("Teleport tried to move something to where it already is");
+			}
 		}
 
 		public static bool DoTeleport(bool longRangeFlag, Thing from)
@@ -45,12 +88,12 @@ namespace alaestor_teleporting
 			if (longRangeFlag)
 			{
 				Log.Message("DoTeleport() LR");
-				TeleportTargeter.GlobalTeleport(from, DoLongRangeTeleport);
+				TeleportTargeter.GlobalTeleport(from, ExecuteTeleport);
 			}
 			else
 			{
 				Log.Message("DoTeleport() SR");
-				TeleportTargeter.LocalTeleport(from, DoShortRangeTeleport);
+				TeleportTargeter.LocalTeleport(from, ExecuteTeleport);
 			}
 
 			// actually teleport
