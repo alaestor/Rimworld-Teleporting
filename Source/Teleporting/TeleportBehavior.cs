@@ -1,5 +1,5 @@
-﻿using Verse;
-using System;
+﻿using System;
+using Verse;
 
 namespace alaestor_teleporting
 {
@@ -74,23 +74,24 @@ namespace alaestor_teleporting
 
 		public static bool StartTeleportTargetting(bool longRangeFlag, Thing from, Action onSuccessCallback = null)
 		{
-			void GotTeleportTargets(TeleportTargeterData targeterData)
+			if (longRangeFlag)
+			{
+				Log.Message("DoTeleport() LR");
+				TeleportTargeter.GlobalTeleport(from, GotTeleportTargets_Callback);
+			}
+			else
+			{
+				Log.Message("DoTeleport() SR");
+				TeleportTargeter.LocalTeleport(from, GotTeleportTargets_Callback);
+			}
+
+			void GotTeleportTargets_Callback(TeleportTargeterData targeterData)
 			{
 				ExecuteTeleport(targeterData);
 
 				onSuccessCallback?.Invoke();
 			}
 
-			if (longRangeFlag)
-			{
-				Log.Message("DoTeleport() LR");
-				TeleportTargeter.GlobalTeleport(from, GotTeleportTargets);
-			}
-			else
-			{
-				Log.Message("DoTeleport() SR");
-				TeleportTargeter.LocalTeleport(from, GotTeleportTargets);
-			}
 			return true;
 		}
 	}
