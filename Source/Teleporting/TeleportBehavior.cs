@@ -72,7 +72,7 @@ namespace alaestor_teleporting
 		// will probably need to make this class non-static
 		// also, rename DoTeleport and void return
 
-		public static bool StartTeleportTargetting(bool longRangeFlag, Thing from, Action onSuccessCallback = null)
+		public static void StartTeleportTargetting(bool longRangeFlag, Thing from, Action onSuccessCallback = null)
 		{
 			if (longRangeFlag)
 			{
@@ -91,8 +91,6 @@ namespace alaestor_teleporting
 
 				onSuccessCallback?.Invoke();
 			}
-
-			return true;
 		}
 	}
 }// namespace alaestor_teleporting
