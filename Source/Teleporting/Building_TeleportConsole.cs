@@ -121,7 +121,7 @@ namespace alaestor_teleporting
 		public void TryStartTeleport(Pawn controllingPawn, bool longRangeFlag)
 		{
 			if (TeleportingMod.settings.enableCooldown)
-			{ // sanity check
+			{
 				if (this.cooldownComp != null)
 				{
 					if (this.cooldownComp.IsOnCooldown)
@@ -133,9 +133,9 @@ namespace alaestor_teleporting
 				else Log.Error("Teleporting: cooldown is enabled but cooldownComp is null");
 			}
 
-			// need to find a way to set cooldown only if teleport succeeds. Callback on success?
+			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess);
 
-			if (TeleportBehavior.DoTeleport(longRangeFlag, this))
+			void onTeleportSuccess()
 			{
 				if (TeleportingMod.settings.enableCooldown)
 				{
@@ -184,7 +184,7 @@ namespace alaestor_teleporting
 					defaultLabel = "ShortTeleDebugGizmo_Label".Translate(), //"Tele Local",
 					defaultDesc = "ShortTeleDebugGizmo_Desc".Translate(), //"Teleport on map layer",
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { TeleportBehavior.DoTeleport(false, this); }
+					action = delegate { TeleportBehavior.StartTeleportTargetting(false, this); }
 				};
 
 				yield return new Command_Action
@@ -192,7 +192,7 @@ namespace alaestor_teleporting
 					defaultLabel = "LongTeleDebugGizmo_Label".Translate(), //"Tele Far",
 					defaultDesc = "LongTeleDebugGizmo_Desc".Translate(), //"Teleport on world layer",
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { TeleportBehavior.DoTeleport(true, this); }
+					action = delegate { TeleportBehavior.StartTeleportTargetting(true, this); }
 				};
 			}
 		}

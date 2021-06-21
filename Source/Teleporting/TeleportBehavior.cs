@@ -1,4 +1,5 @@
 ﻿using Verse;
+using System;
 
 namespace alaestor_teleporting
 {
@@ -71,17 +72,24 @@ namespace alaestor_teleporting
 		// will probably need to make this class non-static
 		// also, rename DoTeleport and void return
 
-		public static bool DoTeleport(bool longRangeFlag, Thing from)
+		public static bool StartTeleportTargetting(bool longRangeFlag, Thing from, Action onSuccessCallback = null)
 		{
+			void GotTeleportTargets(TeleportTargeterData targeterData)
+			{
+				ExecuteTeleport(targeterData);
+
+				onSuccessCallback?.Invoke();
+			}
+
 			if (longRangeFlag)
 			{
 				Log.Message("DoTeleport() LR");
-				TeleportTargeter.GlobalTeleport(from, ExecuteTeleport);
+				TeleportTargeter.GlobalTeleport(from, GotTeleportTargets);
 			}
 			else
 			{
 				Log.Message("DoTeleport() SR");
-				TeleportTargeter.LocalTeleport(from, ExecuteTeleport);
+				TeleportTargeter.LocalTeleport(from, GotTeleportTargets);
 			}
 			return true;
 		}
