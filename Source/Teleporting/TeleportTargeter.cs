@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using UnityEngine;
@@ -10,9 +10,9 @@ namespace alaestor_teleporting
 	{
 		public static void StartChoosingLocal(
 			GlobalTargetInfo startingFrom,
-			Action<LocalTargetInfo> callback,
+			Action<LocalTargetInfo> result_Callback,
 			TargetingParameters targetParams,
-			Func<LocalTargetInfo, bool> CanTargetValidator = null,
+			Func<LocalTargetInfo, bool> canTargetValidator = null,
 			Texture2D mouseAttachment = null)
 		{
 			Map targetMap = Find.WorldObjects.MapParentAt(startingFrom.Tile).Map;
@@ -24,7 +24,7 @@ namespace alaestor_teleporting
 				targetParams: targetParams,
 				action: ChoseLocalTarget_Callback,
 				highlightAction: null,
-				targetValidator: CanTargetValidator,
+				targetValidator: canTargetValidator,
 				mouseAttachment: mouseAttachment
 			);
 
@@ -34,7 +34,7 @@ namespace alaestor_teleporting
 				Find.Targeter.StopTargeting();
 				if (localTarget.IsValid)
 				{
-					callback(localTarget);
+					result_Callback(localTarget);
 				}
 				else
 				{
@@ -50,13 +50,13 @@ namespace alaestor_teleporting
 
 		public static void StartChoosingGlobal(
 			GlobalTargetInfo startingFrom,
-			Action<GlobalTargetInfo> callback,
+			Action<GlobalTargetInfo> result_Callback,
 			bool canTargetTiles = true,
 			Texture2D mouseAttachment = null,
 			bool closeWorldTabWhenFinished = true,
 			Action onUpdate = null,
-			Func<GlobalTargetInfo, string> ExtraLabelGetter = null,
-			Func<GlobalTargetInfo, bool> CanTargetValidator = null)
+			Func<GlobalTargetInfo, string> extraLabelGetter = null,
+			Func<GlobalTargetInfo, bool> canTargetValidator = null)
 		{
 			CameraJumper.TryJump(startingFrom);
 			Find.WorldSelector.ClearSelection();
@@ -67,8 +67,8 @@ namespace alaestor_teleporting
 				mouseAttachment: mouseAttachment,
 				closeWorldTabWhenFinished: closeWorldTabWhenFinished,
 				onUpdate: onUpdate, //(() => GenDraw.DrawWorldRadiusRing(tile, this.MaxLaunchDistance)),
-				extraLabelGetter: ExtraLabelGetter,
-				canSelectTarget: CanTargetValidator
+				extraLabelGetter: extraLabelGetter,
+				canSelectTarget: canTargetValidator
 			);
 
 			bool ChoseGlobalTarget_Callback(GlobalTargetInfo globalTarget)
@@ -76,7 +76,7 @@ namespace alaestor_teleporting
 				Find.WorldTargeter.StopTargeting();
 				if (globalTarget.IsValid)
 				{
-					callback(globalTarget);
+					result_Callback(globalTarget);
 					return true;
 				}
 				else
@@ -107,13 +107,13 @@ namespace alaestor_teleporting
 		{
 			TeleportTargeter.StartChoosingGlobal(
 				startingFrom: startingFrom,
-				callback: GotGlobalTarget_Callback,
+				result_Callback: GotGlobalTarget_Callback,
 				canTargetTiles: globalCanTargetTiles,
 				mouseAttachment: globalMouseAttachment,
 				closeWorldTabWhenFinished: globalCloseWorldTabWhenFinished,
 				onUpdate: globalOnUpdate,
-				ExtraLabelGetter: globalExtraLabelGetter,
-				CanTargetValidator: globalTargetValidator);
+				extraLabelGetter: globalExtraLabelGetter,
+				canTargetValidator: globalTargetValidator);
 
 			void GotGlobalTarget_Callback(GlobalTargetInfo globalTarget)
 			{
@@ -121,9 +121,9 @@ namespace alaestor_teleporting
 				{
 					TeleportTargeter.StartChoosingLocal(
 						startingFrom: globalTarget,
-						callback: GotLocalTarget_Callback,
+						result_Callback: GotLocalTarget_Callback,
 						targetParams: localTargetParams,
-						CanTargetValidator: localTargetValidator,
+						canTargetValidator: localTargetValidator,
 						mouseAttachment: localMouseAttachment);
 
 					void GotLocalTarget_Callback(LocalTargetInfo localTarget)

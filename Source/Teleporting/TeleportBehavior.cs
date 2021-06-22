@@ -77,7 +77,7 @@ namespace alaestor_teleporting
 			canTargetLocations = true
 		};
 
-		public static void StartLongRangeTeleport(Thing originator, Action onSuccessCallback = null)
+		public static void StartLongRangeTeleport(Thing originator, Action onSuccess_Callback = null)
 		{
 			bool TargetHasLoadedMap(GlobalTargetInfo target)
 			{
@@ -129,12 +129,12 @@ namespace alaestor_teleporting
 				void GotTo_Callback(GlobalTargetInfo toTarget)
 				{
 					if (ExecuteTeleport(fromTarget.Thing, toTarget.Map, toTarget.Cell))
-						onSuccessCallback?.Invoke();
+						onSuccess_Callback?.Invoke();
 				}
 			}
 		}
 
-		public static void StartLocalTeleport(Thing originator, Action onSuccessCallback = null)
+		public static void StartLocalTeleport(Thing originator, Action onSuccess_Callback = null)
 		{
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 			Map localMap = originator.Map;
@@ -148,22 +148,22 @@ namespace alaestor_teleporting
 				void GotTo_Callback(LocalTargetInfo toTarget)
 				{
 					if (ExecuteTeleport(fromTarget.Thing, localMap, toTarget.Cell))
-						onSuccessCallback?.Invoke();
+						onSuccess_Callback?.Invoke();
 				}
 			}
 		}
 
-		public static void StartTeleportTargetting(bool longRangeFlag, Thing originator, Action onSuccessCallback = null)
+		public static void StartTeleportTargetting(bool longRangeFlag, Thing originator, Action onSuccess_Callback = null)
 		{
 			if (longRangeFlag)
 			{
 				Log.Message("DoTeleport() LR");
-				TeleportBehavior.StartLongRangeTeleport(originator, onSuccessCallback);
+				TeleportBehavior.StartLongRangeTeleport(originator, onSuccess_Callback);
 			}
 			else
 			{
 				Log.Message("DoTeleport() SR");
-				TeleportBehavior.StartLocalTeleport(originator, onSuccessCallback);
+				TeleportBehavior.StartLocalTeleport(originator, onSuccess_Callback);
 			}
 		}
 	}
