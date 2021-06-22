@@ -24,11 +24,16 @@ namespace alaestor_teleporting
 			}
 		}
 
-		public static void ExecuteTeleport(Thing thing, Map destinationMap, IntVec3 destinationCell)
+		public static void ExecuteTeleport(
+			Thing thing, Map destinationMap, IntVec3 destinationCell)
 		{
-			if (thing != null && destinationMap != null && thing.Position != destinationCell)
+			if (thing != null && destinationMap != null)
 			{
-				if (thing is Pawn pawn)
+				if (thing.Map == destinationMap && thing.Position == destinationCell)
+				{
+					return;
+				}
+				else if (thing is Pawn pawn)
 				{
 					if (pawn.RaceProps.Animal)
 					{
@@ -52,13 +57,11 @@ namespace alaestor_teleporting
 						}
 					}
 				}
-				/*
-				else
+				else // simple item
 				{
 					thing.DeSpawn(DestroyMode.Vanish);
-					GenSpawn.Spawn(thing, destination, destinationMap);
+					GenSpawn.Spawn(thing, destinationCell, destinationMap);
 				}
-				*/
 			}
 			else
 			{
@@ -67,10 +70,6 @@ namespace alaestor_teleporting
 				if (thing.Position == destinationCell) Log.Error("Teleport tried to move something to where it already is");
 			}
 		}
-
-		// TODO implement callback for cooldown
-		// will probably need to make this class non-static
-		// also, rename DoTeleport and void return
 
 		public static void StartTeleportTargetting(bool longRangeFlag, Thing from, Action onSuccessCallback = null)
 		{
