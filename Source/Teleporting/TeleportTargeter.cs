@@ -6,36 +6,18 @@ using Verse;
 
 namespace alaestor_teleporting
 {
-	struct TeleportTargeterData
-	{
-		public Map destinationMap;
-		public IntVec3 destinationCell;
-		public Thing target;
-		public bool isValid
-		{
-			get
-			{
-				return target != null
-					&& destinationMap != null
-					&& destinationCell != null
-					&& destinationCell.IsValid;
-			}
-		}
-	}
-
 	class TeleportTargeter
 	{
-		public static readonly Texture2D TargeterMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true);
-
-		private static void StartChoosingLocal(
-			GlobalTargetInfo globalTarget,
-			Action<GlobalTargetInfo> callback,
+		public static void StartChoosingLocal(
+			GlobalTargetInfo startingFrom,
+			Action<LocalTargetInfo> callback,
 			TargetingParameters targetParams,
-			Func<LocalTargetInfo, bool> CanTargetValidator = null)
+			Func<LocalTargetInfo, bool> CanTargetValidator = null,
+			Texture2D mouseAttachment = null)
 		{
-			Map selectedMap = Find.WorldObjects.MapParentAt(globalTarget.Tile).Map;
-			//Map Originator = targetOriginator.Map;
-			Current.Game.CurrentMap = selectedMap;
+			Map targetMap = Find.WorldObjects.MapParentAt(startingFrom.Tile).Map;
+			Current.Game.CurrentMap = targetMap;
+			//CameraJumper.TryJump(startingFrom);
 			CameraJumper.TryHideWorld();
 
 			Find.Targeter.BeginTargeting(
@@ -43,24 +25,36 @@ namespace alaestor_teleporting
 				action: ChoseLocalTarget_Callback,
 				highlightAction: null,
 				targetValidator: CanTargetValidator,
-				mouseAttachment: TeleportTargeter.TargeterMouseAttachment
+				mouseAttachment: mouseAttachment
 			);
+
 
 			void ChoseLocalTarget_Callback(LocalTargetInfo localTarget)
 			{
+				Find.Targeter.StopTargeting();
 				if (localTarget.IsValid)
 				{
-					GlobalTargetInfo targetOut = localTarget.ToGlobalTargetInfo(selectedMap);
-					Find.WorldTargeter.StopTargeting();
-					callback(targetOut);
+					callback(localTarget);
+				}
+				else
+				{
+					// TODO better message
+					Messages.Message(
+						"MessageTransportPodsDestinationIsInvalid".Translate(),
+						MessageTypeDefOf.RejectInput,
+						false
+					);
 				}
 			}
 		}
 
-		private static void StartChoosingMap(
+		public static void StartChoosingGlobal(
 			GlobalTargetInfo startingFrom,
 			Action<GlobalTargetInfo> callback,
-			TargetingParameters localTargetParams,
+			bool canTargetTiles = true,
+			Texture2D mouseAttachment = null,
+			bool closeWorldTabWhenFinished = true,
+			Action onUpdate = null,
 			Func<GlobalTargetInfo, string> ExtraLabelGetter = null,
 			Func<GlobalTargetInfo, bool> CanTargetValidator = null)
 		{
@@ -69,155 +63,81 @@ namespace alaestor_teleporting
 
 			Find.WorldTargeter.BeginTargeting_NewTemp(
 				action: ChoseGlobalTarget_Callback,
-				canTargetTiles: true,
-				mouseAttachment: TeleportTargeter.TargeterMouseAttachment,
-				closeWorldTabWhenFinished: true,
-				onUpdate: null, //(() => GenDraw.DrawWorldRadiusRing(tile, this.MaxLaunchDistance)),
+				canTargetTiles: canTargetTiles,
+				mouseAttachment: mouseAttachment,
+				closeWorldTabWhenFinished: closeWorldTabWhenFinished,
+				onUpdate: onUpdate, //(() => GenDraw.DrawWorldRadiusRing(tile, this.MaxLaunchDistance)),
 				extraLabelGetter: ExtraLabelGetter,
 				canSelectTarget: CanTargetValidator
 			);
 
 			bool ChoseGlobalTarget_Callback(GlobalTargetInfo globalTarget)
 			{
+				Find.WorldTargeter.StopTargeting();
 				if (globalTarget.IsValid)
 				{
-					TeleportTargeter.StartChoosingLocal(globalTarget, callback, localTargetParams);
+					callback(globalTarget);
 					return true;
 				}
 				else
 				{
-					// TODO
+					// TODO better message
 					Messages.Message(
 						"MessageTransportPodsDestinationIsInvalid".Translate(),
 						MessageTypeDefOf.RejectInput,
 						false
 					);
+					return false;
 				}
-				return false;
 			}
 		}
 
-		public static void GlobalTeleport(Thing originator, Action<TeleportTargeterData> callback)
+		public static void StartChoosingGlobalThenLocal(
+			GlobalTargetInfo startingFrom,
+			Action<GlobalTargetInfo> result_Callback,
+			TargetingParameters localTargetParams,
+			Func<LocalTargetInfo, bool> localTargetValidator = null,
+			Texture2D localMouseAttachment = null,
+			bool globalCanTargetTiles = true,
+			Action globalOnUpdate = null,
+			bool globalCloseWorldTabWhenFinished = true,
+			Texture2D globalMouseAttachment = null,
+			Func<GlobalTargetInfo, string> globalExtraLabelGetter = null,
+			Func<GlobalTargetInfo, bool> globalTargetValidator = null)
 		{
-			// select map -> select target pawn -> select map -> select target cell
-			TeleportTargeterData targeterData_out = new TeleportTargeterData();
-			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
+			TeleportTargeter.StartChoosingGlobal(
+				startingFrom: startingFrom,
+				callback: GotGlobalTarget_Callback,
+				canTargetTiles: globalCanTargetTiles,
+				mouseAttachment: globalMouseAttachment,
+				closeWorldTabWhenFinished: globalCloseWorldTabWhenFinished,
+				onUpdate: globalOnUpdate,
+				ExtraLabelGetter: globalExtraLabelGetter,
+				CanTargetValidator: globalTargetValidator);
 
-			TargetingParameters targetTeleportSubjects = new TargetingParameters
+			void GotGlobalTarget_Callback(GlobalTargetInfo globalTarget)
 			{
-				canTargetPawns = true,
-				canTargetAnimals = true,
-				canTargetHumans = true,
-				canTargetItems = true, // not working?
-				canTargetBuildings = false
-			};
-
-			bool TargetHasLoadedMap(GlobalTargetInfo target)
-			{
-				return target.IsValid
-					&& Find.WorldObjects.AnyMapParentAt(target.Tile)
-					&& Find.WorldObjects.MapParentAt(target.Tile).Spawned
-					&& Find.WorldObjects.MapParentAt(target.Tile).Map != null;
-			}
-
-			string ExtraLabelGetter(GlobalTargetInfo target)
-			{
-				if (!target.IsValid)
-					return null;
-
-				return TargetHasLoadedMap(target) ? "Has a map" : "No map";
-			}
-
-			// select pawn
-			TeleportTargeter.StartChoosingMap(globalTarget, GotFrom_Callback, targetTeleportSubjects, ExtraLabelGetter, TargetHasLoadedMap);
-
-			void GotFrom_Callback(GlobalTargetInfo targetFrom)
-			{
-				if (targetFrom.IsValid && targetFrom.HasThing && targetFrom.Thing is Pawn pawn)
+				if (globalTarget.IsValid)
 				{
-					targeterData_out.target = pawn;
+					TeleportTargeter.StartChoosingLocal(
+						startingFrom: globalTarget,
+						callback: GotLocalTarget_Callback,
+						targetParams: localTargetParams,
+						CanTargetValidator: localTargetValidator,
+						mouseAttachment: localMouseAttachment);
 
-					TargetingParameters targetTeleportDestination = new TargetingParameters
+					void GotLocalTarget_Callback(LocalTargetInfo localTarget)
 					{
-						canTargetPawns = false,
-						canTargetBuildings = false,
-						canTargetLocations = true
-					};
-
-					// select destination
-					TeleportTargeter.StartChoosingMap(globalTarget, GotTo_Callback, targetTeleportDestination, ExtraLabelGetter, TargetHasLoadedMap);
-
-					void GotTo_Callback(GlobalTargetInfo targetTo)
-					{
-						if (targetTo.IsValid && targetTo.IsMapTarget && targetTo.Cell.IsValid)
+						if (localTarget.IsValid)
 						{
-							targeterData_out.destinationCell = targetTo.Cell;
-							targeterData_out.destinationMap = targetTo.Map;
-							callback(targeterData_out); // this is how we return the selected targets to the caller
-						}
-						else
-						{
-							// TODO debug log
+							result_Callback(localTarget.ToGlobalTargetInfo(
+								Find.WorldObjects.MapParentAt(globalTarget.Tile).Map));
 						}
 					}
 				}
 				else
 				{
-					// TODO debug log
-				}
-			}
-		}
-
-		public static void LocalTeleport(Thing originator, Action<TeleportTargeterData> callback)
-		{
-			TeleportTargeterData targeterData_out = new TeleportTargeterData();
-			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
-
-			// select pawn
-			TargetingParameters targetTeleportSubjects = new TargetingParameters
-			{
-				canTargetPawns = true,
-				canTargetAnimals = true,
-				canTargetHumans = true,
-				canTargetItems = true,
-				canTargetBuildings = false
-			};
-
-			TeleportTargeter.StartChoosingLocal(globalTarget, GotFrom_Callback, targetTeleportSubjects);
-
-			void GotFrom_Callback(GlobalTargetInfo targetFrom)
-			{
-				if (targetFrom.IsValid && targetFrom.HasThing && targetFrom.Thing is Pawn pawn)
-				{
-					targeterData_out.target = pawn;
-
-					TargetingParameters targetTeleportDestination = new TargetingParameters
-					{
-						canTargetPawns = false,
-						canTargetBuildings = false,
-						canTargetLocations = true
-					};
-
-					// select destination
-					TeleportTargeter.StartChoosingLocal(globalTarget, GotTo_Callback, targetTeleportDestination);
-
-					void GotTo_Callback(GlobalTargetInfo targetTo)
-					{
-						if (targetTo.IsValid && targetTo.IsMapTarget && targetTo.Cell.IsValid)
-						{
-							targeterData_out.destinationCell = targetTo.Cell;
-							targeterData_out.destinationMap = targetTo.Map;
-							callback(targeterData_out); // this is how we return the selected targets to the caller
-						}
-						else
-						{
-							// TODO debug log
-						}
-					}
-				}
-				else
-				{
-					// TODO debug log
+					Log.Error("Teleporting: StartChoosingGlobalThenLocal: invalid global target");
 				}
 			}
 		}

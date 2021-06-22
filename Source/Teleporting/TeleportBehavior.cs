@@ -1,37 +1,20 @@
-﻿using System;
+﻿using RimWorld;
+using RimWorld.Planet;
+using System;
+using UnityEngine;
 using Verse;
 
 namespace alaestor_teleporting
 {
 	class TeleportBehavior
 	{
-		public static void ExecuteTeleport(TeleportTargeterData targeterData)
+		public static bool ExecuteTeleport(Thing thing, Map destinationMap, IntVec3 destinationCell)
 		{
-			if (targeterData.isValid)
-			{
-				Log.Message( // TODO remove, testing
-					"target: " + ((Pawn)targeterData.target).Name.ToString() + "\n"
-					+ "map: " + targeterData.destinationMap.ToString() + " is home: "
-						+ targeterData.destinationMap.IsPlayerHome.ToString() + "\n"
-					+ "cell:" + targeterData.destinationCell.ToString() + "\n"
-				);
-
-				TeleportBehavior.ExecuteTeleport(targeterData.target, targeterData.destinationMap, targeterData.destinationCell);
-			}
-			else
-			{
-				// TODO debug log
-			}
-		}
-
-		public static void ExecuteTeleport(
-			Thing thing, Map destinationMap, IntVec3 destinationCell)
-		{
-			if (thing != null && destinationMap != null)
+			if (thing != null && destinationMap != null && destinationCell != null && destinationCell.IsValid)
 			{
 				if (thing.Map == destinationMap && thing.Position == destinationCell)
 				{
-					return;
+					return true;
 				}
 				else if (thing is Pawn pawn)
 				{
@@ -62,33 +45,125 @@ namespace alaestor_teleporting
 					thing.DeSpawn(DestroyMode.Vanish);
 					GenSpawn.Spawn(thing, destinationCell, destinationMap);
 				}
+				return true;
 			}
 			else
 			{
+				// TODO better logging
 				if (thing == null) Log.Error("Teleport recieved invalid parameters: thing was null");
 				if (destinationMap == null) Log.Error("Teleport recieved invalid parameters: destinationMap was null");
 				if (thing.Position == destinationCell) Log.Error("Teleport tried to move something to where it already is");
+				return false;
 			}
 		}
 
-		public static void StartTeleportTargetting(bool longRangeFlag, Thing from, Action onSuccessCallback = null)
+		private static readonly Texture2D localTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
+
+		private static readonly Texture2D globalTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
+
+		private static readonly TargetingParameters targetTeleportSubjects = new TargetingParameters
+		{
+			canTargetPawns = true,
+			canTargetAnimals = true,
+			canTargetHumans = true,
+			canTargetItems = true, // not working?
+			canTargetBuildings = false
+		};
+
+		private static readonly TargetingParameters targetTeleportDestination = new TargetingParameters
+		{
+			canTargetPawns = false,
+			canTargetBuildings = false,
+			canTargetLocations = true
+		};
+
+		public static void StartLongRangeTeleport(Thing originator, Action onSuccessCallback = null)
+		{
+			bool TargetHasLoadedMap(GlobalTargetInfo target)
+			{
+				return target.IsValid
+					&& Find.WorldObjects.AnyMapParentAt(target.Tile)
+					&& Find.WorldObjects.MapParentAt(target.Tile).Spawned
+					&& Find.WorldObjects.MapParentAt(target.Tile).Map != null;
+			}
+
+			string ExtraLabelGetter(GlobalTargetInfo target)
+			{
+				if (!target.IsValid)
+					return null;
+
+				return TargetHasLoadedMap(target) ? "Has a map" : "No map";
+			}
+
+			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(originator);
+
+			TeleportTargeter.StartChoosingGlobalThenLocal(
+				startingFrom: startingHere,
+				result_Callback: GotFrom_Callback,
+				localTargetParams: TeleportBehavior.targetTeleportSubjects,
+				localMouseAttachment: TeleportBehavior.localTeleportMouseAttachment,
+				//localTargetValidator: null,
+				//globalCanTargetTiles: true,
+				globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
+				//globalCloseWorldTabWhenFinished: true,
+				//globalOnUpdate: null,
+				globalExtraLabelGetter: ExtraLabelGetter,
+				globalTargetValidator: TargetHasLoadedMap);
+
+			void GotFrom_Callback(GlobalTargetInfo fromTarget)
+			{
+				Log.Message("GotFrom(...");
+				TeleportTargeter.StartChoosingGlobalThenLocal(
+					startingFrom: startingHere,
+					result_Callback: GotTo_Callback,
+					localTargetParams: TeleportBehavior.targetTeleportDestination,
+					localMouseAttachment: TeleportBehavior.localTeleportMouseAttachment,
+					//localTargetValidator: null,
+					//globalCanTargetTiles: true,
+					globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
+					//globalCloseWorldTabWhenFinished: true,
+					//globalOnUpdate: null,
+					globalExtraLabelGetter: ExtraLabelGetter,
+					globalTargetValidator: TargetHasLoadedMap);
+
+				void GotTo_Callback(GlobalTargetInfo toTarget)
+				{
+					if (ExecuteTeleport(fromTarget.Thing, toTarget.Map, toTarget.Cell))
+						onSuccessCallback?.Invoke();
+				}
+			}
+		}
+
+		public static void StartLocalTeleport(Thing originator, Action onSuccessCallback = null)
+		{
+			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
+			Map localMap = originator.Map;
+
+			TeleportTargeter.StartChoosingLocal(globalTarget, GotFrom_Callback, TeleportBehavior.targetTeleportSubjects);
+
+			void GotFrom_Callback(LocalTargetInfo fromTarget)
+			{
+				TeleportTargeter.StartChoosingLocal(globalTarget, GotTo_Callback, TeleportBehavior.targetTeleportDestination);
+
+				void GotTo_Callback(LocalTargetInfo toTarget)
+				{
+					if (ExecuteTeleport(fromTarget.Thing, localMap, toTarget.Cell))
+						onSuccessCallback?.Invoke();
+				}
+			}
+		}
+
+		public static void StartTeleportTargetting(bool longRangeFlag, Thing originator, Action onSuccessCallback = null)
 		{
 			if (longRangeFlag)
 			{
 				Log.Message("DoTeleport() LR");
-				TeleportTargeter.GlobalTeleport(from, GotTeleportTargets_Callback);
+				TeleportBehavior.StartLongRangeTeleport(originator, onSuccessCallback);
 			}
 			else
 			{
 				Log.Message("DoTeleport() SR");
-				TeleportTargeter.LocalTeleport(from, GotTeleportTargets_Callback);
-			}
-
-			void GotTeleportTargets_Callback(TeleportTargeterData targeterData)
-			{
-				ExecuteTeleport(targeterData);
-
-				onSuccessCallback?.Invoke();
+				TeleportBehavior.StartLocalTeleport(originator, onSuccessCallback);
 			}
 		}
 	}
