@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using UnityEngine;
@@ -92,7 +92,7 @@ namespace alaestor_teleporting
 				if (!target.IsValid)
 					return null;
 
-				return TargetHasLoadedMap(target) ? "Has a map" : "No map";
+				return TargetHasLoadedMap(target) ? "Has a map" : "No map"; // TODO
 			}
 
 			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(originator);
@@ -112,7 +112,6 @@ namespace alaestor_teleporting
 
 			void GotFrom_Callback(GlobalTargetInfo fromTarget)
 			{
-				Log.Message("GotFrom(...");
 				TeleportTargeter.StartChoosingGlobalThenLocal(
 					startingFrom: startingHere,
 					result_Callback: GotTo_Callback,
