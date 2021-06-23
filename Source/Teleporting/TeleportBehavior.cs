@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
 using System;
 using UnityEngine;
@@ -79,6 +79,8 @@ namespace alaestor_teleporting
 
 		public static void StartLongRangeTeleport(Thing originator, Action onSuccess_Callback = null)
 		{
+			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(originator);
+
 			bool TargetHasLoadedMap(GlobalTargetInfo target)
 			{
 				return target.IsValid
@@ -87,15 +89,58 @@ namespace alaestor_teleporting
 					&& Find.WorldObjects.MapParentAt(target.Tile).Map != null;
 			}
 
+			bool TargetIsWithinRange(GlobalTargetInfo target)
+			{
+				if (TeleportingMod.settings.enableGlobalRangeLimit)
+				{
+					int distanceToTarget = Find.WorldGrid.TraversalDistanceBetween(startingHere.Tile, target.Tile, true, int.MaxValue);
+					return distanceToTarget <= TeleportingMod.settings.globalRangeLimit;
+				}
+				else return true;
+			}
+
 			string ExtraLabelGetter(GlobalTargetInfo target)
 			{
 				if (!target.IsValid)
 					return null;
 
-				return TargetHasLoadedMap(target) ? "Has a map" : "No map"; // TODO
+				string label = "";
+
+				if (TargetHasLoadedMap(target))
+					label += target.Label;
+
+				if (!TargetIsWithinRange(target))
+				{
+					if (label.Length != 0)
+						label += "\n";
+
+					label += "Out of Range"; // TODO translate
+				}
+
+				return label;
 			}
 
-			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(originator);
+			bool CanTargetTile(GlobalTargetInfo target)
+			{
+				if (TeleportingMod.settings.enableGlobalRangeLimit)
+				{
+					int distanceToTile = Find.WorldGrid.TraversalDistanceBetween(startingHere.Tile, target.Tile, true, int.MaxValue);
+					return TargetHasLoadedMap(target) && distanceToTile <= TeleportingMod.settings.globalRangeLimit;
+				}
+				else
+				{
+					return TargetHasLoadedMap(target);
+				}
+			}
+
+			void OnUpdate()
+			{
+				if (TeleportingMod.settings.enableGlobalRangeLimit)
+				{
+					GenDraw.DrawWorldRadiusRing(startingHere.Tile, TeleportingMod.settings.globalRangeLimit);
+				}
+			}
+
 
 			TeleportTargeter.StartChoosingGlobalThenLocal(
 				startingFrom: startingHere,
@@ -106,9 +151,9 @@ namespace alaestor_teleporting
 				//globalCanTargetTiles: true,
 				globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
 				//globalCloseWorldTabWhenFinished: true,
-				//globalOnUpdate: null,
+				globalOnUpdate: OnUpdate,
 				globalExtraLabelGetter: ExtraLabelGetter,
-				globalTargetValidator: TargetHasLoadedMap);
+				globalTargetValidator: CanTargetTile);
 
 			void GotFrom_Callback(GlobalTargetInfo fromTarget)
 			{
@@ -121,12 +166,13 @@ namespace alaestor_teleporting
 					//globalCanTargetTiles: true,
 					globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
 					//globalCloseWorldTabWhenFinished: true,
-					//globalOnUpdate: null,
+					globalOnUpdate: OnUpdate,
 					globalExtraLabelGetter: ExtraLabelGetter,
 					globalTargetValidator: TargetHasLoadedMap);
 
 				void GotTo_Callback(GlobalTargetInfo toTarget)
 				{
+					//if (originator is Building_TeleportConsole console) ...
 					if (ExecuteTeleport(fromTarget.Thing, toTarget.Map, toTarget.Cell))
 						onSuccess_Callback?.Invoke();
 				}

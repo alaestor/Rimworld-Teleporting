@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using UnityEngine;
@@ -73,7 +73,7 @@ namespace alaestor_teleporting
 				canTargetTiles: canTargetTiles,
 				mouseAttachment: mouseAttachment,
 				closeWorldTabWhenFinished: closeWorldTabWhenFinished,
-				onUpdate: onUpdate, //(() => GenDraw.DrawWorldRadiusRing(tile, this.MaxLaunchDistance)),
+				onUpdate: onUpdate,
 				extraLabelGetter: extraLabelGetter,
 				canSelectTarget: canTargetValidator
 			);

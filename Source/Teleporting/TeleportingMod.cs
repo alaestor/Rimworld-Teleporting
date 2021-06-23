@@ -12,52 +12,72 @@ namespace alaestor_teleporting
 			settings = GetSettings<TeleportingModSettings>();
 		}
 
-		public override void DoSettingsWindowContents(Rect inRect)
+		private static void AddSettingsSection_Cooldown(ref Listing_Standard ls)
 		{
-
-			Listing_Standard l = new Listing_Standard();
-			l.Begin(inRect);
-			l.Label("NoteTicksPerSecond".Translate()); // Note: there are 60 ticks in a second
-
-			// Cooldowns
-			l.GapLine();
-			l.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "enableCooldown_tooltip".Translate());
+			ls.GapLine();
+			ls.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "enableCooldown_tooltip".Translate()); // Note: there are 60 ticks in a second
 			if (settings.enableCooldown)
 			{
-				l.CheckboxLabeled("enableIntelectDivisor".Translate(), ref settings.enableIntelectDivisor, tooltip: "intelectDivisor_tooltip".Translate());
+				ls.CheckboxLabeled("enableIntelectDivisor".Translate(), ref settings.enableIntelectDivisor, tooltip: "intelectDivisor_tooltip".Translate());
 				if (settings.enableIntelectDivisor)
 				{
-					l.TextFieldNumericLabeled<int>("intelectDivisor".Translate(), ref settings.intelectDivisor, ref settings.intelectDivisor_Buffer, min: 1, max: 100);
-					l.Gap();
+					ls.TextFieldNumericLabeled<int>("intelectDivisor".Translate(), ref settings.intelectDivisor, ref settings.intelectDivisor_Buffer, min: 1, max: 100);
+					ls.Gap();
 				}
-				l.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
-				l.TextFieldNumericLabeled<int>("longRange_CooldownDuration".Translate(), ref settings.longRange_CooldownDuration, ref settings.longRange_CooldownDuration_Buffer);
+				ls.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
+				ls.TextFieldNumericLabeled<int>("longRange_CooldownDuration".Translate(), ref settings.longRange_CooldownDuration, ref settings.longRange_CooldownDuration_Buffer);
 			}
+		}
 
-			// Fuel
-			l.GapLine();
-			l.CheckboxLabeled("enableFuel".Translate(), ref settings.enableFuel, tooltip: "enableFuel_tooltip".Translate());
+		private static void AddSettingsSection_Fuel(ref Listing_Standard ls)
+		{
+			ls.GapLine();
+			ls.CheckboxLabeled("enableFuel".Translate(), ref settings.enableFuel, tooltip: "enableFuel_tooltip".Translate());
 			if (settings.enableFuel)
 			{
-				l.Gap(10);
-				l.TextFieldNumericLabeled<int>("shortRange_FuelCost".Translate(), ref settings.shortRange_FuelCost, ref settings.shortRange_FuelCost_Buffer);
-				l.TextFieldNumericLabeled<int>("longRange_FuelCost".Translate(), ref settings.longRange_FuelCost, ref settings.longRange_FuelCost_Buffer);
-				l.Gap(10);
+				ls.Gap(10);
+				ls.TextFieldNumericLabeled<int>("shortRange_FuelCost".Translate(), ref settings.shortRange_FuelCost, ref settings.shortRange_FuelCost_Buffer);
+				ls.TextFieldNumericLabeled<int>("longRange_FuelCost".Translate(), ref settings.longRange_FuelCost, ref settings.longRange_FuelCost_Buffer);
+				ls.Gap(10);
 			}
+		}
 
-			// Debug options & Cheats
-			l.GapLine();
-			l.CheckboxLabeled("enableDebugGizmosInGodmode".Translate(), ref settings.enableDebugGizmosInGodmode, tooltip: "enableDebugGizmosInGodmode_tooltip".Translate());
+		private static void AddSettingsSection_RangeLimit(ref Listing_Standard ls)
+		{
+			ls.GapLine();
+			ls.CheckboxLabeled("enableGlobalRangeLimit".Translate(), ref settings.enableGlobalRangeLimit, tooltip: "enableGlobalRangeLimit_tooltip".Translate());
+			if (settings.enableFuel)
+			{
+				ls.Gap(10);
+				ls.TextFieldNumericLabeled<int>("globalRangeLimit".Translate(), ref settings.globalRangeLimit, ref settings.globalRangeLimit_Buffer);
+				ls.Gap(10);
+			}
+		}
+
+		private static void AddSettingsSection_DebugAndCheats(ref Listing_Standard ls)
+		{
+			ls.GapLine();
+			ls.CheckboxLabeled("enableDebugGizmosInGodmode".Translate(), ref settings.enableDebugGizmosInGodmode, tooltip: "enableDebugGizmosInGodmode_tooltip".Translate());
+		}
+
+		public override void DoSettingsWindowContents(Rect inRect)
+		{
+			Listing_Standard ls = new Listing_Standard();
+			ls.Begin(inRect);
+
+			AddSettingsSection_Cooldown(ref ls);
+			AddSettingsSection_Fuel(ref ls);
+			AddSettingsSection_RangeLimit(ref ls);
+			AddSettingsSection_DebugAndCheats(ref ls);
 
 			// Settings reset
-			l.Gap(100);
-
-			if (l.ButtonTextLabeled("", "resetTheseSettings".Translate()))
+			ls.Gap(100);
+			if (ls.ButtonTextLabeled("", "resetTheseSettings".Translate()))
 			{
 				settings.ResetToDefaults();
 			}
 
-			l.End();
+			ls.End();
 			base.DoSettingsWindowContents(inRect);
 			//settings.Write();
 		}
