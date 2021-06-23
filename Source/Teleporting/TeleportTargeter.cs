@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
 using System;
 using UnityEngine;
@@ -44,6 +44,13 @@ namespace alaestor_teleporting
 						MessageTypeDefOf.RejectInput,
 						false
 					);
+
+					TeleportTargeter.StartChoosingLocal(
+						startingFrom: startingFrom,
+						result_Callback: result_Callback,
+						targetParams: targetParams,
+						canTargetValidator: canTargetValidator,
+						mouseAttachment: mouseAttachment);
 				}
 			}
 		}
@@ -87,6 +94,17 @@ namespace alaestor_teleporting
 						MessageTypeDefOf.RejectInput,
 						false
 					);
+
+					TeleportTargeter.StartChoosingGlobal(
+						startingFrom: startingFrom,
+						result_Callback: result_Callback,
+						canTargetTiles: canTargetTiles,
+						mouseAttachment: mouseAttachment,
+						closeWorldTabWhenFinished: closeWorldTabWhenFinished,
+						onUpdate: onUpdate,
+						extraLabelGetter: extraLabelGetter,
+						canTargetValidator: canTargetValidator);
+
 					return false;
 				}
 			}
