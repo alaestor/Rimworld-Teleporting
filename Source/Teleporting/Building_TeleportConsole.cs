@@ -161,7 +161,10 @@ namespace alaestor_teleporting
 			{
 				if (TeleportingMod.settings.enableCooldown)
 				{
-					int cooldownTicks = (longRangeFlag ? TeleportingMod.settings.longRange_CooldownDuration : TeleportingMod.settings.shortRange_CooldownDuration) * 60;
+					int cooldownTicks = (longRangeFlag ?
+							TeleportingMod.settings.longRange_CooldownDuration
+							: TeleportingMod.settings.shortRange_CooldownDuration) * 60;
+
 					if (TeleportingMod.settings.enableIntelectDivisor)
 					{
 						int intelect = controllingPawn.skills.GetSkill(SkillDefOf.Intellectual).Level;
