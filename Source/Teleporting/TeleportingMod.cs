@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Verse;
 
 namespace alaestor_teleporting
@@ -38,6 +39,13 @@ namespace alaestor_teleporting
 				ls.Gap(10);
 				ls.TextFieldNumericLabeled<int>("shortRange_FuelCost".Translate(), ref settings.shortRange_FuelCost, ref settings.shortRange_FuelCost_Buffer);
 				ls.TextFieldNumericLabeled<int>("longRange_FuelCost".Translate(), ref settings.longRange_FuelCost, ref settings.longRange_FuelCost_Buffer);
+				ls.TextFieldNumericLabeled<int>("longRange_FuelDistance".Translate(), ref settings.longRange_FuelDistance, ref settings.longRange_FuelDistance_Buffer);
+				ls.LabelDouble(
+					leftLabel: ("longRange_FuelDistance_Msg".Translate()),
+					rightLabel: settings.longRange_FuelDistance == 0 ?
+						String.Format("always consume {0} fuel"/*"longRange_FuelDistance_FixedMsg".Translate()*/, settings.longRange_FuelCost)
+						: String.Format("Consumes {0} fuel every {1} tiles"/*"longRange_FuelDistance_ScalesMsg".Translate()*/, settings.longRange_FuelCost, settings.longRange_FuelDistance),
+					tip: null);
 				ls.Gap(10);
 			}
 		}

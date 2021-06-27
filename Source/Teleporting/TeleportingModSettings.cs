@@ -38,6 +38,10 @@ namespace alaestor_teleporting
 		public int longRange_FuelCost = longRange_FuelCost_Default;
 		public string longRange_FuelCost_Buffer = longRange_FuelCost_Default.ToString();
 
+		private static readonly int longRange_FuelDistance_Default = 10;
+		public int longRange_FuelDistance = longRange_FuelDistance_Default;
+		public string longRange_FuelDistance_Buffer = longRange_FuelDistance_Default.ToString();
+
 
 
 		// global teleport range limit
@@ -66,6 +70,7 @@ namespace alaestor_teleporting
 			// fuel
 			this.shortRange_FuelCost_Buffer = shortRange_FuelCost.ToString();
 			this.longRange_FuelCost_Buffer = longRange_FuelCost.ToString();
+			this.longRange_FuelDistance_Buffer = longRange_FuelDistance.ToString();
 
 			// range limit
 			this.globalRangeLimit_Buffer = globalRangeLimit_Default.ToString();
@@ -84,6 +89,7 @@ namespace alaestor_teleporting
 			this.enableFuel = enableFuel_Default;
 			this.shortRange_FuelCost = shortRange_FuelCost_Default;
 			this.longRange_FuelCost = longRange_FuelCost_Default;
+			this.longRange_FuelDistance = longRange_FuelDistance_Default;
 
 			// range limit
 			enableGlobalRangeLimit = enableGlobalRangeLimit_Default;
@@ -104,6 +110,7 @@ namespace alaestor_teleporting
 			Scribe_Values.Look(ref this.enableFuel, "enableFuel", enableFuel_Default);
 			Scribe_Values.Look(ref this.shortRange_FuelCost, "shortRange_FuelCost", shortRange_FuelCost_Default);
 			Scribe_Values.Look(ref this.longRange_FuelCost, "longRange_FuelCost", longRange_FuelCost_Default);
+			Scribe_Values.Look(ref this.longRange_FuelDistance, "longRange_FuelDistance", longRange_FuelDistance_Default);
 			Scribe_Values.Look(ref this.enableDebugGizmosInGodmode, "enableDebugGizmosInGodmode", enableDebugGizmosInGodmode_Default);
 
 			this.RefreshStringBuffers();
