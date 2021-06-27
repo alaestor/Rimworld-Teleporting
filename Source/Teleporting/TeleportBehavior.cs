@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
 using System;
 using UnityEngine;
@@ -9,6 +9,26 @@ namespace alaestor_teleporting
 	[StaticConstructorOnStartup]
 	class TeleportBehavior
 	{
+		private static readonly Texture2D localTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
+
+		private static readonly Texture2D globalTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
+
+		private static readonly TargetingParameters targetTeleportSubjects = new TargetingParameters
+		{
+			canTargetPawns = true,
+			canTargetAnimals = true,
+			canTargetHumans = true,
+			canTargetItems = true, // not working?
+			canTargetBuildings = false
+		};
+
+		private static readonly TargetingParameters targetTeleportDestination = new TargetingParameters
+		{
+			canTargetPawns = false,
+			canTargetBuildings = false,
+			canTargetLocations = true
+		};
+
 		public static bool ExecuteTeleport(Thing thing, Map destinationMap, IntVec3 destinationCell)
 		{
 			if (thing != null && destinationMap != null && destinationCell != null && destinationCell.IsValid)
@@ -57,26 +77,6 @@ namespace alaestor_teleporting
 				return false;
 			}
 		}
-
-		private static readonly Texture2D localTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
-
-		private static readonly Texture2D globalTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
-
-		private static readonly TargetingParameters targetTeleportSubjects = new TargetingParameters
-		{
-			canTargetPawns = true,
-			canTargetAnimals = true,
-			canTargetHumans = true,
-			canTargetItems = true, // not working?
-			canTargetBuildings = false
-		};
-
-		private static readonly TargetingParameters targetTeleportDestination = new TargetingParameters
-		{
-			canTargetPawns = false,
-			canTargetBuildings = false,
-			canTargetLocations = true
-		};
 
 		public static void StartLongRangeTeleport(Thing originator, Action<int> onSuccess_Callback = null, bool cheat = false)
 		{
