@@ -58,6 +58,9 @@ namespace alaestor_teleporting
 		private static readonly bool enableDebugGizmosInGodmode_Default = true;
 		public bool enableDebugGizmosInGodmode = enableDebugGizmosInGodmode_Default;
 
+		private static readonly bool enableDebugLogging_Default = false;
+		public bool enableDebugLogging = enableDebugLogging_Default;
+
 
 
 		public void RefreshStringBuffers()
@@ -96,6 +99,7 @@ namespace alaestor_teleporting
 
 			// debug and cheats
 			this.enableDebugGizmosInGodmode = enableDebugGizmosInGodmode_Default;
+			this.enableDebugLogging = enableDebugLogging_Default;
 
 			this.RefreshStringBuffers();
 		}
@@ -112,6 +116,7 @@ namespace alaestor_teleporting
 			Scribe_Values.Look(ref this.longRange_FuelCost, "longRange_FuelCost", longRange_FuelCost_Default);
 			Scribe_Values.Look(ref this.longRange_FuelDistance, "longRange_FuelDistance", longRange_FuelDistance_Default);
 			Scribe_Values.Look(ref this.enableDebugGizmosInGodmode, "enableDebugGizmosInGodmode", enableDebugGizmosInGodmode_Default);
+			Scribe_Values.Look(ref this.enableDebugLogging, "enableDebugLogging", enableDebugLogging_Default);
 
 			this.RefreshStringBuffers();
 

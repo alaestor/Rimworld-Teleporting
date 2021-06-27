@@ -66,6 +66,7 @@ namespace alaestor_teleporting
 		{
 			ls.GapLine();
 			ls.CheckboxLabeled("enableDebugGizmosInGodmode".Translate(), ref settings.enableDebugGizmosInGodmode, tooltip: "enableDebugGizmosInGodmode_tooltip".Translate());
+			ls.CheckboxLabeled("enableDebugLogging".Translate(), ref settings.enableDebugLogging, tooltip: "enableDebugLogging_tooltip".Translate());
 		}
 
 		public override void DoSettingsWindowContents(Rect inRect)
