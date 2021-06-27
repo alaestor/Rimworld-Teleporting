@@ -15,7 +15,6 @@ namespace alaestor_teleporting
 
 	public class JobDriver_UseTeleportConsole_ShortRange : JobDriver
 	{
-
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 			=> this.pawn.Reserve(this.job.targetA, this.job, errorOnFailed: errorOnFailed);
 
@@ -26,13 +25,14 @@ namespace alaestor_teleporting
 				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseConsoleNow));
 
 			Toil useTeleporterToil = new Toil();
+			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Never;
 			useTeleporterToil.initAction = (Action)(() =>
 			{
 				Pawn actor = useTeleporterToil.actor;
 				Building_TeleportConsole console = (Building_TeleportConsole)actor.jobs.curJob.GetTarget(TargetIndex.A).Thing;
 				if (!console.CanUseConsoleNow)
 					return;
-				// actor.jobs.curJob.commTarget.TryOpenComms(actor);
+
 				console.TryStartTeleport(actor, false);
 			});
 			yield return useTeleporterToil;
@@ -51,6 +51,7 @@ namespace alaestor_teleporting
 				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseConsoleNow));
 
 			Toil useTeleporterToil = new Toil();
+			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Never;
 			useTeleporterToil.initAction = (Action)(() =>
 			{
 				Pawn actor = useTeleporterToil.actor;
@@ -58,7 +59,6 @@ namespace alaestor_teleporting
 				if (!console.CanUseConsoleNow)
 					return;
 
-				// actor.jobs.curJob.commTarget.TryOpenComms(actor);
 				console.TryStartTeleport(actor, true);
 			});
 			yield return useTeleporterToil;

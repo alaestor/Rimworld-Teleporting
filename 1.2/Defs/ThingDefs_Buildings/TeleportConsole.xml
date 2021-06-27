@@ -32,7 +32,7 @@
     <hasInteractionCell>true</hasInteractionCell>
     <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
     <designationCategory>Misc</designationCategory>
-	<tickerType>Normal</tickerType>
+	<tickerType>Rare</tickerType>
     <comps>
       <li Class="CompProperties_Power">
         <compClass>CompPowerTrader</compClass>

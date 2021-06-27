@@ -17,6 +17,9 @@ namespace alaestor_teleporting
 		private CompCooldown cooldownComp;
 		// private ??? fuelComp; // for teleport cartridges
 
+		private bool isBeingControlled = false;
+		private Pawn controllingPawn = null;
+
 		public override void Tick()
 		{
 			base.Tick();
@@ -25,6 +28,17 @@ namespace alaestor_teleporting
 		public override void TickRare()
 		{
 			base.TickRare();
+			if (this.isBeingControlled && !(Find.Targeter.IsTargeting || Find.WorldTargeter.IsTargeting))
+			{
+				JobDef curJobDef = this.controllingPawn.CurJobDef;
+				if (curJobDef == TeleporterDefOf.UseTeleportConsole_ShortRange
+					|| curJobDef == TeleporterDefOf.UseTeleportConsole_LongRange)
+				{
+					this.controllingPawn.jobs.EndCurrentJob(JobCondition.None);
+					this.isBeingControlled = false;
+					this.controllingPawn = null;
+				}
+			}
 		}
 
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
@@ -142,6 +156,9 @@ namespace alaestor_teleporting
 
 		public void TryStartTeleport(Pawn controllingPawn, bool longRangeFlag)
 		{
+			this.isBeingControlled = true;
+			this.controllingPawn = controllingPawn;
+
 			if (TeleportingMod.settings.enableCooldown)
 			{
 				if (this.cooldownComp != null)
