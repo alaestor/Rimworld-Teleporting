@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using UnityEngine;
@@ -6,6 +6,7 @@ using Verse;
 
 namespace alaestor_teleporting
 {
+	[StaticConstructorOnStartup]
 	class TeleportBehavior
 	{
 		public static bool ExecuteTeleport(Thing thing, Map destinationMap, IntVec3 destinationCell)
