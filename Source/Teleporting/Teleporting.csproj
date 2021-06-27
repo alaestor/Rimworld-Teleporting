@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompCooldown.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="MyDefs.cs" />
     <Compile Include="TeleportTargeter.cs" />
     <Compile Include="TeleportingMod.cs" />
