@@ -50,6 +50,28 @@ namespace alaestor_teleporting
 			}
 		}
 
+		public int RemainingFuel()
+		{
+			return ((int)Math.Floor(refuelableComp.Fuel));
+		}
+
+		public bool CanConsumeFuelAmount(int n)
+		{
+			return RemainingFuel() >= n;
+		}
+
+		public int FuelCostToTravel(int tileDistance)
+		{
+			if (tileDistance == 0)
+			{
+				return TeleportingMod.settings.longRange_FuelCost;
+			}
+			else
+			{
+				return ((int)Math.Ceiling(((double)tileDistance) / TeleportingMod.settings.longRange_FuelDistance)) * TeleportingMod.settings.longRange_FuelCost;
+			}
+		}
+
 		private FloatMenuOption GetFailureReason(Pawn myPawn)
 		{
 			if (!myPawn.CanReach((LocalTargetInfo)(Thing)this, PathEndMode.InteractionCell, Danger.Some))
@@ -135,7 +157,7 @@ namespace alaestor_teleporting
 
 			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess);
 
-			void onTeleportSuccess()
+			void onTeleportSuccess(int totalTeleportDistance)
 			{
 				if (TeleportingMod.settings.enableCooldown)
 				{
@@ -167,7 +189,20 @@ namespace alaestor_teleporting
 
 				if (TeleportingMod.settings.enableFuel)
 				{
-					this.refuelableComp.ConsumeFuel(longRangeFlag ? TeleportingMod.settings.longRange_FuelCost : TeleportingMod.settings.shortRange_FuelCost);
+					int fuelCost = 0;
+
+					if (longRangeFlag)
+					{
+						fuelCost = TeleportingMod.settings.longRange_FuelDistance > 0 ?
+							FuelCostToTravel(totalTeleportDistance) : TeleportingMod.settings.longRange_FuelCost;
+					}
+					else
+					{
+						fuelCost = TeleportingMod.settings.shortRange_FuelCost;
+					}
+
+
+					this.refuelableComp.ConsumeFuel(fuelCost);
 				}
 			}
 		}
@@ -184,7 +219,7 @@ namespace alaestor_teleporting
 					defaultLabel = "ShortTeleDebugGizmo_Label".Translate(), //"Tele Local",
 					defaultDesc = "ShortTeleDebugGizmo_Desc".Translate(), //"Teleport on map layer",
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { TeleportBehavior.StartTeleportTargetting(false, this); }
+					action = delegate { TeleportBehavior.StartTeleportTargetting(false, this, cheat: true); }
 				};
 
 				yield return new Command_Action
@@ -192,7 +227,7 @@ namespace alaestor_teleporting
 					defaultLabel = "LongTeleDebugGizmo_Label".Translate(), //"Tele Far",
 					defaultDesc = "LongTeleDebugGizmo_Desc".Translate(), //"Teleport on world layer",
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { TeleportBehavior.StartTeleportTargetting(true, this); }
+					action = delegate { TeleportBehavior.StartTeleportTargetting(true, this, cheat: true); }
 				};
 			}
 		}

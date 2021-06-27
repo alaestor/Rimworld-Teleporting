@@ -77,7 +77,7 @@ namespace alaestor_teleporting
 			canTargetLocations = true
 		};
 
-		public static void StartLongRangeTeleport(Thing originator, Action onSuccess_Callback = null)
+		public static void StartLongRangeTeleport(Thing originator, Action<int> onSuccess_Callback = null, bool cheat = false)
 		{
 			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(originator);
 
@@ -89,7 +89,7 @@ namespace alaestor_teleporting
 					&& Find.WorldObjects.MapParentAt(target.Tile).Map != null;
 			}
 
-			bool TargetIsWithinRange(GlobalTargetInfo target)
+			bool TargetIsWithinGlobalRangeLimit(GlobalTargetInfo target)
 			{
 				if (TeleportingMod.settings.enableGlobalRangeLimit)
 				{
@@ -98,6 +98,9 @@ namespace alaestor_teleporting
 				}
 				else return true;
 			}
+
+			int fromTile = 0;
+			bool choosingDestination = false;
 
 			string ExtraLabelGetter(GlobalTargetInfo target)
 			{
@@ -109,12 +112,30 @@ namespace alaestor_teleporting
 				if (TargetHasLoadedMap(target))
 					label += target.Label;
 
-				if (!TargetIsWithinRange(target))
+				if (!cheat)
 				{
-					if (label.Length != 0)
-						label += "\n";
+					if (!TargetIsWithinGlobalRangeLimit(target))
+					{
+						if (label.Length != 0)
+							label += "\n";
 
-					label += "Out of Range"; // TODO translate
+						label += "Out of Range"; // TODO translate
+					}
+					else if (choosingDestination && TeleportingMod.settings.longRange_FuelDistance > 0 && originator is Building_TeleportConsole console)
+					{ // replace console with fuel component "originator.TryGetComp...."?
+						int fuelCost = console.FuelCostToTravel(Find.WorldGrid.TraversalDistanceBetween(fromTile, target.Tile, true, int.MaxValue));
+						if (fuelCost > 0)
+						{
+							if (label.Length != 0)
+								label += "\n";
+
+							label += String.Format("Cost: {0} of {1}", fuelCost, console.RemainingFuel()); // TODO translate
+							if (!console.CanConsumeFuelAmount(fuelCost))
+							{
+								label += "\nNot enough fuel!";
+							}
+						}
+					}
 				}
 
 				return label;
@@ -122,25 +143,46 @@ namespace alaestor_teleporting
 
 			bool CanTargetTile(GlobalTargetInfo target)
 			{
-				if (TeleportingMod.settings.enableGlobalRangeLimit)
+				if (TargetHasLoadedMap(target))
 				{
-					int distanceToTile = Find.WorldGrid.TraversalDistanceBetween(startingHere.Tile, target.Tile, true, int.MaxValue);
-					return TargetHasLoadedMap(target) && distanceToTile <= TeleportingMod.settings.globalRangeLimit;
+					if (cheat) // ignore range and fuel limits
+					{
+						return true;
+					}
+					else if (TargetIsWithinGlobalRangeLimit(target))
+					{
+						if (choosingDestination
+							&& TeleportingMod.settings.longRange_FuelDistance > 0
+							&& originator is Building_TeleportConsole console)
+						{
+							return console.CanConsumeFuelAmount(console.FuelCostToTravel(
+								Find.WorldGrid.TraversalDistanceBetween(fromTile, target.Tile, true, int.MaxValue)));
+						}
+						else return true;
+					}
 				}
-				else
-				{
-					return TargetHasLoadedMap(target);
-				}
+				return false;
 			}
 
 			void OnUpdate()
 			{
+				if (choosingDestination
+					&& TeleportingMod.settings.longRange_FuelDistance > 0
+					&& originator is Building_TeleportConsole console)
+				{
+					int fuelRangeLimit =
+						((int)Math.Floor(
+							((double)console.RemainingFuel()) / TeleportingMod.settings.longRange_FuelCost))
+						* TeleportingMod.settings.longRange_FuelDistance;
+
+					GenDraw.DrawWorldRadiusRing(fromTile, fuelRangeLimit);
+				}
+
 				if (TeleportingMod.settings.enableGlobalRangeLimit)
 				{
 					GenDraw.DrawWorldRadiusRing(startingHere.Tile, TeleportingMod.settings.globalRangeLimit);
 				}
 			}
-
 
 			TeleportTargeter.StartChoosingGlobalThenLocal(
 				startingFrom: startingHere,
@@ -157,6 +199,8 @@ namespace alaestor_teleporting
 
 			void GotFrom_Callback(GlobalTargetInfo fromTarget)
 			{
+				fromTile = fromTarget.Tile;
+				choosingDestination = true;
 				TeleportTargeter.StartChoosingGlobalThenLocal(
 					startingFrom: startingHere,
 					result_Callback: GotTo_Callback,
@@ -172,14 +216,15 @@ namespace alaestor_teleporting
 
 				void GotTo_Callback(GlobalTargetInfo toTarget)
 				{
-					//if (originator is Building_TeleportConsole console) ...
 					if (ExecuteTeleport(fromTarget.Thing, toTarget.Map, toTarget.Cell))
-						onSuccess_Callback?.Invoke();
+					{
+						onSuccess_Callback?.Invoke(Find.WorldGrid.TraversalDistanceBetween(fromTarget.Tile, toTarget.Tile, true, int.MaxValue));
+					}
 				}
 			}
 		}
 
-		public static void StartLocalTeleport(Thing originator, Action onSuccess_Callback = null)
+		public static void StartLocalTeleport(Thing originator, Action<int> onSuccess_Callback = null)
 		{
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 			Map localMap = originator.Map;
@@ -193,17 +238,17 @@ namespace alaestor_teleporting
 				void GotTo_Callback(LocalTargetInfo toTarget)
 				{
 					if (ExecuteTeleport(fromTarget.Thing, localMap, toTarget.Cell))
-						onSuccess_Callback?.Invoke();
+						onSuccess_Callback?.Invoke(0);
 				}
 			}
 		}
 
-		public static void StartTeleportTargetting(bool longRangeFlag, Thing originator, Action onSuccess_Callback = null)
+		public static void StartTeleportTargetting(bool longRangeFlag, Thing originator, Action<int> onSuccess_Callback = null, bool cheat = false)
 		{
 			if (longRangeFlag)
 			{
 				Log.Message("DoTeleport() LR");
-				TeleportBehavior.StartLongRangeTeleport(originator, onSuccess_Callback);
+				TeleportBehavior.StartLongRangeTeleport(originator, onSuccess_Callback, cheat);
 			}
 			else
 			{
