@@ -248,7 +248,11 @@ namespace alaestor_teleporting
 					defaultLabel = "ShortTeleDebugGizmo_Label".Translate(), //"Tele Local",
 					defaultDesc = "ShortTeleDebugGizmo_Desc".Translate(), //"Teleport on map layer",
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { TeleportBehavior.StartTeleportTargetting(false, this, cheat: true); }
+					action = delegate
+					{
+						Logger.Debug("TeleportConsole Debug Gizmo clicked: Short Range Teleport");
+						TeleportBehavior.StartTeleportTargetting(false, this, cheat: true);
+					}
 				};
 
 				yield return new Command_Action
@@ -256,7 +260,11 @@ namespace alaestor_teleporting
 					defaultLabel = "LongTeleDebugGizmo_Label".Translate(), //"Tele Far",
 					defaultDesc = "LongTeleDebugGizmo_Desc".Translate(), //"Teleport on world layer",
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { TeleportBehavior.StartTeleportTargetting(true, this, cheat: true); }
+					action = delegate
+					{
+						Logger.Debug("TeleportConsole Debug Gizmo clicked: Long Range Teleport");
+						TeleportBehavior.StartTeleportTargetting(true, this, cheat: true);
+					}
 				};
 			}
 		}
