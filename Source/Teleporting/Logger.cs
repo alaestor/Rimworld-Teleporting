@@ -7,6 +7,7 @@ namespace alaestor_teleporting
 	{
 		private static readonly string prefix_modname = "[" + TeleportingMod.modname + "]";
 		private static readonly string prefix_debug = "[DEBUG]";
+		private static readonly string prefix_debugVerbose = "[DEBUG]";
 		private static readonly string prefix_details = "[DETAILS]";
 		private static readonly string prefix_warning = "[WARN]";
 		private static readonly string prefix_error = "[ERROR]";
@@ -15,6 +16,7 @@ namespace alaestor_teleporting
 		private static readonly string prefix_delim = ": ";
 
 		private static readonly string debug_header = prefix_modname + prefix_sep + prefix_debug + prefix_delim;
+		private static readonly string debugVerbose_header = prefix_modname + prefix_sep + prefix_debugVerbose + prefix_delim;
 		private static readonly string details_header = prefix_sep + prefix_details + prefix_delim;
 		private static readonly string warning_header = prefix_modname + prefix_sep + prefix_warning + prefix_delim;
 		private static readonly string error_header = prefix_modname + prefix_sep + prefix_error + prefix_delim;
@@ -41,7 +43,18 @@ namespace alaestor_teleporting
 			}
 		}
 
-
+		public static void DebugVerbose(string msg, params string[] infoStrings)
+		{
+			DebugVerbose(msg, false, infoStrings);
+		}
+		public static void DebugVerbose(string msg, bool debugBypass, params string[] infoStrings)
+		{
+			if (debugBypass || (IsDebug && IsDebugVerbose))
+			{
+				Log.Message(debugVerbose_header + msg);
+				if (debugBypass && infoStrings.Length > 0) Details(prefix_debugVerbose, debugBypass, infoStrings);
+			}
+		}
 
 		public static void Debug(string msg, params string[] infoStrings)
 		{
@@ -49,7 +62,7 @@ namespace alaestor_teleporting
 		}
 		public static void Debug(string msg, bool debugBypass, params string[] infoStrings)
 		{
-			if (IsDebug || debugBypass)
+			if (debugBypass || IsDebug)
 			{
 				Log.Message(debug_header + msg);
 				if (debugBypass || (IsDebugVerbose && infoStrings.Length > 0)) Details(prefix_debug, debugBypass, infoStrings);
