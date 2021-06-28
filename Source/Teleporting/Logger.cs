@@ -1,4 +1,4 @@
-using Verse;
+﻿using Verse;
 
 namespace alaestor_teleporting
 {
@@ -19,17 +19,19 @@ namespace alaestor_teleporting
 		private static readonly string warning_header = prefix_modname + prefix_sep + prefix_warning + prefix_delim;
 		private static readonly string error_header = prefix_modname + prefix_sep + prefix_error + prefix_delim;
 
+		// there have a lot of duplicate checks, but this is most flexible and shouldn't impact normal games
 		public static bool IsDebug => TeleportingMod.settings.enableDebugLogging;
+		public static bool IsDebugVerbose => TeleportingMod.settings.enableDebugLoggingVerbose;
 
 
-
-		public static void Details(string prefix, params string[] infoStrings)
+		// Details handles Verbose detail logging; details provided via variadic infoStrings
+		private static void Details(string prefix, params string[] infoStrings)
 		{
 			Details(prefix, false, infoStrings);
 		}
-		public static void Details(string prefix, bool debugBypass, params string[] infoStrings)
+		private static void Details(string prefix, bool debugBypass, params string[] infoStrings)
 		{
-			if (IsDebug || debugBypass)
+			if (debugBypass || (IsDebug && IsDebugVerbose && infoStrings.Length > 0))
 			{
 				Log.Message(prefix_indent + prefix + prefix_sep + details_header);
 				foreach (var str in infoStrings)
@@ -50,7 +52,7 @@ namespace alaestor_teleporting
 			if (IsDebug || debugBypass)
 			{
 				Log.Message(debug_header + msg);
-				if (infoStrings.Length > 0) Details(prefix_debug, debugBypass, infoStrings);
+				if (debugBypass || (IsDebugVerbose && infoStrings.Length > 0)) Details(prefix_debug, debugBypass, infoStrings);
 			}
 		}
 
@@ -63,7 +65,7 @@ namespace alaestor_teleporting
 		public static void Warning(string msg, bool debugBypass, params string[] infoStrings)
 		{
 			Log.Warning(warning_header + msg);
-			if (infoStrings.Length > 0) Details(prefix_warning, debugBypass, infoStrings);
+			if (debugBypass || (IsDebugVerbose && infoStrings.Length > 0)) Details(prefix_warning, debugBypass, infoStrings);
 		}
 
 
@@ -75,9 +77,9 @@ namespace alaestor_teleporting
 		public static void Error(string msg, bool debugBypass, params string[] infoStrings)
 		{
 			Log.Error(error_header + msg);
-			if (infoStrings.Length > 0) Details(prefix_error, debugBypass, infoStrings);
+			if (debugBypass || (IsDebugVerbose && infoStrings.Length > 0)) Details(prefix_error, debugBypass, infoStrings);
 		}
-		
+
 
 
 		public static void TestLogger()

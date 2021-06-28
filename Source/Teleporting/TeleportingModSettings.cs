@@ -63,6 +63,9 @@ namespace alaestor_teleporting
 		private static readonly bool enableDebugLogging_Default = false;
 		public bool enableDebugLogging = enableDebugLogging_Default;
 
+		private static readonly bool enableDebugLoggingVerbose_Default = false;
+		public bool enableDebugLoggingVerbose = enableDebugLoggingVerbose_Default;
+
 
 
 		public void RefreshStringBuffers()
@@ -102,6 +105,7 @@ namespace alaestor_teleporting
 			// debug and cheats
 			this.enableDebugGizmosInGodmode = enableDebugGizmosInGodmode_Default;
 			this.enableDebugLogging = enableDebugLogging_Default;
+			this.enableDebugLoggingVerbose = enableDebugLoggingVerbose_Default;
 
 			this.RefreshStringBuffers();
 		}
@@ -119,6 +123,7 @@ namespace alaestor_teleporting
 			Scribe_Values.Look(ref this.longRange_FuelDistance, "longRange_FuelDistance", longRange_FuelDistance_Default);
 			Scribe_Values.Look(ref this.enableDebugGizmosInGodmode, "enableDebugGizmosInGodmode", enableDebugGizmosInGodmode_Default);
 			Scribe_Values.Look(ref this.enableDebugLogging, "enableDebugLogging", enableDebugLogging_Default);
+			Scribe_Values.Look(ref this.enableDebugLoggingVerbose, "enableDebugLoggingVerbose", enableDebugLoggingVerbose_Default);
 
 			this.RefreshStringBuffers();
 
@@ -130,7 +135,7 @@ namespace alaestor_teleporting
 		/////////////////////////////
 		///  Settings Mod Window  ///
 		/////////////////////////////
-		
+
 
 
 		public static void DoSettingsWindowContents(Rect inRect)
@@ -151,7 +156,7 @@ namespace alaestor_teleporting
 				settings.ResetToDefaults();
 			}
 			ls.End();
-			
+
 			// associated option groups:
 
 			void AddSettings_Cooldown_Options()
@@ -210,11 +215,13 @@ namespace alaestor_teleporting
 				ls.CheckboxLabeled("enableDebugLogging".Translate(), ref settings.enableDebugLogging, tooltip: "enableDebugLogging_tooltip".Translate());
 				if (settings.enableDebugLogging)
 				{
+					ls.CheckboxLabeled("enableDebugLoggingVerbose".Translate(), ref settings.enableDebugLoggingVerbose, tooltip: "enableDebugLoggingVerbose_tooltip".Translate());
 					if (ls.ButtonTextLabeled("", "testDebugLogging".Translate()))
 					{
 						Logger.TestLogger();
 					}
 				}
+				else if (settings.enableDebugLoggingVerbose) settings.enableDebugLoggingVerbose = false;
 			}
 		}
 	}
