@@ -28,7 +28,6 @@ namespace alaestor_teleporting
 				mouseAttachment: mouseAttachment
 			);
 
-
 			void ChoseLocalTarget_Callback(LocalTargetInfo localTarget)
 			{
 				Find.Targeter.StopTargeting();
@@ -36,22 +35,7 @@ namespace alaestor_teleporting
 				{
 					result_Callback(localTarget);
 				}
-				else
-				{
-					// TODO better message
-					Messages.Message(
-						"MessageTransportPodsDestinationIsInvalid".Translate(),
-						MessageTypeDefOf.RejectInput,
-						false
-					);
-
-					TeleportTargeter.StartChoosingLocal(
-						startingFrom: startingFrom,
-						result_Callback: result_Callback,
-						targetParams: targetParams,
-						canTargetValidator: canTargetValidator,
-						mouseAttachment: mouseAttachment);
-				}
+				else Logger.Error("TeleportTargeter::StartChoosingLocal::ChoseLocalTarget_Callback: invalid local target");
 			}
 		}
 
@@ -88,23 +72,7 @@ namespace alaestor_teleporting
 				}
 				else
 				{
-					// TODO better message
-					Messages.Message(
-						"MessageTransportPodsDestinationIsInvalid".Translate(),
-						MessageTypeDefOf.RejectInput,
-						false
-					);
-
-					TeleportTargeter.StartChoosingGlobal(
-						startingFrom: startingFrom,
-						result_Callback: result_Callback,
-						canTargetTiles: canTargetTiles,
-						mouseAttachment: mouseAttachment,
-						closeWorldTabWhenFinished: closeWorldTabWhenFinished,
-						onUpdate: onUpdate,
-						extraLabelGetter: extraLabelGetter,
-						canTargetValidator: canTargetValidator);
-
+					Logger.Error("TeleportTargeter::StartChoosingGlobal::ChoseGlobalTarget_Callback: invalid global target");
 					return false;
 				}
 			}
@@ -151,12 +119,10 @@ namespace alaestor_teleporting
 							result_Callback(localTarget.ToGlobalTargetInfo(
 								Find.WorldObjects.MapParentAt(globalTarget.Tile).Map));
 						}
+						else Logger.Error("TeleportTargeter::StartChoosingGlobalThenLocal::GotLocalTarget_Callback: invalid local target");
 					}
 				}
-				else
-				{
-					Log.Error("Teleporting: StartChoosingGlobalThenLocal: invalid global target");
-				}
+				else Logger.Error("Teleporting: StartChoosingGlobalThenLocal: invalid global target");
 			}
 		}
 	}
