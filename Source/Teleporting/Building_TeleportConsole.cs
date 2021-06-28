@@ -89,28 +89,29 @@ namespace alaestor_teleporting
 		}
 		// <-- to here
 
-		private FloatMenuOption GetFailureReason(Pawn myPawn)
-		{
-			if (!myPawn.CanReach((LocalTargetInfo)(Thing)this, PathEndMode.InteractionCell, Danger.Some))
-				return new FloatMenuOption((string)"CannotUseNoPath".Translate(), (Action)null);
-			else if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
-				return new FloatMenuOption((string)"CannotUseSolarFlare".Translate(), (Action)null);
-			else if (this.powerComp != null && !this.powerComp.PowerOn)
-				return new FloatMenuOption((string)"CannotUseNoPower".Translate(), (Action)null);
-			else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
-				return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Manipulation.label, myPawn.Named("PAWN"))), (Action)null);
-			else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
-				return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
-			else if (this.CanUseConsoleNow)
-				return (FloatMenuOption)null; // allow use
-			Logger.Warning(myPawn.ToString() + "Could not use teleport console for unknown reason.");
-			return new FloatMenuOption("Cannot use now", (Action)null);
-		}
-
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn myPawn)
 		{
 			Building_TeleportConsole console = this;
-			FloatMenuOption failureReason = console.GetFailureReason(myPawn);
+			FloatMenuOption failureReason = GetFailureReason();
+
+			FloatMenuOption GetFailureReason()
+			{
+				if (!myPawn.CanReach((LocalTargetInfo)(Thing)this, PathEndMode.InteractionCell, Danger.Some))
+					return new FloatMenuOption((string)"CannotUseNoPath".Translate(), (Action)null);
+				else if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
+					return new FloatMenuOption((string)"CannotUseSolarFlare".Translate(), (Action)null);
+				else if (this.powerComp != null && !this.powerComp.PowerOn)
+					return new FloatMenuOption((string)"CannotUseNoPower".Translate(), (Action)null);
+				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
+					return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Manipulation.label, myPawn.Named("PAWN"))), (Action)null);
+				else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
+					return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
+				else if (this.CanUseConsoleNow)
+					return (FloatMenuOption)null; // allow use
+				Logger.Warning(myPawn.ToString() + "Could not use teleport console for unknown reason.");
+				return new FloatMenuOption("Cannot use now", (Action)null);
+			}
+
 			if (failureReason != null)
 			{
 				yield return failureReason;
