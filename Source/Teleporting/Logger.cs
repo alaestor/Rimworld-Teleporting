@@ -60,9 +60,7 @@ namespace alaestor_teleporting
 		{
 			if (debugBypass || (IsDebug && IsDebugVerbose))
 			{
-				string logMsg = debugVerbose_header + msg;
-				logMsg += Details(prefix_debugVerbose, debugBypass, infoStrings);
-				Log.Message(logMsg);
+				Log.Message(debugVerbose_header + msg + Details(prefix_debugVerbose, debugBypass, infoStrings));
 			}
 		}
 
@@ -76,9 +74,7 @@ namespace alaestor_teleporting
 		{
 			if (debugBypass || IsDebug)
 			{
-				string logMsg = debug_header + msg;
-				logMsg += Details(prefix_debug, debugBypass, infoStrings);
-				Log.Message(logMsg);
+				Log.Message(debug_header + msg + Details(prefix_debug, debugBypass, infoStrings));
 			}
 		}
 
@@ -89,9 +85,7 @@ namespace alaestor_teleporting
 		}
 		public static void Warning(string msg, bool debugBypass, params string[] infoStrings)
 		{
-			string logMsg = warning_header + msg;
-			logMsg += Details(prefix_warning, debugBypass, infoStrings);
-			Log.Warning(logMsg);
+			Log.Warning(warning_header + msg + Details(prefix_warning, debugBypass, infoStrings));
 		}
 
 		// Rarer
@@ -101,9 +95,7 @@ namespace alaestor_teleporting
 		}
 		public static void Error(string msg, bool debugBypass, params string[] infoStrings)
 		{
-			string logMsg = error_header + msg;
-			logMsg += Details(prefix_error, debugBypass, infoStrings);
-			Log.Error(logMsg);
+			Log.Error(error_header + msg + Details(prefix_error, debugBypass, infoStrings));
 		}
 
 		// Tester; logs example messages
