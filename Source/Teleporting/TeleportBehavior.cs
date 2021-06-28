@@ -35,6 +35,12 @@ namespace alaestor_teleporting
 			{
 				if (thing.Map == destinationMap && thing.Position == destinationCell)
 				{
+					Logger.Debug(
+						"ExecuteTeleport tried to move thing to it's own location",
+						"Thing: " + thing.Label,
+						"destinationMap: " + destinationMap.ToString(),
+						"destinationCell: " + destinationCell.ToString()
+					);
 					return true;
 				}
 				else if (thing is Pawn pawn)
@@ -66,14 +72,22 @@ namespace alaestor_teleporting
 					thing.DeSpawn(DestroyMode.Vanish);
 					GenSpawn.Spawn(thing, destinationCell, destinationMap);
 				}
+
+				Logger.DebugVerbose(
+					"ExecuteTeleport",
+					"From " + thing.Label + " at Tile,Cell: " + thing.Tile.ToString() + "," + thing.Position.ToString(),
+					"To Tile,Cell: " + destinationMap.Tile.ToString() + "," + destinationCell.ToString()
+				);
 				return true;
 			}
 			else
 			{
-				// TODO better logging
-				if (thing == null) Log.Error("Teleport recieved invalid parameters: thing was null");
-				if (destinationMap == null) Log.Error("Teleport recieved invalid parameters: destinationMap was null");
-				if (thing.Position == destinationCell) Log.Error("Teleport tried to move something to where it already is");
+				Logger.Warning(
+					"ExecuteTeleport failed",
+					"thing: " + thing.ToString(),
+					"destinationMap: " + destinationMap.ToString(),
+					"destinationCell: " + destinationCell.ToString()
+				);
 				return false;
 			}
 		}
@@ -120,7 +134,7 @@ namespace alaestor_teleporting
 						if (label.Length != 0)
 							label += "\n";
 
-						label += "Out of Range"; // TODO translate
+						label += "TeleportBehavior_Global_OutofRange".Translate();
 					}
 					else if (choosingDestination && TeleportingMod.settings.longRange_FuelDistance > 0 && originator is Building_TeleportConsole console)
 					{ // replace console with fuel component "originator.TryGetComp...."?
@@ -133,7 +147,7 @@ namespace alaestor_teleporting
 							label += String.Format("Cost: {0} of {1}", fuelCost, console.RemainingFuel()); // TODO translate
 							if (!console.CanConsumeFuelAmount(fuelCost))
 							{
-								label += "\nNot enough fuel!";
+								label += "\n" + "TeleportBehavior_Global_NotEnoughFuel".Translate();
 							}
 						}
 					}
@@ -152,7 +166,7 @@ namespace alaestor_teleporting
 					}
 					else if (TargetIsWithinGlobalRangeLimit(target))
 					{
-						if (choosingDestination
+						if (choosingDestination // check needed fuel
 							&& TeleportingMod.settings.longRange_FuelDistance > 0
 							&& originator is Building_TeleportConsole console)
 						{
@@ -185,6 +199,8 @@ namespace alaestor_teleporting
 				}
 			}
 
+			Logger.DebugVerbose("StartLongRangeTeleport \n\tonSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"));
+
 			TeleportTargeter.StartChoosingGlobalThenLocal(
 				startingFrom: startingHere,
 				result_Callback: GotFrom_Callback,
@@ -200,6 +216,7 @@ namespace alaestor_teleporting
 
 			void GotFrom_Callback(GlobalTargetInfo fromTarget)
 			{
+				Logger.DebugVerbose("StartLongRangeTeleport Got \"from\" target:\t" + fromTarget.Label + " at Tile,Cell: " + fromTarget.Tile.ToString() + "," + fromTarget.Cell.ToString());
 				fromTile = fromTarget.Tile;
 				choosingDestination = true;
 				TeleportTargeter.StartChoosingGlobalThenLocal(
@@ -217,6 +234,7 @@ namespace alaestor_teleporting
 
 				void GotTo_Callback(GlobalTargetInfo toTarget)
 				{
+					Logger.DebugVerbose("StartLongRangeTeleport Got \"to\" target:\t\t" + toTarget.Label + " at Tile,Cell: " + toTarget.Tile.ToString() + "," + toTarget.Cell.ToString());
 					if (ExecuteTeleport(fromTarget.Thing, toTarget.Map, toTarget.Cell))
 					{
 						onSuccess_Callback?.Invoke(Find.WorldGrid.TraversalDistanceBetween(fromTarget.Tile, toTarget.Tile, true, int.MaxValue));
@@ -225,19 +243,23 @@ namespace alaestor_teleporting
 			}
 		}
 
-		public static void StartLocalTeleport(Thing originator, Action<int> onSuccess_Callback = null)
+		public static void StartShortRangeTeleport(Thing originator, Action<int> onSuccess_Callback = null)
 		{
+			
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 			Map localMap = originator.Map;
-
+			
+			Logger.DebugVerbose("StartShortRangeTeleport \n\tonSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"));
 			TeleportTargeter.StartChoosingLocal(globalTarget, GotFrom_Callback, TeleportBehavior.targetTeleportSubjects);
 
 			void GotFrom_Callback(LocalTargetInfo fromTarget)
 			{
+				Logger.DebugVerbose("StartShortRangeTeleport Got \"from\" target:\t" + fromTarget.Label + " at Cell: " + fromTarget.Cell.ToString());
 				TeleportTargeter.StartChoosingLocal(globalTarget, GotTo_Callback, TeleportBehavior.targetTeleportDestination);
 
 				void GotTo_Callback(LocalTargetInfo toTarget)
 				{
+					Logger.DebugVerbose("StartShortRangeTeleport Got \"to\" target:\t\t" + toTarget.Label + " at Cell: " + toTarget.Cell.ToString());
 					if (ExecuteTeleport(fromTarget.Thing, localMap, toTarget.Cell))
 						onSuccess_Callback?.Invoke(0);
 				}
@@ -246,15 +268,21 @@ namespace alaestor_teleporting
 
 		public static void StartTeleportTargetting(bool longRangeFlag, Thing originator, Action<int> onSuccess_Callback = null, bool cheat = false)
 		{
+			Logger.Debug(
+				"DoTeleport() called",
+				(longRangeFlag ? "Long Range (global targeting)" : "Short Range (local targeting)"),
+				"Originator: " + (originator != null ? originator.ToString() : "null"),
+				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"),
+				"Cheat: " + cheat.ToString()
+			);
+
 			if (longRangeFlag)
 			{
-				Log.Message("DoTeleport() LR");
 				TeleportBehavior.StartLongRangeTeleport(originator, onSuccess_Callback, cheat);
 			}
 			else
 			{
-				Log.Message("DoTeleport() SR");
-				TeleportBehavior.StartLocalTeleport(originator, onSuccess_Callback);
+				TeleportBehavior.StartShortRangeTeleport(originator, onSuccess_Callback);
 			}
 		}
 	}
