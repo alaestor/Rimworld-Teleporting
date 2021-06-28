@@ -49,7 +49,7 @@ namespace alaestor_teleporting
 			this.cooldownComp = this.GetComp<CompCooldown>();
 			if (this.cooldownComp == null)
 			{
-				Log.Error("A Building_TeleportConsole class object didn't provide a cooldownComp. Creating a default one.");
+				Logger.Error("A Building_TeleportConsole class object didn't provide a cooldownComp. Creating a default one.");
 				this.cooldownComp = new CompCooldown();
 			}
 		}
@@ -64,6 +64,8 @@ namespace alaestor_teleporting
 			}
 		}
 
+		// TODO remove all of this once there's an alternative to refuelable
+		// <-- from here
 		public int RemainingFuel()
 		{
 			return ((int)Math.Floor(refuelableComp.Fuel));
@@ -85,6 +87,7 @@ namespace alaestor_teleporting
 				return ((int)Math.Ceiling(((double)tileDistance) / TeleportingMod.settings.longRange_FuelDistance)) * TeleportingMod.settings.longRange_FuelCost;
 			}
 		}
+		// <-- to here
 
 		private FloatMenuOption GetFailureReason(Pawn myPawn)
 		{
@@ -99,8 +102,8 @@ namespace alaestor_teleporting
 			else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
 				return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
 			else if (this.CanUseConsoleNow)
-				return (FloatMenuOption)null; // yes
-			Log.Error(myPawn.ToString() + " could not use teleport console for unknown reason.");
+				return (FloatMenuOption)null; // allow use
+			Logger.Warning(myPawn.ToString() + "Could not use teleport console for unknown reason.");
 			return new FloatMenuOption("Cannot use now", (Action)null);
 		}
 
@@ -136,15 +139,15 @@ namespace alaestor_teleporting
 						{
 							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
 						}
-						else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), (Action)null);
+						else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), (Action)null); // restring
 
 						if (this.refuelableComp.Fuel >= TeleportingMod.settings.longRange_FuelCost)
 						{
 							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
 						}
-						else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), (Action)null);
+						else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), (Action)null); // restring
 					}
-					else Log.Error("Teleporting: fuel is enabled but refuelableComp is null");
+					else Logger.Error("Teleporting: fuel is enabled but refuelableComp is null", refuelableComp.ToString());
 				}
 				else
 				{
@@ -165,11 +168,11 @@ namespace alaestor_teleporting
 				{
 					if (this.cooldownComp.IsOnCooldown)
 					{
-						Log.Error("Tried to start a teleport but console was on cooldown");
+						Logger.Warning("Tried to start a teleport but console was on cooldown");
 						return;
 					}
 				}
-				else Log.Error("Teleporting: cooldown is enabled but cooldownComp is null");
+				else Logger.Error("Teleporting: cooldown is enabled but cooldownComp is null");
 			}
 
 			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess);
@@ -196,13 +199,18 @@ namespace alaestor_teleporting
 							}
 							else cooldownTicks -= (int)(cooldownTicks * multiplier);
 						}
-						/*
-						Log.Message("intelect:   \t" + intelect.ToString());
-						Log.Message("divisor:    \t" + TeleportingMod.settings.intelectDivisor.ToString());
-						Log.Message("multiplier: \t" + multiplier.ToString() + " (" + ((double)intelect / TeleportingMod.settings.intelectDivisor).ToString() + ")" );
-						Log.Message("reduction:  \t" + (cooldownTicks * multiplier).ToString());
-						Log.Message("Cooldown:   \t" + cooldownTicks.ToString() + " (" + (cooldownTicks / 60).ToString() + " seconds) from " + ((longRangeFlag ? TeleportingMod.settings.longRange_CooldownDuration : TeleportingMod.settings.shortRange_CooldownDuration) * 60).ToString());
-						*/
+
+						if (Logger.IsDebug)
+						{
+							Logger.Debug("onTeleportSuccess :: cooldown :: Intelect divisor",
+								"pawn name:  \t" + controllingPawn.Name,
+								"intelect:   \t" + intelect.ToString(),
+								"divisor:    \t" + TeleportingMod.settings.intelectDivisor.ToString(),
+								"multiplier: \t" + multiplier.ToString() + " (" + ((double)intelect / TeleportingMod.settings.intelectDivisor).ToString() + ")",
+								"reduction:  \t" + (cooldownTicks * multiplier).ToString(),
+								"Cooldown:   \t" + cooldownTicks.ToString() + " (" + (cooldownTicks / 60).ToString() + " seconds) from " + ((longRangeFlag ? TeleportingMod.settings.longRange_CooldownDuration : TeleportingMod.settings.shortRange_CooldownDuration) * 60).ToString()
+							);
+						}
 					}
 					this.cooldownComp.Set(cooldownTicks);
 				}
@@ -213,6 +221,7 @@ namespace alaestor_teleporting
 
 					if (longRangeFlag)
 					{
+						// TODO rework once usesconsumables is made
 						fuelCost = TeleportingMod.settings.longRange_FuelDistance > 0 ?
 							FuelCostToTravel(totalTeleportDistance) : TeleportingMod.settings.longRange_FuelCost;
 					}
@@ -220,7 +229,6 @@ namespace alaestor_teleporting
 					{
 						fuelCost = TeleportingMod.settings.shortRange_FuelCost;
 					}
-
 
 					this.refuelableComp.ConsumeFuel(fuelCost);
 				}
