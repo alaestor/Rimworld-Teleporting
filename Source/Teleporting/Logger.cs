@@ -29,7 +29,8 @@ namespace alaestor_teleporting
 		// Details handles Verbose detail logging; details provided via variadic infoStrings
 		private static void Details(string prefix, params string[] infoStrings)
 		{
-			Details(prefix, false, infoStrings);
+			if (IsDebug && IsDebugVerbose && infoStrings.Length > 0)
+				Details(prefix, false, infoStrings);
 		}
 		private static void Details(string prefix, bool debugBypass, params string[] infoStrings)
 		{
@@ -43,9 +44,11 @@ namespace alaestor_teleporting
 			}
 		}
 
+		// Extremely spammy
 		public static void DebugVerbose(string msg, params string[] infoStrings)
 		{
-			DebugVerbose(msg, false, infoStrings);
+			if (IsDebug && IsDebugVerbose)
+				DebugVerbose(msg, false, infoStrings);
 		}
 		public static void DebugVerbose(string msg, bool debugBypass, params string[] infoStrings)
 		{
@@ -56,9 +59,11 @@ namespace alaestor_teleporting
 			}
 		}
 
+		// Spammy
 		public static void Debug(string msg, params string[] infoStrings)
 		{
-			Debug(msg, false, infoStrings);
+			if (IsDebug)
+				Debug(msg, false, infoStrings);
 		}
 		public static void Debug(string msg, bool debugBypass, params string[] infoStrings)
 		{
@@ -69,8 +74,7 @@ namespace alaestor_teleporting
 			}
 		}
 
-
-
+		// Rare
 		public static void Warning(string msg, params string[] infoStrings)
 		{
 			Warning(msg, false, infoStrings);
@@ -81,8 +85,7 @@ namespace alaestor_teleporting
 			if (debugBypass || (IsDebugVerbose && infoStrings.Length > 0)) Details(prefix_warning, debugBypass, infoStrings);
 		}
 
-
-
+		// Rare
 		public static void Error(string msg, params string[] infoStrings)
 		{
 			Error(msg, false, infoStrings);
@@ -93,8 +96,7 @@ namespace alaestor_teleporting
 			if (debugBypass || (IsDebugVerbose && infoStrings.Length > 0)) Details(prefix_error, debugBypass, infoStrings);
 		}
 
-
-
+		// Tester; logs example messages
 		public static void TestLogger()
 		{
 			Debug("Singular");
