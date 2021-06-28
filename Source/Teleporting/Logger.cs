@@ -1,11 +1,11 @@
-﻿using Verse;
+using Verse;
 
 namespace alaestor_teleporting
 {
 	//[StaticConstructorOnStartup]
 	class Logger
 	{
-		private static readonly string prefix_modname = "[Teleporting]";
+		private static readonly string prefix_modname = "[" + TeleportingMod.modname + "]";
 		private static readonly string prefix_debug = "[DEBUG]";
 		private static readonly string prefix_details = "[DETAILS]";
 		private static readonly string prefix_warning = "[WARN]";
