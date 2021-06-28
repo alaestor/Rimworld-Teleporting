@@ -36,11 +36,13 @@ namespace alaestor_teleporting
 		{
 			if (debugBypass || (IsDebug && IsDebugVerbose && infoStrings.Length > 0))
 			{
-				Log.Message(prefix_indent + prefix + prefix_sep + details_header);
+				string detailsOutput = prefix_indent + prefix + prefix_sep + details_header;
+				detailsOutput += "\n" + prefix_indent + infoStrings.Length.ToString() + " details\t\t(click to view all)";
 				foreach (var str in infoStrings)
 				{
-					Log.Message(prefix_indent + prefix_indent + str);
+					detailsOutput += "\n" + prefix_indent + prefix_indent + str;
 				}
+				Log.Message(detailsOutput);
 			}
 		}
 
