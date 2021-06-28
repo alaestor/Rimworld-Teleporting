@@ -201,9 +201,9 @@ namespace alaestor_teleporting
 							else cooldownTicks -= (int)(cooldownTicks * multiplier);
 						}
 
-						if (Logger.IsDebug)
+						if (Logger.IsDebugVerbose)
 						{
-							Logger.Debug("onTeleportSuccess :: cooldown :: Intelect divisor",
+							Logger.DebugVerbose("onTeleportSuccess :: cooldown :: Intelect divisor",
 								"pawn name:  \t" + controllingPawn.Name,
 								"intelect:   \t" + intelect.ToString(),
 								"divisor:    \t" + TeleportingMod.settings.intelectDivisor.ToString(),
@@ -250,7 +250,7 @@ namespace alaestor_teleporting
 					activateSound = SoundDef.Named("Click"),
 					action = delegate
 					{
-						Logger.Debug("TeleportConsole Debug Gizmo clicked: Short Range Teleport");
+						Logger.Debug("TeleportConsole:: called Godmode Gizmo Short Range Teleport");
 						TeleportBehavior.StartTeleportTargetting(false, this, cheat: true);
 					}
 				};
@@ -262,7 +262,7 @@ namespace alaestor_teleporting
 					activateSound = SoundDef.Named("Click"),
 					action = delegate
 					{
-						Logger.Debug("TeleportConsole Debug Gizmo clicked: Long Range Teleport");
+						Logger.Debug("TeleportConsole:: called Godmode Gizmo Long Range Teleport");
 						TeleportBehavior.StartTeleportTargetting(true, this, cheat: true);
 					}
 				};
