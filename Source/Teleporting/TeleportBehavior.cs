@@ -33,6 +33,12 @@ namespace alaestor_teleporting
 		{
 			if (thing != null && destinationMap != null && destinationCell != null && destinationCell.IsValid)
 			{
+				Logger.Debug(
+					"TeleportBehavior::ExecuteTeleport called",
+					"From " + thing.Label + " at Tile,Cell: " + thing.Tile.ToString() + "," + thing.Position.ToString(),
+					"To Tile,Cell: " + destinationMap.Tile.ToString() + "," + destinationCell.ToString()
+				);
+
 				if (thing.Map == destinationMap && thing.Position == destinationCell)
 				{
 					Logger.Debug(
@@ -72,12 +78,6 @@ namespace alaestor_teleporting
 					thing.DeSpawn(DestroyMode.Vanish);
 					GenSpawn.Spawn(thing, destinationCell, destinationMap);
 				}
-
-				Logger.DebugVerbose(
-					"ExecuteTeleport",
-					"From " + thing.Label + " at Tile,Cell: " + thing.Tile.ToString() + "," + thing.Position.ToString(),
-					"To Tile,Cell: " + destinationMap.Tile.ToString() + "," + destinationCell.ToString()
-				);
 				return true;
 			}
 			else
@@ -199,7 +199,7 @@ namespace alaestor_teleporting
 				}
 			}
 
-			Logger.DebugVerbose("StartLongRangeTeleport \n\tonSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"));
+			Logger.DebugVerbose("TeleportBehavior::StartLongRangeTeleport \n\tonSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"));
 
 			TeleportTargeter.StartChoosingGlobalThenLocal(
 				startingFrom: startingHere,
@@ -249,7 +249,7 @@ namespace alaestor_teleporting
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 			Map localMap = originator.Map;
 
-			Logger.DebugVerbose("StartShortRangeTeleport \n\tonSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"));
+			Logger.DebugVerbose("TeleportBehavior::StartShortRangeTeleport \n\tonSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"));
 			TeleportTargeter.StartChoosingLocal(globalTarget, GotFrom_Callback, TeleportBehavior.targetTeleportSubjects);
 
 			void GotFrom_Callback(LocalTargetInfo fromTarget)
@@ -269,7 +269,7 @@ namespace alaestor_teleporting
 		public static void StartTeleportTargetting(bool longRangeFlag, Thing originator, Action<int> onSuccess_Callback = null, bool cheat = false)
 		{
 			Logger.Debug(
-				"DoTeleport() called",
+				"TeleportBehavior::DoTeleport called",
 				(longRangeFlag ? "Long Range (global targeting)" : "Short Range (local targeting)"),
 				"Originator: " + (originator != null ? originator.ToString() : "null"),
 				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"),
