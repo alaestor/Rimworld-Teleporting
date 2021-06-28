@@ -7,7 +7,7 @@ namespace alaestor_teleporting
 	{
 		private static readonly string prefix_modname = "[" + TeleportingMod.modname + "]";
 		private static readonly string prefix_debug = "[DEBUG]";
-		private static readonly string prefix_debugVerbose = "[DEBUG]";
+		private static readonly string prefix_debugVerbose = prefix_debug + prefix_sep + "[VERBOSE]";
 		private static readonly string prefix_details = "[DETAILS]";
 		private static readonly string prefix_warning = "[WARN]";
 		private static readonly string prefix_error = "[ERROR]";
