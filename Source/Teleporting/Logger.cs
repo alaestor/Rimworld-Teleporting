@@ -55,7 +55,7 @@ namespace alaestor_teleporting
 			if (debugBypass || (IsDebug && IsDebugVerbose))
 			{
 				Log.Message(debugVerbose_header + msg);
-				if (debugBypass && infoStrings.Length > 0) Details(prefix_debugVerbose, debugBypass, infoStrings);
+				if (debugBypass || infoStrings.Length > 0) Details(prefix_debugVerbose, debugBypass, infoStrings);
 			}
 		}
 
