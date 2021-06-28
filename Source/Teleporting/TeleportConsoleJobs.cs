@@ -13,11 +13,31 @@ namespace alaestor_teleporting
 		public static JobDef UseTeleportConsole_LongRange;
 	}
 
-	public class JobDriver_UseTeleportConsole_ShortRange : JobDriver
+	public abstract class JobDriver_UseTeleportConsole_Generic : JobDriver
 	{
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 			=> this.pawn.Reserve(this.job.targetA, this.job, errorOnFailed: errorOnFailed);
 
+		protected JobCondition IsToilDone()
+		{
+			if (this.job.targetA != null
+				&& this.job.targetA.IsValid
+				&& this.job.targetA.Thing != null
+				&& this.job.targetA.Thing is Building_TeleportConsole console
+				&& console.IsDoneTargeting()) // is this enough checks?
+			{
+				Logger.DebugVerbose("useTeleporterToil finished");
+				return JobCondition.Succeeded;
+			}
+			else
+			{
+				return JobCondition.Ongoing;
+			}
+		}
+	}
+
+	public class JobDriver_UseTeleportConsole_ShortRange : JobDriver_UseTeleportConsole_Generic
+	{
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportConsole_ShortRange>(TargetIndex.A);
@@ -34,16 +54,16 @@ namespace alaestor_teleporting
 					return;
 
 				console.TryStartTeleport(actor, false);
+				console.hasStartedTargetting = true;
+				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportConsole_ShortRange at ThindID " + console.ThingID.ToString());
 			});
+			useTeleporterToil.AddEndCondition(IsToilDone);
 			yield return useTeleporterToil;
 		}
 	}
 
-	public class JobDriver_UseTeleportConsole_LongRange : JobDriver
+	public class JobDriver_UseTeleportConsole_LongRange : JobDriver_UseTeleportConsole_Generic
 	{
-		public override bool TryMakePreToilReservations(bool errorOnFailed)
-			=> this.pawn.Reserve(this.job.targetA, this.job, errorOnFailed: errorOnFailed);
-
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportConsole_LongRange>(TargetIndex.A);
@@ -60,7 +80,10 @@ namespace alaestor_teleporting
 					return;
 
 				console.TryStartTeleport(actor, true);
+				console.hasStartedTargetting = true;
+				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportConsole_LongRange at ThindID " + console.ThingID.ToString());
 			});
+			useTeleporterToil.AddEndCondition(IsToilDone);
 			yield return useTeleporterToil;
 		}
 	}

@@ -17,9 +17,10 @@ namespace alaestor_teleporting
 		private CompCooldown cooldownComp;
 		// private ??? fuelComp; // for teleport cartridges
 
-		private bool isBeingControlled = false;
-		private Pawn controllingPawn = null;
+		// if this isn't set, the job toil finishes before targetting begins
+		public bool hasStartedTargetting = false;
 
+		/*
 		public override void Tick()
 		{
 			base.Tick();
@@ -28,17 +29,23 @@ namespace alaestor_teleporting
 		public override void TickRare()
 		{
 			base.TickRare();
-			if (this.isBeingControlled && !(Find.Targeter.IsTargeting || Find.WorldTargeter.IsTargeting))
+		}
+		*/
+
+		public override void ExposeData()
+		{
+			base.ExposeData();
+			Scribe_Values.Look<bool>(ref this.hasStartedTargetting, "hasStartedTargetting", false);
+		}
+
+		public bool IsDoneTargeting()
+		{
+			if (this.hasStartedTargetting && !(Find.Targeter.IsTargeting || Find.WorldTargeter.IsTargeting))
 			{
-				JobDef curJobDef = this.controllingPawn.CurJobDef;
-				if (curJobDef == TeleporterDefOf.UseTeleportConsole_ShortRange
-					|| curJobDef == TeleporterDefOf.UseTeleportConsole_LongRange)
-				{
-					this.controllingPawn.jobs.EndCurrentJob(JobCondition.None);
-					this.isBeingControlled = false;
-					this.controllingPawn = null;
-				}
+				this.hasStartedTargetting = false;
+				return true;
 			}
+			else return false;
 		}
 
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
@@ -160,9 +167,6 @@ namespace alaestor_teleporting
 
 		public void TryStartTeleport(Pawn controllingPawn, bool longRangeFlag)
 		{
-			this.isBeingControlled = true;
-			this.controllingPawn = controllingPawn;
-
 			if (TeleportingMod.settings.enableCooldown)
 			{
 				if (this.cooldownComp != null)
