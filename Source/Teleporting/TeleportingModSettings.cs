@@ -1,4 +1,6 @@
 using Verse;
+using System;
+using UnityEngine;
 
 namespace alaestor_teleporting
 {
@@ -121,6 +123,99 @@ namespace alaestor_teleporting
 			this.RefreshStringBuffers();
 
 			base.ExposeData();
+		}
+
+
+
+		/////////////////////////////
+		///  Settings Mod Window  ///
+		/////////////////////////////
+		
+
+
+		public static void DoSettingsWindowContents(Rect inRect)
+		{
+			TeleportingModSettings settings = TeleportingMod.settings;
+
+			Listing_Standard ls = new Listing_Standard();
+			ls.ColumnWidth = (float)(((double)inRect.width - 40.0) / 2.0);
+			ls.Begin(inRect);
+			AddSettings_Cooldown_Options();
+			AddSettings_Fuel_Options();
+			AddSettings_RangeLimit_Options();
+			ls.NewColumn();
+			AddSettings_DebugAndCheats_Options();
+			ls.Gap(100);
+			if (ls.ButtonTextLabeled("", "resetTheseSettings".Translate()))
+			{
+				settings.ResetToDefaults();
+			}
+			ls.End();
+			
+			// associated option groups:
+
+			void AddSettings_Cooldown_Options()
+			{
+				ls.GapLine();
+				ls.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "enableCooldown_tooltip".Translate()); // Note: there are 60 ticks in a second
+				if (settings.enableCooldown)
+				{
+					ls.CheckboxLabeled("enableIntelectDivisor".Translate(), ref settings.enableIntelectDivisor, tooltip: "intelectDivisor_tooltip".Translate());
+					if (settings.enableIntelectDivisor)
+					{
+						ls.TextFieldNumericLabeled<int>("intelectDivisor".Translate(), ref settings.intelectDivisor, ref settings.intelectDivisor_Buffer, min: 1, max: 100);
+						ls.Gap();
+					}
+					ls.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
+					ls.TextFieldNumericLabeled<int>("longRange_CooldownDuration".Translate(), ref settings.longRange_CooldownDuration, ref settings.longRange_CooldownDuration_Buffer);
+				}
+			}
+
+			void AddSettings_Fuel_Options()
+			{
+				ls.GapLine();
+				ls.CheckboxLabeled("enableFuel".Translate(), ref settings.enableFuel, tooltip: "enableFuel_tooltip".Translate());
+				if (settings.enableFuel)
+				{
+					ls.Gap(10);
+					ls.TextFieldNumericLabeled<int>("shortRange_FuelCost".Translate(), ref settings.shortRange_FuelCost, ref settings.shortRange_FuelCost_Buffer);
+					ls.TextFieldNumericLabeled<int>("longRange_FuelCost".Translate(), ref settings.longRange_FuelCost, ref settings.longRange_FuelCost_Buffer);
+					ls.TextFieldNumericLabeled<int>("longRange_FuelDistance".Translate(), ref settings.longRange_FuelDistance, ref settings.longRange_FuelDistance_Buffer);
+					ls.LabelDouble(
+						leftLabel: (""),
+						rightLabel: settings.longRange_FuelDistance == 0 ?
+							String.Format("always consume {0} fuel"/*"longRange_FuelDistance_FixedMsg".Translate()*/, settings.longRange_FuelCost)
+							: String.Format("Consumes {0} cartridges every {1} tiles"/*"longRange_FuelDistance_ScalesMsg".Translate()*/, settings.longRange_FuelCost, settings.longRange_FuelDistance),
+						tip: null);
+					ls.Gap(10);
+				}
+			}
+
+			void AddSettings_RangeLimit_Options()
+			{
+				ls.GapLine();
+				ls.CheckboxLabeled("enableGlobalRangeLimit".Translate(), ref settings.enableGlobalRangeLimit, tooltip: "enableGlobalRangeLimit_tooltip".Translate());
+				if (settings.enableFuel)
+				{
+					ls.Gap(10);
+					ls.TextFieldNumericLabeled<int>("globalRangeLimit".Translate(), ref settings.globalRangeLimit, ref settings.globalRangeLimit_Buffer);
+					ls.Gap(10);
+				}
+			}
+
+			void AddSettings_DebugAndCheats_Options()
+			{
+				ls.GapLine();
+				ls.CheckboxLabeled("enableDebugGizmosInGodmode".Translate(), ref settings.enableDebugGizmosInGodmode, tooltip: "enableDebugGizmosInGodmode_tooltip".Translate());
+				ls.CheckboxLabeled("enableDebugLogging".Translate(), ref settings.enableDebugLogging, tooltip: "enableDebugLogging_tooltip".Translate());
+				if (settings.enableDebugLogging)
+				{
+					if (ls.ButtonTextLabeled("", "testDebugLogging".Translate()))
+					{
+						Logger.TestLogger();
+					}
+				}
+			}
 		}
 	}
 }// namespace alaestor_teleporting
