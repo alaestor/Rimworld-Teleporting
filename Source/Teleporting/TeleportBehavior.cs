@@ -245,10 +245,10 @@ namespace alaestor_teleporting
 
 		public static void StartShortRangeTeleport(Thing originator, Action<int> onSuccess_Callback = null)
 		{
-			
+
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 			Map localMap = originator.Map;
-			
+
 			Logger.DebugVerbose("StartShortRangeTeleport \n\tonSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"));
 			TeleportTargeter.StartChoosingLocal(globalTarget, GotFrom_Callback, TeleportBehavior.targetTeleportSubjects);
 
