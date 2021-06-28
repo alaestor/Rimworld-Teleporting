@@ -254,7 +254,7 @@ namespace alaestor_teleporting
 					activateSound = SoundDef.Named("Click"),
 					action = delegate
 					{
-						Logger.Debug("TeleportConsole:: called Godmode Gizmo Short Range Teleport");
+						Logger.Debug("TeleportConsole:: called Godmode Gizmo: Short Range Teleport");
 						TeleportBehavior.StartTeleportTargetting(false, this, cheat: true);
 					}
 				};
@@ -266,7 +266,7 @@ namespace alaestor_teleporting
 					activateSound = SoundDef.Named("Click"),
 					action = delegate
 					{
-						Logger.Debug("TeleportConsole:: called Godmode Gizmo Long Range Teleport");
+						Logger.Debug("TeleportConsole:: called Godmode Gizmo: Long Range Teleport");
 						TeleportBehavior.StartTeleportTargetting(true, this, cheat: true);
 					}
 				};

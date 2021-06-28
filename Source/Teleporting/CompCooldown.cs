@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Verse;
 using UnityEngine;
+using Verse;
 
 namespace alaestor_teleporting
 {
@@ -16,12 +16,14 @@ namespace alaestor_teleporting
 		public void Reset()
 		{
 			this.remaining = 0;
+			Logger.DebugVerbose("CompCooldown cooldown reset");
 		}
 
 		public void Set(int ticks)
 		{
 			if (ticks > 0) this.remaining = ticks;
 			else this.remaining = 0;
+			Logger.DebugVerbose("CompCooldown cooldown set to " + ticks.ToString() + " ticks (" + ((int)(ticks / 60)).ToString() + " seconds)");
 		}
 
 		public void SetSeconds(int seconds)
@@ -31,12 +33,14 @@ namespace alaestor_teleporting
 
 		public void Add(int ticks)
 		{
-			this.remaining += ticks;
+			if (ticks > 0) this.remaining += ticks;
+			else Logger.Error("CompCooldown Tried to add negative cooldown time");
+			Logger.DebugVerbose("CompCooldown cooldown increased by adding " + ticks.ToString() + " ticks (" + ((int)(ticks / 60)).ToString() + " seconds)");
 		}
 
 		public void AddSeconds(int seconds)
 		{
-			this.remaining += seconds * 60;
+			this.Add(seconds * 60);
 		}
 
 		public void Subtract(int ticks)
@@ -60,17 +64,13 @@ namespace alaestor_teleporting
 		public override void CompTick()
 		{ // ticks every 1/60th second (1t / 60tps)
 			base.CompTick();
-			if (this.remaining > 0) --this.remaining;
+			this.Subtract(1);
 		}
 
 		public override void CompTickRare()
 		{ // ticks every 4.16 seconds (250t / 60tps)
 			base.CompTickRare();
-			if (this.remaining > 0)
-			{
-				if (this.remaining - 250 >= 0) this.remaining -= 250;
-				else this.remaining = 0;
-			}
+			this.Subtract(250);
 		}
 
 		public override void PostExposeData()
@@ -110,10 +110,14 @@ namespace alaestor_teleporting
 			{
 				yield return new Command_Action
 				{
-					defaultLabel = "MakeCoolDebugGizmo_Label".Translate(),
-					defaultDesc = "MakeCoolDebugGizmo_Desc".Translate(), //"Reset cooldown to 0",
+					defaultLabel = "MakeCoolDebugGizmo_Label".Translate(), //"Cooldown"
+					defaultDesc = "MakeCoolDebugGizmo_Desc".Translate(), //"Reset cooldown to 0"
 					activateSound = SoundDef.Named("Click"),
-					action = delegate { this.Reset(); }
+					action = delegate
+					{
+						Logger.Debug("CompCooldown:: called Godmode Gizmo: cooldown");
+						this.Reset();
+					}
 				};
 			}
 		}
