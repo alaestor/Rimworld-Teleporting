@@ -41,6 +41,7 @@ namespace alaestor_teleporting
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportConsole_ShortRange>(TargetIndex.A);
+			this.FailOnBurningImmobile<JobDriver_UseTeleportConsole_ShortRange>(TargetIndex.A);
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn((Func<Toil, bool>)
 				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseConsoleNow));
 
@@ -67,6 +68,7 @@ namespace alaestor_teleporting
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportConsole_LongRange>(TargetIndex.A);
+			this.FailOnBurningImmobile<JobDriver_UseTeleportConsole_LongRange>(TargetIndex.A);
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn((Func<Toil, bool>)
 				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseConsoleNow));
 
