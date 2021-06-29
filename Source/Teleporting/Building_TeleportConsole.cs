@@ -71,31 +71,6 @@ namespace alaestor_teleporting
 			}
 		}
 
-		// TODO remove all of this once there's an alternative to refuelable
-		// <-- from here
-		public int RemainingFuel()
-		{
-			return ((int)Math.Floor(refuelableComp.Fuel));
-		}
-
-		public bool CanConsumeFuelAmount(int n)
-		{
-			return RemainingFuel() >= n;
-		}
-
-		public int FuelCostToTravel(int tileDistance)
-		{
-			if (tileDistance == 0)
-			{
-				return TeleportingMod.settings.longRange_FuelCost;
-			}
-			else
-			{
-				return ((int)Math.Ceiling(((double)tileDistance) / TeleportingMod.settings.longRange_FuelDistance)) * TeleportingMod.settings.longRange_FuelCost;
-			}
-		}
-		// <-- to here
-
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn myPawn)
 		{
 			Building_TeleportConsole console = this;
@@ -180,9 +155,9 @@ namespace alaestor_teleporting
 				else Logger.Error("Teleporting: cooldown is enabled but cooldownComp is null");
 			}
 
-			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess);
+			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess, refuelableComp);
 
-			void onTeleportSuccess(int totalTeleportDistance)
+			void onTeleportSuccess(int fuelConsumed)
 			{
 				if (TeleportingMod.settings.enableCooldown)
 				{
@@ -222,20 +197,7 @@ namespace alaestor_teleporting
 
 				if (TeleportingMod.settings.enableFuel)
 				{
-					int fuelCost = 0;
-
-					if (longRangeFlag)
-					{
-						// TODO rework once usesconsumables is made
-						fuelCost = TeleportingMod.settings.longRange_FuelDistance > 0 ?
-							FuelCostToTravel(totalTeleportDistance) : TeleportingMod.settings.longRange_FuelCost;
-					}
-					else
-					{
-						fuelCost = TeleportingMod.settings.shortRange_FuelCost;
-					}
-
-					this.refuelableComp.ConsumeFuel(fuelCost);
+					this.refuelableComp.ConsumeFuel(fuelConsumed);
 				}
 			}
 		}
