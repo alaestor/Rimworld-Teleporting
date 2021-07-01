@@ -56,7 +56,7 @@ namespace alaestor_teleporting
 			this.cooldownComp = this.GetComp<CompCooldown>();
 		}
 
-		public bool CanUseConsoleNow
+		public bool CanUseNow
 		{
 			get
 			{
@@ -83,7 +83,7 @@ namespace alaestor_teleporting
 					return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), (Action)null);
 				else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
 					return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
-				else if (this.CanUseConsoleNow)
+				else if (this.CanUseNow)
 					return (FloatMenuOption)null; // allow use
 				Logger.Warning(myPawn.ToString() + "Could not use teleport console for unknown reason.");
 				return new FloatMenuOption("Cannot use now", (Action)null);
