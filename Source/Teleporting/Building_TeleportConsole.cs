@@ -68,9 +68,7 @@ namespace alaestor_teleporting
 
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn myPawn)
 		{
-			Building_TeleportConsole console = this;
 			FloatMenuOption failureReason = GetFailureReason();
-
 			FloatMenuOption GetFailureReason()
 			{
 				if (!myPawn.CanReach((LocalTargetInfo)(Thing)this, PathEndMode.InteractionCell, Danger.Some))
@@ -117,13 +115,13 @@ namespace alaestor_teleporting
 					{
 						if (this.refuelableComp.Fuel >= TeleportingMod.settings.shortRange_FuelCost)
 						{
-							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
+							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
 						}
 						else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), (Action)null); // restring
 
 						if (this.refuelableComp.Fuel >= TeleportingMod.settings.longRange_FuelCost)
 						{
-							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
+							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
 						}
 						else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), (Action)null); // restring
 					}
@@ -131,8 +129,8 @@ namespace alaestor_teleporting
 				}
 				else
 				{
-					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
-					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)console);
+					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
 				}
 			}
 		}
