@@ -53,7 +53,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Building_TeleportPlatform.cs" />
     <Compile Include="CompCooldown.cs" />
+    <Compile Include="CompNameLinkable.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MyDefs.cs" />
     <Compile Include="TeleportTargeter.cs" />
