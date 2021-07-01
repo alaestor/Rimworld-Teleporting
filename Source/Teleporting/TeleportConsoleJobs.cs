@@ -43,7 +43,7 @@ namespace alaestor_teleporting
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportConsole_ShortRange>(TargetIndex.A);
 			this.FailOnBurningImmobile<JobDriver_UseTeleportConsole_ShortRange>(TargetIndex.A);
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn((Func<Toil, bool>)
-				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseConsoleNow));
+				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow));
 
 			Toil useTeleporterToil = new Toil();
 			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Never;
@@ -51,7 +51,7 @@ namespace alaestor_teleporting
 			{
 				Pawn actor = useTeleporterToil.actor;
 				Building_TeleportConsole console = (Building_TeleportConsole)actor.jobs.curJob.GetTarget(TargetIndex.A).Thing;
-				if (!console.CanUseConsoleNow)
+				if (!console.CanUseNow)
 					return;
 
 				console.TryStartTeleport(actor, false);
@@ -70,7 +70,7 @@ namespace alaestor_teleporting
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportConsole_LongRange>(TargetIndex.A);
 			this.FailOnBurningImmobile<JobDriver_UseTeleportConsole_LongRange>(TargetIndex.A);
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn((Func<Toil, bool>)
-				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseConsoleNow));
+				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow));
 
 			Toil useTeleporterToil = new Toil();
 			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Never;
@@ -78,7 +78,7 @@ namespace alaestor_teleporting
 			{
 				Pawn actor = useTeleporterToil.actor;
 				Building_TeleportConsole console = (Building_TeleportConsole)actor.jobs.curJob.GetTarget(TargetIndex.A).Thing;
-				if (!console.CanUseConsoleNow)
+				if (!console.CanUseNow)
 					return;
 
 				console.TryStartTeleport(actor, true);
