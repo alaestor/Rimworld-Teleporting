@@ -292,7 +292,7 @@ namespace alaestor_teleporting
 				{
 					Logger.DebugVerbose("StartShortRangeTeleport Got \"to\" target:\t\t" + toTarget.Label + " at Cell: " + toTarget.Cell.ToString());
 					if (ExecuteTeleport(fromTarget.Thing, localMap, toTarget.Cell))
-						onSuccess_Callback?.Invoke(0);
+						onSuccess_Callback?.Invoke(TeleportingMod.settings.shortRange_FuelCost);
 				}
 			}
 		}
