@@ -54,11 +54,6 @@ namespace alaestor_teleporting
 			this.powerComp = this.GetComp<CompPowerTrader>();
 			this.refuelableComp = this.GetComp<CompRefuelable>();
 			this.cooldownComp = this.GetComp<CompCooldown>();
-			if (this.cooldownComp == null)
-			{
-				Logger.Error("A Building_TeleportConsole class object didn't provide a cooldownComp. Creating a default one.");
-				this.cooldownComp = new CompCooldown();
-			}
 		}
 
 		public bool CanUseConsoleNow
