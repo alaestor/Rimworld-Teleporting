@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
   <ThingDef ParentName="BuildingBase">
@@ -46,6 +46,8 @@
         <fuelFilter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></fuelFilter>
         <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
         <showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
+		<fuelLabel>Teleport Cartridges</fuelLabel>
+		<!--fuelGizmoLabel>Test2</fuelGizmoLabel-->
       </li>
 	  <li Class="CompProperties_Flickable"/>
       <li Class="CompProperties_Breakdownable"/>
