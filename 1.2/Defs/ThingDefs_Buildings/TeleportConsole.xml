@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
   <ThingDef ParentName="BuildingBase">
@@ -42,7 +42,7 @@
 	  <li Class="alaestor_teleporting.CompProperties_Cooldown"/>
 	  <li Class="CompProperties_Refuelable">
         <fuelConsumptionRate>0</fuelConsumptionRate>
-        <fuelCapacity>30.0</fuelCapacity>
+        <fuelCapacity>75.0</fuelCapacity>
         <fuelFilter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></fuelFilter>
         <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
         <showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
