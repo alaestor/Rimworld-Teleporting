@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -48,7 +48,7 @@ namespace alaestor_teleporting
 				if (!platform.CanUseNow)
 					return;
 
-				//platform.TryStartTeleport(actor, false);
+				platform.TryStartTeleport(actor);
 				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportPlatform_TeleportToLink at ThindID " + platform.ThingID.ToString());
 			});
 			//useTeleporterToil.AddEndCondition(IsToilDone);

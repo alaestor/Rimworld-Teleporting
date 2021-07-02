@@ -76,5 +76,60 @@ namespace alaestor_teleporting
 					use_Label, use_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
 			}
 		}
+
+		public void TryStartTeleport(Pawn usingPawn)
+		{
+			/*
+			if (TeleportingMod.settings.enableCooldown)
+			{
+				if (this.cooldownComp != null)
+				{
+					if (this.cooldownComp.IsOnCooldown)
+					{
+						Logger.Warning("Tried to start a teleport but console was on cooldown");
+						return;
+					}
+				}
+				else Logger.Error("Teleporting: cooldown is enabled but cooldownComp is null");
+			}
+			*/
+
+			if (nameLinkableComp.IsLinkedToSomething)
+			{
+				Thing destination = nameLinkableComp.LinkedThing;
+				if (destination.Map != null && destination.InteractionCell.IsValid)
+				{
+					if (TeleportBehavior.ExecuteTeleport(usingPawn, destination.Map, destination.InteractionCell))
+					{
+						Logger.Debug(
+							"Building_TeleportPlatform::TryStartTeleport: Teleported "
+								+ usingPawn.Label
+								+ " from \"" + nameLinkableComp.Name ?? "(unnamed)"
+								+ "\" to \"" + nameLinkableComp.LinkedName ?? "(unnamed)" + "\"",
+							"Destination Map: " + destination.Map.ToString(),
+							"Destination Cell: " + destination.InteractionCell.ToString()
+						);
+						/*
+						if (TeleportingMod.settings.enableCooldown)
+						{
+							int cooldownTicks = TeleportingMod.settings.shortRange_CooldownDuration * 60;
+						}
+						*/
+					}
+					else
+					{
+						Logger.Error("Building_TeleportPlatform::TryStartTeleport: ExecuteTeleport failed.");
+					}
+				}
+				else
+				{
+					Logger.Error(
+						"Building_TeleportPlatform::TryStartTeleport: destination map or cell was invalid!",
+						"Map: " + destination.Map.ToString(),
+						"Cell: " + destination.InteractionCell.ToString()
+					);
+				}
+			}
+		}
 	}
 }
