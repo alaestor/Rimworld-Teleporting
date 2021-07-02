@@ -37,7 +37,7 @@ namespace alaestor_teleporting
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportPlatform_TeleportToLink>(TargetIndex.A);
 			this.FailOnBurningImmobile<JobDriver_UseTeleportPlatform_TeleportToLink>(TargetIndex.A);
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn((Func<Toil, bool>)
-				(to => !((Building_TeleportConsole)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow));
+				(to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow));
 
 			Toil useTeleporterToil = new Toil();
 			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.PatherArrival; //ToilCompleteMode.Never;
