@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -40,7 +40,7 @@ namespace alaestor_teleporting
 				(to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow));
 
 			Toil useTeleporterToil = new Toil();
-			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.PatherArrival; //ToilCompleteMode.Never;
+			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Instant; //ToilCompleteMode.Never;
 			useTeleporterToil.initAction = (Action)(() =>
 			{
 				Pawn actor = useTeleporterToil.actor;
