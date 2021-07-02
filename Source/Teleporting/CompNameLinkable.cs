@@ -99,6 +99,8 @@ namespace alaestor_teleporting
 
 		public bool IsLinkedToSomething => linkedToName != null && NameExists(linkedToName);
 
+		public string LinkedName => linkedToName;
+
 		public Thing LinkedThing
 		{
 			get
