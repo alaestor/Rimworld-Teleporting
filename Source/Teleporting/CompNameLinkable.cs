@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
@@ -55,12 +55,6 @@ namespace alaestor_teleporting
 
 	public class CompNameLinkable : ThingComp
 	{
-		private static readonly Dictionary<string, Thing> nameLinkableThings = new Dictionary<string, Thing>();
-
-		public static bool NameExists(string linkableName) => nameLinkableThings.ContainsKey(linkableName);
-		public static bool NameIsAvailable(string linkableName) => !nameLinkableThings.ContainsKey(linkableName);
-
-
 		public CompProperties_NameLinkable Props => (CompProperties_NameLinkable)this.props;
 		public bool CanBeNamed => Props.canBeNamed; // TODO 
 		public bool CanBeLinked => Props.canBeLinked; // TODO
