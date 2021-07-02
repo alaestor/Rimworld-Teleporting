@@ -55,4 +55,30 @@ namespace alaestor_teleporting
 			yield return useTeleporterToil;
 		}
 	}
+
+	public class JobDriver_UseTeleportPlatform_MakeLink : JobDriver_UseTeleportPlatform_Generic
+	{
+		protected override IEnumerable<Toil> MakeNewToils()
+		{
+			this.FailOnDespawnedOrNull<JobDriver_UseTeleportPlatform_MakeLink>(TargetIndex.A);
+			this.FailOnBurningImmobile<JobDriver_UseTeleportPlatform_MakeLink>(TargetIndex.A);
+			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn((Func<Toil, bool>)
+				(to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow));
+
+			Toil useTeleporterToil = new Toil();
+			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Instant; //ToilCompleteMode.Never;
+			useTeleporterToil.initAction = (Action)(() =>
+			{
+				Pawn actor = useTeleporterToil.actor;
+				Building_TeleportPlatform platform = (Building_TeleportPlatform)actor.jobs.curJob.GetTarget(TargetIndex.A).Thing;
+				if (!platform.CanUseNow)
+					return;
+
+				platform.MakeLink();
+				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportPlatform_Unlink at ThindID " + platform.ThingID.ToString());
+			});
+			//useTeleporterToil.AddEndCondition(IsToilDone);
+			yield return useTeleporterToil;
+		}
+	}
 }// namespace alaestor_teleporting

@@ -22,4 +22,11 @@
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>
   
+  <JobDef>
+    <defName>UseTeleportPlatform_MakeLink</defName>
+    <driverClass>alaestor_teleporting.JobDriver_UseTeleportPlatform_MakeLink</driverClass>
+    <reportString>Linking teleport platform.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
 </Defs>

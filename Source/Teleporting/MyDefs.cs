@@ -14,6 +14,7 @@ namespace alaestor_teleporting
 	public static class TeleporterDefOf
 	{ // I'm 99% sure there's a better way to do this
 		public static readonly JobDef UseTeleportPlatform_TeleportToLink;
+		public static readonly JobDef UseTeleportPlatform_MakeLink;
 		public static readonly JobDef UseTeleportConsole_ShortRange;
 		public static readonly JobDef UseTeleportConsole_LongRange;
 	}
