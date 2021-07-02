@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
 namespace alaestor_teleporting
@@ -12,6 +12,7 @@ namespace alaestor_teleporting
 	[DefOf]
 	public static class TeleporterDefOf
 	{ // I'm 99% sure there's a better way to do this
+		public static readonly JobDef UseTeleportPlatform_TeleportToLink;
 		public static readonly JobDef UseTeleportConsole_ShortRange;
 		public static readonly JobDef UseTeleportConsole_LongRange;
 	}

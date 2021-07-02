@@ -15,4 +15,11 @@
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>
   
+  <JobDef>
+    <defName>UseTeleportPlatform_TeleportToLink</defName>
+    <driverClass>alaestor_teleporting.JobDriver_UseTeleportPlatform_TeleportToLink</driverClass>
+    <reportString>using teleport platform.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
 </Defs>
