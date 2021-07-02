@@ -8,8 +8,9 @@ namespace alaestor_teleporting
 {
 	public class Building_TeleportPlatform : Building
 	{
-		private CompPowerTrader powerComp;
 		private CompNameLinkable nameLinkableComp;
+		private CompRefuelable refuelableComp;
+		private CompPowerTrader powerComp;
 
 		public override void ExposeData()
 		{
@@ -20,8 +21,9 @@ namespace alaestor_teleporting
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.powerComp = this.GetComp<CompPowerTrader>();
 			this.nameLinkableComp = this.GetComp<CompNameLinkable>();
+			this.refuelableComp = this.GetComp<CompRefuelable>();
+			this.powerComp = this.GetComp<CompPowerTrader>();
 		}
 
 		public bool CanUseNow
@@ -34,51 +36,53 @@ namespace alaestor_teleporting
 			}
 		}
 
-		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn myPawn)
+		public bool HasEnoughFuel => ((int)refuelableComp.Fuel) >= 1;
+		public void ConsumeFuel()
 		{
-			FloatMenuOption failureReason = GetFailureReason();
+			refuelableComp.ConsumeFuel(1);
+		}
 
-			FloatMenuOption GetFailureReason()
-			{
-				if (!myPawn.CanReach((LocalTargetInfo)(Thing)this, PathEndMode.InteractionCell, Danger.Some))
-					return new FloatMenuOption((string)"CannotUseNoPath".Translate(), (Action)null);
-				else if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
-					return new FloatMenuOption((string)"CannotUseSolarFlare".Translate(), (Action)null);
-				else if (this.powerComp != null && !this.powerComp.PowerOn)
-					return new FloatMenuOption((string)"CannotUseNoPower".Translate(), (Action)null);
-				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving))
-					return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), (Action)null);
-				/*
-				else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
-					return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
-				*/
-				else if (this.CanUseNow)
-					return (FloatMenuOption)null; // allow use
-				Logger.Warning(myPawn.ToString() + "Could not use teleport pad for unknown reason.");
-				return new FloatMenuOption("Cannot use now", (Action)null);
-			}
+		public void Rename()
+		{
+			nameLinkableComp.BeginRename();
+		}
 
-			if (failureReason != null)
+		public void MakeLink()
+		{
+			nameLinkableComp.BeginMakeLink();
+		}
+
+		public bool Unlink()
+		{
+			if (nameLinkableComp.IsLinkedToSomething && HasEnoughFuel)
 			{
-				yield return failureReason;
+				ConsumeFuel();
+				nameLinkableComp.Unlink();
+				return true;
 			}
 			else
 			{
-				//if valid link
-				string use_Label = "UseTeleportPlatform_Label".Translate();
-				Action use_Action = (Action)(() =>
-				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_TeleportToLink, (LocalTargetInfo)(Thing)this);
-					myPawn.jobs.TryTakeOrderedJob(job);
-				});
-
-				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(
-					use_Label, use_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+				Logger.Debug("Building_TeleportPlatform::Unlink: couldn't unlink",
+					"IsLinkedToSomething: " + nameLinkableComp.IsLinkedToSomething.ToString(),
+					"HasEnoughFuel: " + HasEnoughFuel.ToString()
+				);
+				//Message?
 			}
+			return false;
 		}
 
 		public void TryStartTeleport(Pawn usingPawn)
 		{
+			if (refuelableComp != null && !refuelableComp.IsFull)
+			{
+				Logger.Warning(
+					"Building_TeleportPlatform::TryStartTeleport: " + usingPawn.Label + " tried to teleport but fuel isnt full",
+					"From: \"" + nameLinkableComp.Name + "\"",
+					"Fuel: " + refuelableComp.Fuel
+				);
+				return;
+			}
+
 			/*
 			if (TeleportingMod.settings.enableCooldown)
 			{
@@ -94,7 +98,7 @@ namespace alaestor_teleporting
 			}
 			*/
 
-			if (nameLinkableComp.IsLinkedToSomething)
+			if (nameLinkableComp.HasValidLinkedThing)
 			{
 				Thing destination = nameLinkableComp.LinkedThing;
 				if (destination.Map != null && destination.InteractionCell.IsValid)
@@ -104,8 +108,8 @@ namespace alaestor_teleporting
 						Logger.Debug(
 							"Building_TeleportPlatform::TryStartTeleport: Teleported "
 								+ usingPawn.Label
-								+ " from \"" + nameLinkableComp.Name ?? "(unnamed)"
-								+ "\" to \"" + nameLinkableComp.LinkedName ?? "(unnamed)" + "\"",
+								+ " from \"" + nameLinkableComp.Name
+								+ "\" to \"" + nameLinkableComp.GetNameOfLinkedLinkedThing + "\"",
 							"Destination Map: " + destination.Map.ToString(),
 							"Destination Cell: " + destination.InteractionCell.ToString()
 						);
@@ -129,6 +133,103 @@ namespace alaestor_teleporting
 						"Cell: " + destination.InteractionCell.ToString()
 					);
 				}
+			}
+		}
+
+		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn myPawn)
+		{
+			FloatMenuOption failureReason = GetFailureReason();
+
+			FloatMenuOption GetFailureReason()
+			{
+				if (!myPawn.CanReach((LocalTargetInfo)(Thing)this, PathEndMode.InteractionCell, Danger.Some))
+					return new FloatMenuOption((string)"CannotUseNoPath".Translate(), (Action)null);
+				else if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
+					return new FloatMenuOption((string)"CannotUseSolarFlare".Translate(), (Action)null);
+				else if (this.powerComp != null && !this.powerComp.PowerOn)
+					return new FloatMenuOption((string)"CannotUseNoPower".Translate(), (Action)null);
+				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving))
+					return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), (Action)null);
+				/*
+				else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
+					return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
+				*/
+				else if (this.refuelableComp != null && !HasEnoughFuel)
+					return new FloatMenuOption((string)"out of fuel".Translate(), (Action)null); // TODO translate
+				else if (nameLinkableComp.IsLinkedToSomething && nameLinkableComp.HasInvalidLinkedThing)
+					return new FloatMenuOption("Link broken: cannot find target", (Action)null);
+				else if (this.CanUseNow)
+					return (FloatMenuOption)null; // allow use
+				Logger.Warning(myPawn.ToString() + "Could not use teleport pad for unknown reason.");
+				return new FloatMenuOption("Cannot use now", (Action)null);
+			}
+
+			if (failureReason != null)
+			{
+				yield return failureReason;
+			}
+			else if (nameLinkableComp.HasValidLinkedThing)
+			{
+
+				string use_Label = "UseTeleportPlatform_Label".Translate();
+				Action use_Action = (Action)(() =>
+				{
+					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_TeleportToLink, (LocalTargetInfo)(Thing)this);
+					myPawn.jobs.TryTakeOrderedJob(job);
+				});
+
+				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(
+					use_Label, use_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+			}
+			else if (!nameLinkableComp.IsLinkedToSomething && nameLinkableComp.CanBeLinked)
+			{
+				string makeLink_Label = "LinkTeleportPlatform_Label".Translate();
+				Action makeLink_Action = (Action)(() =>
+				{
+					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_MakeLink, (LocalTargetInfo)(Thing)this);
+					myPawn.jobs.TryTakeOrderedJob(job);
+				});
+
+				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(
+					makeLink_Label, makeLink_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+			}
+		}
+
+		public override IEnumerable<Gizmo> GetGizmos()
+		{
+			foreach (Gizmo gizmo in base.GetGizmos())
+				yield return gizmo;
+
+			if (nameLinkableComp.CanBeNamed)
+			{
+				yield return new Command_Action
+				{
+					//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
+					defaultLabel = "RenamePlatformGizmo_Label".Translate(),
+					defaultDesc = "RenamePlatformGizmo_Desc".Translate(),
+					activateSound = SoundDef.Named("Click"),
+					action = delegate
+					{
+						Rename();
+						Logger.Debug("TeleportPlatform:: called Gizmo: rename");
+					}
+				};
+			}
+
+			if (nameLinkableComp.IsLinkedToSomething)
+			{
+				yield return new Command_Action
+				{
+					//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
+					defaultLabel = "UnlinkPlatformGizmo_Label".Translate(),
+					defaultDesc = "UnlinkPlatformGizmo_Desc".Translate(),
+					activateSound = SoundDef.Named("Click"),
+					action = delegate
+					{
+						Unlink();
+						Logger.Debug("TeleportPlatform:: called Gizmo: unlink");
+					}
+				};
 			}
 		}
 	}

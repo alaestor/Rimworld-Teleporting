@@ -40,14 +40,17 @@
       </li>
 	  <!--
 	  <li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+	  -->
 	  <li Class="CompProperties_Refuelable">
         <fuelConsumptionRate>0</fuelConsumptionRate>
-        <fuelCapacity>30.0</fuelCapacity>
+        <fuelCapacity>1.0</fuelCapacity>
+        <initialFuelPercent>1.0</initialFuelPercent>
         <fuelFilter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></fuelFilter>
         <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
         <showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
+		<fuelLabel>Teleport Cartridges</fuelLabel>
+		<atomicFueling>true</atomicFueling>
       </li>
-	  -->
 	  <li Class="alaestor_teleporting.CompProperties_NameLinkable"/>
 	  <li Class="CompProperties_Flickable"/>
       <li Class="CompProperties_Breakdownable"/>

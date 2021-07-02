@@ -1,20 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace alaestor_teleporting
 {
-	/*
-	[StaticConstructorOnStartup]
-	class NameLinkableManager
-	{
-		static public Dictionary<string, Thing> nameLinkableThings;
-
-		public static bool NameExists(string linkableName) => nameLinkableThings.ContainsKey(linkableName);
-		public static bool NameIsAvailable(string linkableName) => !nameLinkableThings.ContainsKey(linkableName);
-	}
-	*/
-
 	// TODO this should probably be its own file
 	public class Dialog_NameInputWindow : Dialog_Rename
 	{
@@ -65,97 +54,148 @@ namespace alaestor_teleporting
 
 		private string name = null;
 
+		public bool IsNamed => name != null;
+
 		public string Name
 		{
-			get => name;
+			get => name ?? "(unnamed)";
 			set
 			{
-				if (NameIsAvailable(value))
+				if (CanBeNamed)
 				{
-					if (name != null && nameLinkableThings.ContainsKey(name))
-						nameLinkableThings.Remove(name);
-
-					name = value;
-
-					if (!name.NullOrEmpty())
-						nameLinkableThings.Add(name, parent);
+					if (!value.NullOrEmpty())
+					{
+						if (NameLinkableManager.NameIsAvailable(value))
+						{
+							Logger.DebugVerbose("CompNameLinkable::Name::set: Changed \"" + name.ToString() + "\" to \"" + value + "\"");
+							NameLinkableManager.TryToUnregister(name);
+							name = value;
+							NameLinkableManager.RegisterOrUpdate(name, parent);
+						}
+						else Logger.Error("CompNameLinkable::Name::set: Tried to name thing\"" + value + "\" but it already exists");
+					}
+					else Logger.Error("CompNameLinkable::Name::set: Tried to name thing null or empty string");
 				}
-				else Logger.Error("CompNameLinkable::Name::set: Tried to name thing\"" + value + "\" but it already exists");
+				else Logger.Error("CompNameLinkable::Name::set: Tried to name thing but thing CanBeNamed is false");
 			}
+		}
+
+		public static bool IsNewNameValid(string newName)
+		{
+			return NameLinkableManager.NameIsAvailable(newName);
+		}
+
+		public void BeginRename()
+		{
+			if (CanBeNamed)
+			{
+				Logger.DebugVerbose("CompNameLinkable::BeginRename: called");
+				AcceptanceReport Rename_Validator(string newName)
+				{
+					if (NameLinkableManager.NameIsAvailable(newName))
+					{
+						return (AcceptanceReport)true;
+					}
+					else return (AcceptanceReport)"NameIsInUse".Translate();
+				}
+
+				Find.WindowStack.Add(new Dialog_NameInputWindow(name ?? "", Rename_Validator, Rename_Callback));
+
+				void Rename_Callback(string newName)
+				{
+					Name = newName;
+				}
+			}
+			else Logger.Error("CompNameLinkable::BeginRename: called but CanBeNamed is false!");
 		}
 
 		//
 		// LINK stuff
 		//
 
-		private string linkedToName = null;
-		private Thing linkedToThing = null;
+		private string linkedName = null;
 
-		public bool IsLinkedToSomething => linkedToName != null && NameExists(linkedToName);
+		public Thing LinkedThing => HasValidLinkedThing ? NameLinkableManager.GetLinkedThing(linkedName) : null;
 
-		public string LinkedName => linkedToName;
+		public bool IsLinkedToSomething => linkedName != null;
+		public bool IsLinkedToValidName => linkedName != null && NameLinkableManager.NameExists(linkedName);
+		public bool HasValidLinkedThing => linkedName != null && NameLinkableManager.IsLinkedThingValid(linkedName);
+		public bool HasInvalidLinkedThing => !HasValidLinkedThing;
 
-		public Thing LinkedThing
-		{
-			get
-			{
-				if (IsLinkedToSomething)
-				{
-					if (linkedToThing != null && linkedToThing.Spawned)
-					{
-						return linkedToThing;
-					}
-					else
-					{
-						var thing = nameLinkableThings[linkedToName];
-						if (thing != null && thing.Spawned)
-						{
-							linkedToThing = thing;
-							return linkedToThing;
-						}
-					}
-				}
-				return null;
-			}
-		}
+		public string GetNameOfLinkedLinkedThing => linkedName ?? "(unlinked)";
 
 		public void LinkTo(string linkableName)
 		{
-			if (NameExists(linkableName))
+			if (CanBeLinked)
 			{
-				linkedToName = linkableName;
-				linkedToThing = nameLinkableThings[linkedToName];
-			}
-			else Logger.Warning("Tried to link to non-existent nameLinkable \"" + linkableName + "\"");
+				if (NameLinkableManager.NameExists(linkableName))
+				{
+					linkedName = linkableName;
+					Logger.DebugVerbose("CompNameLinkable::LinkTo: \"" + Name + "\" linked to \"" + linkableName + "\"");
+				}
+				else Logger.Warning("Tried to link to non-existent nameLinkable \"" + linkableName + "\"");
+			} 
+			else Logger.Error("CompNameLinkable::LinkTo: called but CanBeLinked is false!");
 		}
 
 		public bool TryLinkTo(string linkableName)
 		{
-			if (NameExists(linkableName))
+			if (CanBeLinked)
 			{
-				LinkTo(linkableName);
-
-				Logger.Debug("CompNameLinkable::TryLinkTo: \""
-					+ (name.NullOrEmpty() ? "(noname)" : name)
-					+ "\" linked to \"" + linkableName + "\"");
-
-				return true;
+				if (NameLinkableManager.NameExists(linkableName))
+				{
+					LinkTo(linkableName);
+					return true;
+				}
+				else
+				{
+					Logger.DebugVerbose("CompNameLinkable::TryLinkTo: Tried to link \""
+						+ Name + "\" to \"" + linkableName + "\" but it doesn't exist"
+					);
+				}
 			}
-			else
-			{
-				Logger.Debug("CompNameLinkable::TryLinkTo: Tried to link \""
-					+ (name.NullOrEmpty() ? "(noname)" : name)
-					+ "\" to \"" + linkableName
-					+ "\" but it doesn't exist");
-
-				return false;
-			}
+			else Logger.Error("CompNameLinkable::LinkTo: called but CanBeLinked is false!");
+			return false;
 		}
 
-		public void Unlink()
+		public bool Unlink()
 		{
-			linkedToName = null;
-			linkedToThing = null;
+			if (CanBeLinked)
+			{
+				if (linkedName != null)
+				{
+					Logger.Debug("CompNameLinkable::Unlink: Unlinked \"" + Name + "\" from \"" + linkedName + "\"");
+					linkedName = null;
+					return true;
+				}
+				else Logger.Debug("CompNameLinkable::Unlink: Tried to unlink \"" + Name + "\" but it wasn't linked to anything.");
+			}
+			else Logger.Error("CompNameLinkable::Unlink: called but CanBeLinked is false!");
+			return false;
+		}
+
+		public void BeginMakeLink()
+		{
+			if (CanBeLinked)
+			{
+				Logger.DebugVerbose("CompNameLinkable::BeginMakeLink: called");
+				AcceptanceReport MakeLink_Validator(string newName)
+				{
+					if (NameLinkableManager.IsLinkedThingValid(newName))
+					{
+						return true;
+					}
+					else return "Couldn't find " + newName; // TODO format and translate
+				}
+
+				Find.WindowStack.Add(new Dialog_NameInputWindow("", MakeLink_Validator, MakeLink_Callback));
+
+				void MakeLink_Callback(string linkableName)
+				{
+					TryLinkTo(linkableName);
+				}
+			}
+			else Logger.Error("CompNameLinkable::BeginMakeLink: called but CanBeLinked is false!");
 		}
 
 		//
@@ -170,7 +210,7 @@ namespace alaestor_teleporting
 
 		public override void PostDraw()
 		{
-			if (false) // is link invalid?
+			if (HasInvalidLinkedThing) // is link invalid?
 			{// overlay broken link
 				/*
 				Thing thing = this.parent;
@@ -186,22 +226,30 @@ namespace alaestor_teleporting
 		public override string CompInspectStringExtra()
 		{
 			string s = "";
-			if (!Name.NullOrEmpty())
-			{
-				if (s.Length != 0)
-					s += "\n";
 
-				s += "Name: \"" + Name + "\"";
+			if (CanBeNamed)
+			{
+				if (IsNamed)
+				{
+					s += "Name: \"" + Name + "\"";
+				}
+				else
+				{
+					s += "Not named.";
+				}
 			}
 
 			if (s.Length != 0)
 				s += "\n";
 
-			if (IsLinkedToSomething)
+			if (CanBeLinked)
 			{
-				s += "Linked to \"" + linkedToName + "\"";
+				if (HasValidLinkedThing)
+				{
+					s += "Linked to: \"" + linkedName + "\"";
+				}
+				else s += "Not linked.";
 			}
-			else s += "Unlinked.";
 
 			return s;
 		}
@@ -210,34 +258,20 @@ namespace alaestor_teleporting
 		{
 			base.PostExposeData();
 			Scribe_Values.Look<string>(ref this.name, "name", null);
-			Scribe_Values.Look<string>(ref this.linkedToName, "linkedToName", null);
+			Scribe_Values.Look<string>(ref this.linkedName, "linkedToName", null);
 			//Scribe_Collections.Look<>
 
 			if (Scribe.mode == LoadSaveMode.LoadingVars) //LoadSaveMode.PostLoadInit ?
 			{
-				if (!name.NullOrEmpty() && parent != null)
+				if (IsNamed && parent != null)
 				{
-					if (NameIsAvailable(name))
-					{
-						nameLinkableThings.Add(name, parent);
-						Logger.Debug("CompNameLinkable::PostExposeData: registered \"" + name + "\" to " + parent.Label);
-					}
-					else
-					{
-						nameLinkableThings[name] = parent;
-						Logger.Debug("CompNameLinkable::PostExposeData: updated \"" + name + "\" with " + parent.Label);
-					}
-					//Logger.Error("CompNameLinkable::PostExposeData: \"" + name + "\" was not available (already exists)");
+					NameLinkableManager.RegisterOrUpdate(name, parent);
 				}
 				else if (parent == null) Logger.Error("CompNameLinkable::PostExposeData: parent was null?!");
 			}
 			else if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (!linkedToName.NullOrEmpty())
-				{
-					//if (NameExists(linkedToName))
-					LinkTo(linkedToName);
-				}
+				//?
 			}
 		}
 
@@ -246,101 +280,80 @@ namespace alaestor_teleporting
 			base.Initialize(props);
 		}
 
+		public override void PostDeSpawn(Map map)
+		{
+			base.PostDeSpawn(map);
+			NameLinkableManager.TryToUnregister(Name);
+		}
+
+		public override void PostDestroy(DestroyMode mode, Map previousMap)
+		{
+			base.PostDestroy(mode, previousMap);
+			NameLinkableManager.TryToUnregister(Name);
+		}
+
 		// TODO these 3 gizmos should all be part of one button + a status icon (linked/unlinked)
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
 				yield return gizmo;
 
-			AcceptanceReport Rename_Validator(string newName)
+			/*
+			CompRefuelable parentRefuelable = parent.GetComp<CompRefuelable>();
+
+			if (parentRefuelable != null && parentRefuelable.IsFull)
 			{
-				if (CompNameLinkable.NameIsAvailable(newName))
-				{
-					return (AcceptanceReport)true;
-				}
-				else return (AcceptanceReport)"NameIsInUse".Translate();
+
 			}
+			*/
 
-			void Rename(string newName)
+			if (DebugSettings.godMode)
 			{
-				Logger.Debug(
-					"CompNameLinkable::Rename: "
-					+ (Name != null ? Name : "(unnamed)")
-					+ " to " + newName
-				);
-
-				Name = newName;
-			}
-
-			yield return new Command_Action
-			{
-				//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
-				defaultLabel = "CompNameLinkable_Gizmo_Rename_Label".Translate(),
-				defaultDesc = "CompNameLinkable_Gizmo_Rename_Desc".Translate(),
-				activateSound = SoundDef.Named("Click"),
-				action = delegate
+				if (CanBeNamed)
 				{
-					Logger.DebugVerbose("CompNameLinkable:: called Gizmo: rename");
-					Find.WindowStack.Add(new Dialog_NameInputWindow((Name ?? ""), Rename_Validator, Rename));
+					yield return new Command_Action
+					{
+						//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
+						defaultLabel = "CompNameLinkable_Gizmo_Rename_Label".Translate(),
+						defaultDesc = "CompNameLinkable_Gizmo_Rename_Desc".Translate(),
+						activateSound = SoundDef.Named("Click"),
+						action = delegate
+						{
+							Logger.DebugVerbose("CompNameLinkable:: called Gizmo: rename");
+							BeginRename();
+						}
+					};
 				}
-			};
 
-			AcceptanceReport MakeLink_Validator(string newName)
-			{
-				if (CompNameLinkable.NameExists(newName))
+				if (CanBeLinked)
 				{
-					return (AcceptanceReport)true;
-				}
-				else return (AcceptanceReport)("Couldn't find " + newName); // TODO format and translate
-			}
+					yield return new Command_Action
+					{
+						//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
+						defaultLabel = "CompNameLinkable_Gizmo_MakeLink_Label".Translate(),
+						defaultDesc = "CompNameLinkable_Gizmo_MakeLink_Desc".Translate(),
+						activateSound = SoundDef.Named("Click"),
+						action = delegate
+						{
+							Logger.DebugVerbose("CompNameLinkable:: called Gizmo: make link");
+							BeginMakeLink();
+						}
+					};
 
-			void MakeLink(string linkableName)
-			{
-				if (TryLinkTo(linkableName))
-				{
-					Logger.Debug(
-						"CompNameLinkable::MakeLink: "
-						+ (Name ?? "(unnamed)")
-						+ " linked to " + linkableName
-					);
-				}
-				else
-				{
-					Logger.Debug(
-						"CompNameLinkable::MakeLink: "
-						+ (Name ?? "(unnamed)")
-						+ " failed to link to " + linkableName
-					);
+					yield return new Command_Action
+					{
+						//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
+						defaultLabel = "CompNameLinkable_Gizmo_Unlink_Label".Translate(),
+						defaultDesc = "CompNameLinkable_Gizmo_Unlink_Desc".Translate(),
+						activateSound = SoundDef.Named("Click"),
+						action = delegate
+						{
+							Logger.DebugVerbose("CompNameLinkable:: called Gizmo: unlink");
+							Unlink();
+						}
+					};
 				}
 			}
-
-			yield return new Command_Action
-			{
-				//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
-				defaultLabel = "CompNameLinkable_Gizmo_MakeLink_Label".Translate(),
-				defaultDesc = "CompNameLinkable_Gizmo_MakeLink_Desc".Translate(),
-				activateSound = SoundDef.Named("Click"),
-				action = delegate
-				{
-					Logger.DebugVerbose("CompNameLinkable:: called Gizmo: make link");
-					Find.WindowStack.Add(new Dialog_NameInputWindow("", MakeLink_Validator, MakeLink));
-				}
-			};
-
-			yield return new Command_Action
-			{
-				//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
-				defaultLabel = "CompNameLinkable_Gizmo_Unlink_Label".Translate(),
-				defaultDesc = "CompNameLinkable_Gizmo_Unlink_Desc".Translate(),
-				activateSound = SoundDef.Named("Click"),
-				action = delegate
-				{
-					Logger.DebugVerbose("CompNameLinkable:: called Gizmo: unlink");
-					Unlink();
-				}
-			};
-
-			//if (DebugSettings.godMode)
 		}
 	}
 
