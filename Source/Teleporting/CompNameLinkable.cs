@@ -287,7 +287,7 @@ namespace alaestor_teleporting
 				action = delegate
 				{
 					Logger.DebugVerbose("CompNameLinkable:: called Gizmo: rename");
-					Find.WindowStack.Add(new Dialog_NameInputWindow((Name ?? "(unnamed)"), Rename_Validator, Rename));
+					Find.WindowStack.Add(new Dialog_NameInputWindow((Name ?? ""), Rename_Validator, Rename));
 				}
 			};
 
