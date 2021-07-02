@@ -68,8 +68,8 @@ namespace alaestor_teleporting
 				string use_Label = "UseTeleportPlatform_Label".Translate();
 				Action use_Action = (Action)(() =>
 				{
-					//Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_ShortRange, (LocalTargetInfo)(Thing)this);
-					//myPawn.jobs.TryTakeOrderedJob(job);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_TeleportToLink, (LocalTargetInfo)(Thing)this);
+					myPawn.jobs.TryTakeOrderedJob(job);
 				});
 
 				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(
