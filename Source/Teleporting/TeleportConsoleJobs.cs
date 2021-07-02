@@ -1,4 +1,3 @@
-﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -6,13 +5,6 @@ using Verse.AI;
 
 namespace alaestor_teleporting
 {
-	[DefOf]
-	public static class TeleporterDefOf
-	{ // I'm 99% sure there's a better way to do this
-		public static JobDef UseTeleportConsole_ShortRange;
-		public static JobDef UseTeleportConsole_LongRange;
-	}
-
 	public abstract class JobDriver_UseTeleportConsole_Generic : JobDriver
 	{
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
