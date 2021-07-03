@@ -46,8 +46,8 @@ namespace alaestor_teleporting
 				if (!console.CanUseNow)
 					return;
 
-				console.TryStartTeleport(actor, false);
 				console.hasStartedTargetting = true;
+				console.TryStartTeleport(actor, false);
 				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportConsole_ShortRange at ThindID " + console.ThingID.ToString());
 			});
 			useTeleporterToil.AddEndCondition(IsToilDone);
@@ -73,8 +73,8 @@ namespace alaestor_teleporting
 				if (!console.CanUseNow)
 					return;
 
-				console.TryStartTeleport(actor, true);
 				console.hasStartedTargetting = true;
+				console.TryStartTeleport(actor, true);
 				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportConsole_LongRange at ThindID " + console.ThingID.ToString());
 			});
 			useTeleporterToil.AddEndCondition(IsToilDone);
