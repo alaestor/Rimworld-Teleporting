@@ -12,11 +12,8 @@ namespace alaestor_teleporting
 
 		protected JobCondition IsToilDone()
 		{
-			if (this.job.targetA != null
-				&& this.job.targetA.IsValid
-				&& this.job.targetA.Thing != null
-				&& this.job.targetA.Thing is Building_TeleportConsole console
-				&& console.IsDoneTargeting()) // is this enough checks?
+			if (job?.targetA.Thing is Building_TeleportConsole console
+				&& console.IsDoneTargeting())
 			{
 				Logger.DebugVerbose("useTeleporterToil finished");
 				return JobCondition.Succeeded;
