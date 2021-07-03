@@ -12,6 +12,8 @@ namespace alaestor_teleporting
 		private CompRefuelable refuelableComp;
 		private CompPowerTrader powerComp;
 
+		private bool FuelMatters => (TeleportingMod.settings.enableFuel && TeleportingMod.settings.enablePlatformUnlinkFuelCost);
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -36,10 +38,12 @@ namespace alaestor_teleporting
 			}
 		}
 
-		public bool HasEnoughFuel => ((int)refuelableComp.Fuel) >= 1;
+		public bool HasEnoughFuel => !FuelMatters || (((int)refuelableComp.Fuel) >= 1);
+
 		public void ConsumeFuel()
 		{
-			refuelableComp.ConsumeFuel(1);
+			if (FuelMatters)
+				refuelableComp.ConsumeFuel(1);
 		}
 
 		public void Rename()
@@ -54,26 +58,33 @@ namespace alaestor_teleporting
 
 		public bool Unlink()
 		{
-			if (nameLinkableComp.IsLinkedToSomething && HasEnoughFuel)
+			if (nameLinkableComp.IsLinkedToSomething)
 			{
-				ConsumeFuel();
-				nameLinkableComp.Unlink();
-				return true;
+				if (HasEnoughFuel || !FuelMatters)
+				{
+					ConsumeFuel();
+					nameLinkableComp.Unlink();
+					return true;
+				}
+				else
+				{
+					Logger.Debug("Building_TeleportPlatform::Unlink: couldn't unlink",
+						"IsLinkedToSomething: " + nameLinkableComp.IsLinkedToSomething.ToString(),
+						"HasEnoughFuel: " + HasEnoughFuel.ToString()
+					);
+					return false;
+				}
 			}
 			else
 			{
-				Logger.Debug("Building_TeleportPlatform::Unlink: couldn't unlink",
-					"IsLinkedToSomething: " + nameLinkableComp.IsLinkedToSomething.ToString(),
-					"HasEnoughFuel: " + HasEnoughFuel.ToString()
-				);
-				//Message?
+				Logger.Warning("Building_TeleportPlatform::Unlink: Not linked to anything");
+				return false;
 			}
-			return false;
 		}
 
 		public void TryStartTeleport(Pawn usingPawn)
 		{
-			if (refuelableComp != null && !refuelableComp.IsFull)
+			if (FuelMatters && refuelableComp != null && !refuelableComp.IsFull)
 			{
 				Logger.Warning(
 					"Building_TeleportPlatform::TryStartTeleport: " + usingPawn.Label + " tried to teleport but fuel isnt full",
@@ -154,7 +165,7 @@ namespace alaestor_teleporting
 				else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
 					return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
 				*/
-				else if (this.refuelableComp != null && !HasEnoughFuel)
+				else if (FuelMatters && this.refuelableComp != null && !HasEnoughFuel)
 					return new FloatMenuOption((string)"out of fuel".Translate(), (Action)null); // TODO translate
 				else if (nameLinkableComp.IsLinkedToSomething && nameLinkableComp.HasInvalidLinkedThing)
 					return new FloatMenuOption("Link broken: cannot find target", (Action)null);

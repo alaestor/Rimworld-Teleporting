@@ -32,6 +32,9 @@ namespace alaestor_teleporting
 		private static readonly bool enableFuel_Default = true;
 		public bool enableFuel = enableFuel_Default;
 
+		private static readonly bool enablePlatformUnlinkFuelCost_Default = true;
+		public bool enablePlatformUnlinkFuelCost = enablePlatformUnlinkFuelCost_Default;
+
 		private static readonly int shortRange_FuelCost_Default = 1;
 		public int shortRange_FuelCost = shortRange_FuelCost_Default;
 		public string shortRange_FuelCost_Buffer = shortRange_FuelCost_Default.ToString();
@@ -95,6 +98,7 @@ namespace alaestor_teleporting
 
 			// fuel
 			this.enableFuel = enableFuel_Default;
+			this.enablePlatformUnlinkFuelCost = enablePlatformUnlinkFuelCost_Default;
 			this.shortRange_FuelCost = shortRange_FuelCost_Default;
 			this.longRange_FuelCost = longRange_FuelCost_Default;
 			this.longRange_FuelDistance = longRange_FuelDistance_Default;
@@ -118,6 +122,7 @@ namespace alaestor_teleporting
 			Scribe_Values.Look(ref this.enableIntelectDivisor, "enableIntelectDivisor", enableIntelectDivisor_Default);
 			Scribe_Values.Look(ref this.intelectDivisor, "intelectDivisor", intelectDivisor_Default);
 			Scribe_Values.Look(ref this.enableFuel, "enableFuel", enableFuel_Default);
+			Scribe_Values.Look(ref this.enablePlatformUnlinkFuelCost, "enablePlatformUnlinkFuelCost", enablePlatformUnlinkFuelCost_Default);
 			Scribe_Values.Look(ref this.shortRange_FuelCost, "shortRange_FuelCost", shortRange_FuelCost_Default);
 			Scribe_Values.Look(ref this.longRange_FuelCost, "longRange_FuelCost", longRange_FuelCost_Default);
 			Scribe_Values.Look(ref this.longRange_FuelDistance, "longRange_FuelDistance", longRange_FuelDistance_Default);
@@ -182,6 +187,8 @@ namespace alaestor_teleporting
 				ls.CheckboxLabeled("enableFuel".Translate(), ref settings.enableFuel, tooltip: "enableFuel_tooltip".Translate());
 				if (settings.enableFuel)
 				{
+					ls.Gap(10);
+					ls.CheckboxLabeled("enablePlatformUnlinkFuelCost".Translate(), ref settings.enablePlatformUnlinkFuelCost, tooltip: "enablePlatformUnlinkFuelCost_tooltip".Translate());
 					ls.Gap(10);
 					ls.TextFieldNumericLabeled<int>("shortRange_FuelCost".Translate(), ref settings.shortRange_FuelCost, ref settings.shortRange_FuelCost_Buffer);
 					ls.TextFieldNumericLabeled<int>("longRange_FuelCost".Translate(), ref settings.longRange_FuelCost, ref settings.longRange_FuelCost_Buffer);
