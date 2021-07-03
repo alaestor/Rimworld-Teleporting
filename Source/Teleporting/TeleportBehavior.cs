@@ -3,6 +3,7 @@ using RimWorld.Planet;
 using System;
 using UnityEngine;
 using Verse;
+using Verse.AI;
 
 namespace alaestor_teleporting
 {
@@ -60,6 +61,20 @@ namespace alaestor_teleporting
 					{
 						if (pawn.IsColonist)
 						{
+							var curJobDef = pawn.CurJobDef;
+							if (curJobDef == TeleporterDefOf.UseTeleportConsole_LongRange
+								|| curJobDef == TeleporterDefOf.UseTeleportConsole_ShortRange)
+							{
+								if (pawn.jobs.curJob?.targetA.Thing is Building_TeleportConsole console)
+								{
+									//console.hasStartedTargetting = false;
+									console.IsDoneTargeting();
+								}
+
+								pawn.jobs.curDriver.EndJobWith(JobCondition.Succeeded);
+								Logger.DebugVerbose("TeleportBehavior::ExecuteTeleport: self-teleport, job terminated");
+							}
+
 							bool drafted = pawn.Drafted;
 							pawn.drafter.Drafted = false;
 							pawn.DeSpawn(DestroyMode.Vanish);
