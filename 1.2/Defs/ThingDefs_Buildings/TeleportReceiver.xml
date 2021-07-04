@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>alaestor_teleporting_TeleportReceiver</defName>
+    <label>Teleport Receiver</label>
+    <description>Placeholder text</description>
+	<thingClass>alaestor_teleporting.Building_TeleportPlatform</thingClass>
+    <graphicData>
+      <texPath>Things/Building/TeleportReceiver/TeleportReceiver</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <damageData><rect>(0.8,0.3,1,0.8)</rect></damageData>
+    </graphicData>
+	<size>(1,1)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <blockWind>false</blockWind>
+    <castEdgeShadows>false</castEdgeShadows>
+    <fillPercent>0.3</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases><MaxHitPoints>250</MaxHitPoints><WorkToBuild>15000</WorkToBuild><Flammability>1.0</Flammability><Mass>150</Mass></statBases>
+    <building><destroySound>BuildingDestroyed_Metal_Big</destroySound></building>
+    <costList>
+      <Steel>120</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <defaultPlacingRot>North</defaultPlacingRot>
+    <interactionCellOffset>(0,0,0)</interactionCellOffset>
+    <hasInteractionCell>true</hasInteractionCell>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <designationCategory>Misc</designationCategory>
+	<tickerType>Rare</tickerType>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <shortCircuitInRain>true</shortCircuitInRain>
+        <basePowerConsumption>200</basePowerConsumption>
+      </li>
+	  <!--
+	  <li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+	  -->
+	  <li Class="CompProperties_Refuelable">
+        <fuelConsumptionRate>0</fuelConsumptionRate>
+        <fuelCapacity>1.0</fuelCapacity>
+        <initialFuelPercent>1.0</initialFuelPercent>
+        <fuelFilter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></fuelFilter>
+        <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+        <showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
+		<fuelLabel>Teleport Cartridges</fuelLabel>
+		<atomicFueling>true</atomicFueling>
+      </li>
+	  <li Class="alaestor_teleporting.CompProperties_NameLinkable">
+		<canBeNamed>true</canBeNamed>
+		<canBeLinked>false</canBeLinked>
+	  </li>
+	  <li Class="CompProperties_Flickable"/>
+      <li Class="CompProperties_Breakdownable"/>
+    </comps>
+    <designationHotKey>Misc3</designationHotKey>
+    <placeWorkers><li>PlaceWorker_PreventInteractionSpotOverlap</li></placeWorkers>
+    <!--researchPrerequisites>
+      <li>MicroelectronicsBasics</li>
+    </researchPrerequisites-->
+    <constructionSkillPrerequisite>15</constructionSkillPrerequisite>
+  </ThingDef>
+
+</Defs>
