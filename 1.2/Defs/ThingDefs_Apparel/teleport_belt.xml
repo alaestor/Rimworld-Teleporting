@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="ApparelNoQualityBase">
+    <defName>alaestor_teleporting_Apparel_TeleportBelt</defName>
+    <label>teleport belt</label>
+    <description>Placeholder</description>
+    <!--thingClass>alaestor_teleporting.TeleportBelt_Local</thingClass-->
+    <graphicData>
+      <texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <tickerType>Normal</tickerType>
+    <statBases>
+      <Mass>3</Mass>
+      <WorkToMake>14000</WorkToMake>
+      <Flammability>0.4</Flammability>
+      <EnergyShieldRechargeRate>0.13</EnergyShieldRechargeRate>
+      <EnergyShieldEnergyMax>1.1</EnergyShieldEnergyMax>
+      <EquipDelay>2</EquipDelay>
+    </statBases>
+    <costList>
+      <ComponentIndustrial>2</ComponentIndustrial>
+      <Steel>50</Steel>
+      <Plasteel>20</Plasteel>
+    </costList>
+    <!--recipeMaker>
+      <unfinishedThingDef>UnfinishedBelt</unfinishedThingDef>
+      <researchPrerequisite>ShieldBelt</researchPrerequisite>
+      <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+      <workSkill>Crafting</workSkill>
+      <effectWorking>Smith</effectWorking>
+      <soundWorking>Recipe_Machining</soundWorking>
+      <recipeUsers><li>TableMachining</li></recipeUsers>
+      <useIngredientsForColor>false</useIngredientsForColor>
+      <skillRequirements><Crafting>6</Crafting></skillRequirements>
+    </recipeMaker-->
+    <thingCategories><li>ApparelUtility</li></thingCategories>
+    <apparel>
+      <careIfWornByCorpse>false</careIfWornByCorpse>
+      <careIfDamaged>false</careIfDamaged>
+      <wearPerDay>0</wearPerDay>
+      <bodyPartGroups><li>Waist</li></bodyPartGroups>
+      <layers><li>Belt</li></layers>
+      <!--tags><li>BeltDefense</li></tags-->
+    </apparel>
+	<comps>
+      <li Class="alaestor_teleporting.CompProperties_TeleportApparel">
+        <shortRange>true</shortRange>
+        <longRange>true</longRange>
+        <canTeleportOthers>false</canTeleportOthers>
+      </li>
+	</comps>
+  </ThingDef>
+
+</Defs>
