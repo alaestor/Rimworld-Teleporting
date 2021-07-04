@@ -10,11 +10,11 @@ namespace alaestor_teleporting
 	[StaticConstructorOnStartup]
 	class TeleportBehavior
 	{
-		private static readonly Texture2D localTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
+		public static readonly Texture2D localTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
 
-		private static readonly Texture2D globalTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
+		public static readonly Texture2D globalTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
 
-		private static readonly TargetingParameters targetTeleportSubjects = new TargetingParameters
+		public static readonly TargetingParameters targetTeleportSubjects = new TargetingParameters
 		{
 			canTargetPawns = true,
 			canTargetAnimals = true,
@@ -23,7 +23,7 @@ namespace alaestor_teleporting
 			canTargetBuildings = false
 		};
 
-		private static readonly TargetingParameters targetTeleportDestination = new TargetingParameters
+		public static readonly TargetingParameters targetTeleportDestination = new TargetingParameters
 		{
 			canTargetPawns = false,
 			canTargetBuildings = false,
@@ -115,24 +115,6 @@ namespace alaestor_teleporting
 		{
 			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(originator);
 
-			bool TargetHasLoadedMap(GlobalTargetInfo target)
-			{
-				return target.IsValid
-					&& Find.WorldObjects.AnyMapParentAt(target.Tile)
-					&& Find.WorldObjects.MapParentAt(target.Tile).Spawned
-					&& Find.WorldObjects.MapParentAt(target.Tile).Map != null;
-			}
-
-			bool TargetIsWithinGlobalRangeLimit(GlobalTargetInfo target)
-			{
-				if (TeleportingMod.settings.enableGlobalRangeLimit)
-				{
-					int distanceToTarget = Find.WorldGrid.TraversalDistanceBetween(startingHere.Tile, target.Tile, true, int.MaxValue);
-					return distanceToTarget <= TeleportingMod.settings.globalRangeLimit;
-				}
-				else return true;
-			}
-
 			int FuelCostToTravel(int tileDistance)
 			{
 				if (cheat)
@@ -164,12 +146,12 @@ namespace alaestor_teleporting
 
 				string label = "";
 
-				if (TargetHasLoadedMap(target))
+				if (TeleportTargeter.TargetHasLoadedMap(target))
 					label += target.Label;
 
 				if (!cheat)
 				{
-					if (!TargetIsWithinGlobalRangeLimit(target))
+					if (!TeleportTargeter.TargetIsWithinGlobalRangeLimit(startingHere.Tile, target.Tile))
 					{
 						if (label.Length != 0)
 							label += "\n";
@@ -198,13 +180,13 @@ namespace alaestor_teleporting
 
 			bool CanTargetTile(GlobalTargetInfo target)
 			{
-				if (TargetHasLoadedMap(target))
+				if (TeleportTargeter.TargetHasLoadedMap(target))
 				{
 					if (cheat) // ignore range and fuel limits
 					{
 						return true;
 					}
-					else if (TargetIsWithinGlobalRangeLimit(target))
+					else if (TeleportTargeter.TargetIsWithinGlobalRangeLimit(startingHere.Tile, target.Tile))
 					{
 						if (fuelDistanceMatters && choosingDestination)
 						{
@@ -265,7 +247,7 @@ namespace alaestor_teleporting
 					//globalCloseWorldTabWhenFinished: true,
 					globalOnUpdate: OnUpdate,
 					globalExtraLabelGetter: ExtraLabelGetter,
-					globalTargetValidator: TargetHasLoadedMap);
+					globalTargetValidator: TeleportTargeter.TargetHasLoadedMap);
 
 				void GotTo_Callback(GlobalTargetInfo toTarget)
 				{

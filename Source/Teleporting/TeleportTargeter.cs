@@ -8,6 +8,29 @@ namespace alaestor_teleporting
 {
 	class TeleportTargeter
 	{
+		public static bool TargetHasLoadedMap(GlobalTargetInfo target)
+		{
+			return target.IsValid
+				&& Find.WorldObjects.AnyMapParentAt(target.Tile)
+				&& Find.WorldObjects.MapParentAt(target.Tile).Spawned
+				&& Find.WorldObjects.MapParentAt(target.Tile).Map != null;
+		}
+
+		public static bool TargetIsWithinGlobalRangeLimit(int origin, int target)
+		{
+			if (TeleportingMod.settings.enableGlobalRangeLimit)
+			{
+				int distanceToTarget = Find.WorldGrid.TraversalDistanceBetween(origin, target, true, int.MaxValue);
+				return distanceToTarget <= TeleportingMod.settings.globalRangeLimit;
+			}
+			else return true;
+		}
+
+		public static bool TargetIsWithinGlobalRangeLimit(GlobalTargetInfo origin, GlobalTargetInfo target)
+		{
+			return TargetIsWithinGlobalRangeLimit(origin.Tile, target.Tile);
+		}
+
 		public static void StartChoosingLocal(
 			GlobalTargetInfo startingFrom,
 			Action<LocalTargetInfo> result_Callback,
