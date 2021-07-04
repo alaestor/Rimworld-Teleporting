@@ -80,7 +80,7 @@ namespace alaestor_teleporting
 					);
 				}
 			}
-			else Logger.Error("NameLinkableManager::TryToUnregister: Got null or empty parameter");
+			else Logger.DebugVerbose("NameLinkableManager::TryToUnregister: Got null or empty parameter");
 			return false;
 		}
 	}
