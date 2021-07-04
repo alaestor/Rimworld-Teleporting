@@ -67,7 +67,7 @@ namespace alaestor_teleporting
 					{
 						if (NameLinkableManager.NameIsAvailable(value))
 						{
-							Logger.DebugVerbose("CompNameLinkable::Name::set: Changed \"" + name.ToString() + "\" to \"" + value + "\"");
+							Logger.DebugVerbose("CompNameLinkable::Name::set: Changed \"" + (name ?? "(unnamed)").ToString() + "\" to \"" + value + "\"");
 							NameLinkableManager.TryToUnregister(name);
 							name = value;
 							NameLinkableManager.RegisterOrUpdate(name, parent);
@@ -134,7 +134,7 @@ namespace alaestor_teleporting
 					Logger.DebugVerbose("CompNameLinkable::LinkTo: \"" + Name + "\" linked to \"" + linkableName + "\"");
 				}
 				else Logger.Warning("Tried to link to non-existent nameLinkable \"" + linkableName + "\"");
-			} 
+			}
 			else Logger.Error("CompNameLinkable::LinkTo: called but CanBeLinked is false!");
 		}
 
