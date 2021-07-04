@@ -197,7 +197,7 @@ namespace alaestor_teleporting
 						leftLabel: (""),
 						rightLabel: settings.longRange_FuelDistance == 0 ?
 							String.Format("always consume {0} fuel"/*"longRange_FuelDistance_FixedMsg".Translate()*/, settings.longRange_FuelCost)
-							: String.Format("Consumes {0} cartridges every {1} tiles"/*"longRange_FuelDistance_ScalesMsg".Translate()*/, settings.longRange_FuelCost, settings.longRange_FuelDistance),
+							: String.Format("Consumes {0} cartridges\nfor every {1} tiles"/*"longRange_FuelDistance_ScalesMsg".Translate()*/, settings.longRange_FuelCost, settings.longRange_FuelDistance),
 						tip: null);
 					ls.Gap(10);
 				}
