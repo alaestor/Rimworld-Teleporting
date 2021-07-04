@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
@@ -239,11 +239,11 @@ namespace alaestor_teleporting
 				}
 			}
 
-			if (s.Length != 0)
-				s += "\n";
-
 			if (CanBeLinked)
 			{
+				if (s.Length != 0)
+					s += "\n";
+
 				if (HasValidLinkedThing)
 				{
 					s += "Linked to: \"" + linkedName + "\"";
