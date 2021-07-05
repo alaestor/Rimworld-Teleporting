@@ -212,8 +212,12 @@ namespace alaestor_teleporting
 
 		public override void PostDraw()
 		{
-			if (HasInvalidLinkedThing) // is link invalid?
-			{// overlay broken link
+			if (!IsLinkedToSomething) // unlinked
+			{
+
+			}
+			if (HasInvalidLinkedThing) // link broken
+			{
 				/*
 				Thing thing = this.parent;
 				float vanillaPulse = (float)(0.300000011920929 + (Math.Sin(((double)Time.realtimeSinceStartup + 397.0 * (double)(thing.thingIDNumber % 571)) * 4.0) + 1.0) * 0.5 * 0.699999988079071);
