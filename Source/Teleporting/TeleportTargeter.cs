@@ -58,7 +58,7 @@ namespace alaestor_teleporting
 				{
 					result_Callback(localTarget);
 				}
-				else Logger.Error("TeleportTargeter::StartChoosingLocal::ChoseLocalTarget_Callback: invalid local target");
+				else Logger.Error("TeleportTargeter::StartChoosingLocal: invalid local target");
 			}
 		}
 
@@ -95,7 +95,7 @@ namespace alaestor_teleporting
 				}
 				else
 				{
-					Logger.Error("TeleportTargeter::StartChoosingGlobal::ChoseGlobalTarget_Callback: invalid global target");
+					Logger.Error("TeleportTargeter::StartChoosingGlobal: invalid global target");
 					return false;
 				}
 			}
@@ -142,10 +142,10 @@ namespace alaestor_teleporting
 							result_Callback(localTarget.ToGlobalTargetInfo(
 								Find.WorldObjects.MapParentAt(globalTarget.Tile).Map));
 						}
-						else Logger.Error("TeleportTargeter::StartChoosingGlobalThenLocal::GotLocalTarget_Callback: invalid local target");
+						else Logger.Error("TeleportTargeter::StartChoosingGlobalThenLocal: invalid local target");
 					}
 				}
-				else Logger.Error("Teleporting: StartChoosingGlobalThenLocal: invalid global target");
+				else Logger.Error("TeleportTargeter::StartChoosingGlobalThenLocal: invalid global target");
 			}
 		}
 	}
