@@ -47,6 +47,8 @@ namespace alaestor_teleporting
 		public CompProperties_NameLinkable Props => (CompProperties_NameLinkable)this.props;
 		public bool CanBeNamed => Props.canBeNamed; // TODO 
 		public bool CanBeLinked => Props.canBeLinked; // TODO
+		public bool ShowGizmos => Props.showGizmos; // TODO
+		public bool ShowDebugGizmos => Props.showDebugGizmos; // TODO
 
 		//
 		// NAME stuff
@@ -298,16 +300,7 @@ namespace alaestor_teleporting
 			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
 				yield return gizmo;
 
-			/*
-			CompRefuelable parentRefuelable = parent.GetComp<CompRefuelable>();
-
-			if (parentRefuelable != null && parentRefuelable.IsFull)
-			{
-
-			}
-			*/
-
-			if (DebugSettings.godMode)
+			if (ShowGizmos)
 			{
 				if (CanBeNamed)
 				{
@@ -315,35 +308,68 @@ namespace alaestor_teleporting
 						"CompNameLinkable_Rename",
 						delegate
 						{
-							Logger.DebugVerbose("CompNameLinkable: called Gizmo: rename");
 							BeginRename();
+							Logger.Debug("TeleportPlatform: called Gizmo: rename");
 						}
+					//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
 					);
 				}
 
-				if (CanBeLinked)
+				if (IsLinkedToSomething)
 				{
-					if (IsLinkedToSomething)
+					yield return GizmoHelper.MakeCommandAction(
+						"CompNameLinkable_Unlink",
+						delegate
+						{
+							Unlink();
+							Logger.Debug("CompNameLinkable: called Gizmo: unlink");
+						}
+					//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+					);
+
+				}
+			}
+
+			if (ShowDebugGizmos)
+			{
+				if (DebugSettings.godMode)
+				{
+					if (CanBeNamed)
 					{
 						yield return GizmoHelper.MakeCommandAction(
-							"CompNameLinkable_Unlink",
+							"CompNameLinkable_Rename_Debug",
 							delegate
 							{
-								Logger.DebugVerbose("CompNameLinkable: called Gizmo: unlink");
-								Unlink();
+								Logger.DebugVerbose("CompNameLinkable: called debug Gizmo: rename");
+								BeginRename();
 							}
 						);
 					}
-					else
+
+					if (CanBeLinked)
 					{
-						yield return GizmoHelper.MakeCommandAction(
-							"CompNameLinkable_MakeLink",
-							delegate
-							{
-								Logger.DebugVerbose("CompNameLinkable: called Gizmo: make link");
-								BeginMakeLink();
-							}
-						);
+						if (IsLinkedToSomething)
+						{
+							yield return GizmoHelper.MakeCommandAction(
+								"CompNameLinkable_Unlink_Debug",
+								delegate
+								{
+									Logger.DebugVerbose("CompNameLinkable: called debug Gizmo: unlink");
+									Unlink();
+								}
+							);
+						}
+						else
+						{
+							yield return GizmoHelper.MakeCommandAction(
+								"CompNameLinkable_MakeLink_Debug",
+								delegate
+								{
+									Logger.DebugVerbose("CompNameLinkable: called debug Gizmo: make link");
+									BeginMakeLink();
+								}
+							);
+						}
 					}
 				}
 			}
@@ -354,12 +380,13 @@ namespace alaestor_teleporting
 	{
 		public bool canBeNamed = true;
 		public bool canBeLinked = true;
+		public bool showGizmos = true;
+		public bool showDebugGizmos = true;
 
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
 		{
 			foreach (string configError in base.ConfigErrors(parentDef))
 				yield return configError;
-			//if (targetQuantityConfigurable == true && )
 		}
 
 		public CompProperties_NameLinkable()

@@ -51,7 +51,12 @@
 		<fuelLabel>Teleport Cartridges</fuelLabel>
 		<atomicFueling>true</atomicFueling>
       </li>
-	  <li Class="alaestor_teleporting.CompProperties_NameLinkable"/>
+	  <li Class="alaestor_teleporting.CompProperties_NameLinkable">
+		<canBeNamed>true</canBeNamed>
+		<canBeLinked>true</canBeLinked>
+		<showGizmos>false</showGizmos>
+		<showDebugGizmos>true</showDebugGizmos>
+	  </li>
 	  <li Class="CompProperties_Flickable"/>
       <li Class="CompProperties_Breakdownable"/>
     </comps>

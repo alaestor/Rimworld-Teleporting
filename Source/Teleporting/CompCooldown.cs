@@ -8,6 +8,8 @@ namespace alaestor_teleporting
 	public class CompCooldown : ThingComp
 	{
 		public CompProperties_Cooldown Props => (CompProperties_Cooldown)this.props;
+		public bool ShowDebugGizmos => Props.showDebugGizmos; // TODO
+
 		public int remaining;
 
 		public bool IsOnCooldown => this.remaining > 0;
@@ -106,7 +108,7 @@ namespace alaestor_teleporting
 			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
 				yield return gizmo;
 
-			if (DebugSettings.godMode)
+			if (ShowDebugGizmos && DebugSettings.godMode)
 			{
 				yield return GizmoHelper.MakeCommandAction(
 					"CompCooldown_SetCool_Debug",
@@ -122,6 +124,8 @@ namespace alaestor_teleporting
 
 	public class CompProperties_Cooldown : CompProperties
 	{
+		public bool showDebugGizmos = true;
+
 		public CompProperties_Cooldown()
 		{
 			this.compClass = typeof(CompCooldown);
