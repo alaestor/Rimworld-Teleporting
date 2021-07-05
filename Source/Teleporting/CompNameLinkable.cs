@@ -45,10 +45,10 @@ namespace alaestor_teleporting
 	public class CompNameLinkable : ThingComp
 	{
 		public CompProperties_NameLinkable Props => (CompProperties_NameLinkable)this.props;
-		public bool CanBeNamed => Props.canBeNamed; // TODO 
-		public bool CanBeLinked => Props.canBeLinked; // TODO
-		public bool ShowGizmos => Props.showGizmos; // TODO
-		public bool ShowDebugGizmos => Props.showDebugGizmos; // TODO
+		public bool CanBeNamed => Props.canBeNamed; 
+		public bool CanBeLinked => Props.canBeLinked;
+		public bool ShowGizmos => Props.showGizmos;
+		public bool ShowDebugGizmos => Props.showDebugGizmos;
 
 		//
 		// NAME stuff

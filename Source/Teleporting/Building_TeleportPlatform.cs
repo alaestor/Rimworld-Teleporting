@@ -218,9 +218,9 @@ namespace alaestor_teleporting
 					delegate
 					{
 						Rename();
-						Logger.Debug("TeleportPlatform:: called Gizmo: rename");
+						Logger.Debug("TeleportPlatform: called Gizmo: rename");
 					}
-				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+					//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
 				);
 			}
 
@@ -231,9 +231,9 @@ namespace alaestor_teleporting
 					delegate
 					{
 						Unlink();
-						Logger.Debug("TeleportPlatform:: called Gizmo: unlink");
+						Logger.Debug("TeleportPlatform: called Gizmo: unlink");
 					}
-				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+					//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
 				);
 
 			}

@@ -70,5 +70,5 @@ namespace alaestor_teleporting
 		}
 	}
 
-		
+
 }

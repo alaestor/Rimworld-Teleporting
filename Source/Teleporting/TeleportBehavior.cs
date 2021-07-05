@@ -296,7 +296,7 @@ namespace alaestor_teleporting
 				"originator: " + (originator != null ? originator.Label : "null"),
 				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null")
 			);
-			
+
 			TeleportTargeter.StartChoosingLocal(globalTarget, FinishedChoosing_From, TeleportBehavior.targetTeleportSubjects);
 
 			void FinishedChoosing_From(LocalTargetInfo fromTarget)
@@ -306,7 +306,7 @@ namespace alaestor_teleporting
 					"Target: " + fromTarget.Label,
 					"Cell: " + fromTarget.Cell.ToString()
 				);
-				
+
 				TeleportTargeter.StartChoosingLocal(globalTarget, FinishedChoosing_To, TeleportBehavior.targetTeleportDestination);
 
 				void FinishedChoosing_To(LocalTargetInfo toTarget)
