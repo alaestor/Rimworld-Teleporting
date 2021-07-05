@@ -8,7 +8,6 @@ namespace alaestor_teleporting
 		private static readonly string prefix_modname = "[" + TeleportingMod.modname + "]";
 		private static readonly string prefix_debug = "[DEBUG]";
 		private static readonly string prefix_debugVerbose = prefix_debug + prefix_sep + "[VERBOSE]";
-		private static readonly string prefix_details = "[DETAILS]";
 		private static readonly string prefix_warning = "[WARN]";
 		private static readonly string prefix_error = "[ERROR]";
 		private static readonly string prefix_indent = "\t";
@@ -18,7 +17,6 @@ namespace alaestor_teleporting
 		private static readonly string details_start = "\n<DETAILS>";
 		private static readonly string details_end = "\n</DETAILS>\n\n";
 
-		private static readonly string details_header = prefix_sep + prefix_details + prefix_delim;
 		private static readonly string debug_header = prefix_modname + prefix_sep + prefix_debug + prefix_delim;
 		private static readonly string debugVerbose_header = prefix_modname + prefix_sep + prefix_debugVerbose + prefix_delim;
 		private static readonly string warning_header = prefix_modname + prefix_sep + prefix_warning + prefix_delim;
@@ -30,16 +28,16 @@ namespace alaestor_teleporting
 
 
 		// Details handles Verbose detail logging; details provided via variadic infoStrings
-		private static void Details(string prefix, params string[] infoStrings)
+		private static void Details(params string[] infoStrings)
 		{
 			if (IsDebug && IsDebugVerbose && infoStrings.Length > 0)
-				Details(prefix, false, infoStrings);
+				Details(false, infoStrings);
 		}
-		private static string Details(string prefix, bool debugBypass, params string[] infoStrings)
+		private static string Details(bool debugBypass, params string[] infoStrings)
 		{
-			if ((debugBypass || IsDebugVerbose) && infoStrings.Length > 0) //Details(prefix_error, debugBypass, infoStrings);
+			if ((debugBypass || IsDebugVerbose) && infoStrings.Length > 0)
 			{
-				string detailsMsg = "\n" + prefix_indent + prefix + details_header + prefix_indent + infoStrings.Length.ToString() + " details  (click to view all)" + details_start;
+				string detailsMsg = "\n\t" + infoStrings.Length.ToString() + " details  (click to view all)" + details_start;
 				foreach (var str in infoStrings)
 				{
 					detailsMsg += "\n" + prefix_indent + prefix_indent + str;
@@ -60,7 +58,7 @@ namespace alaestor_teleporting
 		{
 			if (debugBypass || (IsDebug && IsDebugVerbose))
 			{
-				Log.Message(debugVerbose_header + msg + Details(prefix_debugVerbose, debugBypass, infoStrings));
+				Log.Message(debugVerbose_header + msg + Details(debugBypass, infoStrings));
 			}
 		}
 
@@ -74,7 +72,7 @@ namespace alaestor_teleporting
 		{
 			if (debugBypass || IsDebug)
 			{
-				Log.Message(debug_header + msg + Details(prefix_debug, debugBypass, infoStrings));
+				Log.Message(debug_header + msg + Details(debugBypass, infoStrings));
 			}
 		}
 
@@ -85,7 +83,7 @@ namespace alaestor_teleporting
 		}
 		public static void Warning(string msg, bool debugBypass, params string[] infoStrings)
 		{
-			Log.Warning(warning_header + msg + Details(prefix_warning, debugBypass, infoStrings));
+			Log.Warning(warning_header + msg + Details(debugBypass, infoStrings));
 		}
 
 		// Rarer
@@ -95,7 +93,7 @@ namespace alaestor_teleporting
 		}
 		public static void Error(string msg, bool debugBypass, params string[] infoStrings)
 		{
-			Log.Error(error_header + msg + Details(prefix_error, debugBypass, infoStrings));
+			Log.Error(error_header + msg + Details(debugBypass, infoStrings));
 		}
 
 		// Tester; logs example messages
