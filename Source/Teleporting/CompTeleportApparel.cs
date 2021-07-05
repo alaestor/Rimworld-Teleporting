@@ -124,32 +124,26 @@ namespace alaestor_teleporting
 			{
 				if (CanDoShortRangeTeleport)
 				{
-					yield return new Command_Action
-					{
-						defaultLabel = "ShortTeleDebugGizmo_Label".Translate(), //"Tele Local",
-						defaultDesc = "ShortTeleDebugGizmo_Desc".Translate(), //"Teleport on map layer",
-						activateSound = SoundDef.Named("Click"),
-						action = delegate
+					yield return GizmoHelper.MakeCommandAction(
+						"TeleportApparel_ShortRange",
+						delegate
 						{
 							Logger.Debug("TeleportBelt_Local: called Gizmo: Short Range Teleport");
 							StartTeleport_ShortRange();
 						}
-					};
+					);
 				}
 
 				if (CanDoLongRangeTeleport)
 				{
-					yield return new Command_Action
-					{
-						defaultLabel = "LongTeleDebugGizmo_Label".Translate(), //"Tele Local",
-						defaultDesc = "LongTeleDebugGizmo_Desc".Translate(), //"Teleport on map layer",
-						activateSound = SoundDef.Named("Click"),
-						action = delegate
+					yield return GizmoHelper.MakeCommandAction(
+						"TeleportApparel_LongRange",
+						delegate
 						{
 							Logger.Debug("TeleportBelt_Local: called Gizmo: Long Range Teleport");
 							StartTeleport_LongRange();
 						}
-					};
+					);
 				}
 
 				/*

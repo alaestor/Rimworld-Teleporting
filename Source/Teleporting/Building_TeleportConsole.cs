@@ -204,29 +204,24 @@ namespace alaestor_teleporting
 
 			if (DebugSettings.godMode)
 			{
-				yield return new Command_Action
-				{
-					defaultLabel = "ShortTeleDebugGizmo_Label".Translate(), //"Tele Local",
-					defaultDesc = "ShortTeleDebugGizmo_Desc".Translate(), //"Teleport on map layer",
-					activateSound = SoundDef.Named("Click"),
-					action = delegate
+
+				yield return GizmoHelper.MakeCommandAction(
+					"TeleportConsole_Local_Debug",
+					delegate
 					{
 						Logger.Debug("TeleportConsole:: called Godmode Gizmo: Short Range Teleport");
 						TeleportBehavior.StartTeleportTargetting(false, this, cheat: true);
 					}
-				};
+				);
 
-				yield return new Command_Action
-				{
-					defaultLabel = "LongTeleDebugGizmo_Label".Translate(), //"Tele Far",
-					defaultDesc = "LongTeleDebugGizmo_Desc".Translate(), //"Teleport on world layer",
-					activateSound = SoundDef.Named("Click"),
-					action = delegate
+				yield return GizmoHelper.MakeCommandAction(
+					"TeleportConsole_Global_Debug",
+					delegate
 					{
 						Logger.Debug("TeleportConsole:: called Godmode Gizmo: Long Range Teleport");
 						TeleportBehavior.StartTeleportTargetting(true, this, cheat: true);
 					}
-				};
+				);
 			}
 		}
 	}

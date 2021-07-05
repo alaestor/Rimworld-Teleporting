@@ -108,17 +108,14 @@ namespace alaestor_teleporting
 
 			if (DebugSettings.godMode)
 			{
-				yield return new Command_Action
-				{
-					defaultLabel = "MakeCoolDebugGizmo_Label".Translate(), //"Cooldown"
-					defaultDesc = "MakeCoolDebugGizmo_Desc".Translate(), //"Reset cooldown to 0"
-					activateSound = SoundDef.Named("Click"),
-					action = delegate
+				yield return GizmoHelper.MakeCommandAction(
+					"CompCooldown_SetCool_Debug",
+					delegate
 					{
-						Logger.Debug("CompCooldown:: called Godmode Gizmo: cooldown");
+						Logger.Debug("CompCooldown: called Godmode Gizmo: cooldown");
 						this.Reset();
 					}
-				};
+				);
 			}
 		}
 	}

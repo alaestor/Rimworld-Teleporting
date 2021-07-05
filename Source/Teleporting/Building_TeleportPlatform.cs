@@ -213,34 +213,29 @@ namespace alaestor_teleporting
 
 			if (nameLinkableComp.CanBeNamed)
 			{
-				yield return new Command_Action
-				{
-					//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
-					defaultLabel = "RenamePlatformGizmo_Label".Translate(),
-					defaultDesc = "RenamePlatformGizmo_Desc".Translate(),
-					activateSound = SoundDef.Named("Click"),
-					action = delegate
+				yield return GizmoHelper.MakeCommandAction(
+					"TeleportPlatform_Rename",
+					delegate
 					{
 						Rename();
 						Logger.Debug("TeleportPlatform:: called Gizmo: rename");
 					}
-				};
+				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+				);
 			}
 
 			if (nameLinkableComp.IsLinkedToSomething)
 			{
-				yield return new Command_Action
-				{
-					//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
-					defaultLabel = "UnlinkPlatformGizmo_Label".Translate(),
-					defaultDesc = "UnlinkPlatformGizmo_Desc".Translate(),
-					activateSound = SoundDef.Named("Click"),
-					action = delegate
+				yield return GizmoHelper.MakeCommandAction(
+					"TeleportPlatform_Unlink",
+					delegate
 					{
 						Unlink();
 						Logger.Debug("TeleportPlatform:: called Gizmo: unlink");
 					}
-				};
+				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+				);
+
 			}
 		}
 	}

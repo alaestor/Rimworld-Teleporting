@@ -311,47 +311,40 @@ namespace alaestor_teleporting
 			{
 				if (CanBeNamed)
 				{
-					yield return new Command_Action
-					{
-						//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
-						defaultLabel = "CompNameLinkable_Gizmo_Rename_Label".Translate(),
-						defaultDesc = "CompNameLinkable_Gizmo_Rename_Desc".Translate(),
-						activateSound = SoundDef.Named("Click"),
-						action = delegate
+					yield return GizmoHelper.MakeCommandAction(
+						"CompNameLinkable_Rename",
+						delegate
 						{
-							Logger.DebugVerbose("CompNameLinkable:: called Gizmo: rename");
+							Logger.DebugVerbose("CompNameLinkable: called Gizmo: rename");
 							BeginRename();
 						}
-					};
+					);
 				}
 
 				if (CanBeLinked)
 				{
-					yield return new Command_Action
+					if (IsLinkedToSomething)
 					{
-						//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
-						defaultLabel = "CompNameLinkable_Gizmo_MakeLink_Label".Translate(),
-						defaultDesc = "CompNameLinkable_Gizmo_MakeLink_Desc".Translate(),
-						activateSound = SoundDef.Named("Click"),
-						action = delegate
-						{
-							Logger.DebugVerbose("CompNameLinkable:: called Gizmo: make link");
-							BeginMakeLink();
-						}
-					};
-
-					yield return new Command_Action
+						yield return GizmoHelper.MakeCommandAction(
+							"CompNameLinkable_Unlink",
+							delegate
+							{
+								Logger.DebugVerbose("CompNameLinkable: called Gizmo: unlink");
+								Unlink();
+							}
+						);
+					}
+					else
 					{
-						//icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
-						defaultLabel = "CompNameLinkable_Gizmo_Unlink_Label".Translate(),
-						defaultDesc = "CompNameLinkable_Gizmo_Unlink_Desc".Translate(),
-						activateSound = SoundDef.Named("Click"),
-						action = delegate
-						{
-							Logger.DebugVerbose("CompNameLinkable:: called Gizmo: unlink");
-							Unlink();
-						}
-					};
+						yield return GizmoHelper.MakeCommandAction(
+							"CompNameLinkable_MakeLink",
+							delegate
+							{
+								Logger.DebugVerbose("CompNameLinkable: called Gizmo: make link");
+								BeginMakeLink();
+							}
+						);
+					}
 				}
 			}
 		}
