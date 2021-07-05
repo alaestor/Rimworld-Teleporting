@@ -1,5 +1,4 @@
-using RimWorld;
-using RimWorld.Planet;
+﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -116,14 +115,6 @@ namespace alaestor_teleporting
 			return str;
 		}
 
-		/*
-		public override IEnumerable<Gizmo> CompGetGizmosExtra()
-		{
-			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
-				yield return gizmo;
-		}
-		*/
-
 		public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
 		{
 			foreach (Gizmo gizmo in base.CompGetWornGizmosExtra())
@@ -131,10 +122,8 @@ namespace alaestor_teleporting
 
 			if (Find.Selector.SingleSelectedThing == Wearer)
 			{
-
 				if (CanDoShortRangeTeleport)
 				{
-					// TODO make a factory for these; simplify by passing name and suffixing _Label and _Desc, etc
 					yield return new Command_Action
 					{
 						defaultLabel = "ShortTeleDebugGizmo_Label".Translate(), //"Tele Local",
@@ -163,6 +152,7 @@ namespace alaestor_teleporting
 					};
 				}
 
+				/*
 				if (DebugSettings.godMode)
 				{
 					yield return new Command_Action
@@ -189,6 +179,7 @@ namespace alaestor_teleporting
 						}
 					};
 				}
+				*/
 			}
 		}
 	}
