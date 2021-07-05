@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
 using System;
 using UnityEngine;
@@ -290,6 +290,138 @@ namespace alaestor_teleporting
 					if (ExecuteTeleport(fromTarget.Thing, localMap, toTarget.Cell))
 						onSuccess_Callback?.Invoke(TeleportingMod.settings.shortRange_FuelCost);
 				}
+			}
+		}
+
+		public static void StartShortRangeTeleportPawn(Pawn pawn, Action onSuccess_Callback = null, bool cheat = false)
+		{
+			Logger.DebugVerbose("StartShortRangeTeleport",
+				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"),
+				"Wearer: " + pawn?.Label ?? "(no label)"
+			);
+
+			if (pawn != null && pawn.Map != null)
+			{
+				TeleportTargeter.StartChoosingLocal(
+					startingFrom: pawn,
+					result_Callback: FinishedChoosing,
+					targetParams: targetTeleportDestination,
+					mouseAttachment: localTeleportMouseAttachment);
+
+				void FinishedChoosing(LocalTargetInfo destination)
+				{
+					Logger.DebugVerbose("StartShortRangeTeleportPawn:  Got destination:\t\t" + destination.Label + " at Cell: " + destination.Cell.ToString());
+					if (ExecuteTeleport(pawn, pawn.Map, destination.Cell))
+						onSuccess_Callback?.Invoke();
+				}
+			}
+			else Logger.Error("StartShortRangeTeleportPawn: invalid pawn");
+		}
+
+		public static void StartLongRangeTeleportPawn(Pawn pawn, Action onSuccess_Callback = null, bool cheat = false)
+		{
+			Logger.DebugVerbose("StartLongRangeTeleportPawn",
+				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"),
+				"Wearer: " + pawn?.Label ?? "(no label)"
+			);
+
+			bool fuelDistanceMatters =
+							TeleportingMod.settings.enableFuel
+							&& TeleportingMod.settings.longRange_FuelDistance > 0;
+
+			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(pawn);
+
+			string ExtraLabelGetter(GlobalTargetInfo target)
+			{
+				if (!target.IsValid)
+					return null;
+
+				string label = "";
+
+				if (TeleportTargeter.TargetHasLoadedMap(target))
+					label += target.Label;
+
+				if (!cheat)
+				{
+					if (!TeleportTargeter.TargetIsWithinGlobalRangeLimit(startingHere.Tile, target.Tile))
+					{
+						if (label.Length != 0)
+							label += "\n";
+
+						label += "TeleportBehavior_Global_OutofRange".Translate();
+					}
+					else if (fuelDistanceMatters)
+					{
+						int distance = Find.WorldGrid.TraversalDistanceBetween(startingHere.Tile, target.Tile, true, int.MaxValue);
+						if (distance > TeleportingMod.settings.longRange_FuelDistance)
+						{
+							if (label.Length != 0)
+								label += "\n";
+							label += "TeleportBehavior_Global_NotEnoughFuel".Translate();
+						}
+					}
+				}
+
+				return label;
+			}
+
+			void OnUpdate()
+			{
+				if (!cheat)
+				{
+					if (fuelDistanceMatters)
+					{
+						int fuelRangeLimit = TeleportingMod.settings.longRange_FuelDistance;
+						GenDraw.DrawWorldRadiusRing(startingHere.Tile, fuelRangeLimit);
+					}
+
+					if (TeleportingMod.settings.enableGlobalRangeLimit)
+					{
+						GenDraw.DrawWorldRadiusRing(startingHere.Tile, TeleportingMod.settings.globalRangeLimit);
+					}
+				}
+			}
+
+			TeleportTargeter.StartChoosingGlobalThenLocal(
+				startingFrom: startingHere,
+				result_Callback: FinishedChoosing,
+				localTargetParams: TeleportBehavior.targetTeleportDestination,
+				localMouseAttachment: TeleportBehavior.localTeleportMouseAttachment,
+				globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
+				globalOnUpdate: OnUpdate,
+				globalExtraLabelGetter: ExtraLabelGetter,
+				globalTargetValidator: TeleportTargeter.TargetHasLoadedMap
+			);
+
+			void FinishedChoosing(GlobalTargetInfo destination)
+			{
+				Logger.DebugVerbose("StartLongRangeTeleportPawn:  Got destination:\t\t" + destination.Label + " at Cell: " + destination.Cell.ToString());
+				if (ExecuteTeleport(pawn, destination.Map, destination.Cell))
+					onSuccess_Callback?.Invoke();
+			}
+		}
+
+		public static void StartTeleportPawn(
+			bool longRangeFlag,
+			Pawn pawn,
+			Action onSuccess_Callback = null,
+			bool cheat = false)
+		{
+			Logger.Debug(
+				"TeleportBehavior::StartTeleportPawn called",
+				(longRangeFlag ? "Long Range (global targeting)" : "Short Range (local targeting)"),
+				"Pawn: " + (pawn != null ? pawn.ToString() + " - " + pawn.Label : "null"),
+				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"),
+				"Cheat: " + cheat.ToString()
+			);
+
+			if (longRangeFlag)
+			{
+				StartLongRangeTeleportPawn(pawn, onSuccess_Callback, cheat);
+			}
+			else
+			{
+				StartShortRangeTeleportPawn(pawn, onSuccess_Callback, cheat);
 			}
 		}
 

@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -38,34 +38,20 @@ namespace alaestor_teleporting
 		private bool CanTeleportOthers => Props.canTeleportOthers;
 
 
-		// behavior move to teleportBehavior
-		public void StartTeleport_ShortRange()
+		// TODO check if wearer alive, capable of manipulation, etc
+		public void StartTeleport_ShortRange(bool cheat = false)
 		{
 			if (CanDoShortRangeTeleport)
 			{
 				if (Wearer != null && Wearer.Map != null)
 				{
-					Logger.DebugVerbose("TeleportBelt_Local::StartTeleport_ShortRange: called",
-						"Wearer: " + Wearer.Label ?? "(no label)"
-					);
-
 					if (CanTeleportOthers)
 					{
-						TeleportBehavior.StartTeleportTargetting(false, Wearer);
+						TeleportBehavior.StartTeleportTargetting(false, Wearer, cheat: cheat);
 					}
 					else
 					{
-						TeleportTargeter.StartChoosingLocal(
-							startingFrom: Wearer,
-							result_Callback: FinishedChoosing,
-							targetParams: TeleportBehavior.targetTeleportDestination,
-							mouseAttachment: TeleportBehavior.localTeleportMouseAttachment);
-
-						void FinishedChoosing(LocalTargetInfo destination)
-						{
-							Logger.DebugVerbose("TeleportBelt_Local::StartTeleport_ShortRange:  Got destination:\t\t" + destination.Label + " at Cell: " + destination.Cell.ToString());
-							TeleportBehavior.ExecuteTeleport(Wearer, Wearer.Map, destination.Cell);
-						}
+						TeleportBehavior.StartTeleportPawn(false, Wearer, cheat: cheat);
 					}
 				}
 				else Logger.Error("TeleportBelt_Local::StartTeleport_ShortRange: invalid wearer");
@@ -85,86 +71,11 @@ namespace alaestor_teleporting
 
 					if (CanTeleportOthers)
 					{
-						TeleportBehavior.StartTeleportTargetting(true, Wearer);
+						TeleportBehavior.StartTeleportTargetting(true, Wearer, cheat: cheat);
 					}
 					else
 					{
-						bool fuelDistanceMatters =
-							TeleportingMod.settings.enableFuel
-							&& TeleportingMod.settings.longRange_FuelDistance > 0;
-
-						GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(Wearer);
-
-						string ExtraLabelGetter(GlobalTargetInfo target)
-						{
-							if (!target.IsValid)
-								return null;
-
-							string label = "";
-
-							if (TeleportTargeter.TargetHasLoadedMap(target))
-								label += target.Label;
-
-							if (!cheat)
-							{
-								if (!TeleportTargeter.TargetIsWithinGlobalRangeLimit(startingHere.Tile, target.Tile))
-								{
-									if (label.Length != 0)
-										label += "\n";
-
-									label += "TeleportBehavior_Global_OutofRange".Translate();
-								}
-								else if (fuelDistanceMatters)
-								{
-									int distance = Find.WorldGrid.TraversalDistanceBetween(startingHere.Tile, target.Tile, true, int.MaxValue);
-									if (distance > TeleportingMod.settings.longRange_FuelDistance)
-									{
-										if (label.Length != 0)
-											label += "\n";
-										label += "TeleportBehavior_Global_NotEnoughFuel".Translate();
-									}
-								}
-							}
-
-							return label;
-						}
-
-						void OnUpdate()
-						{
-							if (!cheat)
-							{
-								if (fuelDistanceMatters)
-								{
-									int fuelRangeLimit = TeleportingMod.settings.longRange_FuelDistance;
-
-									GenDraw.DrawWorldRadiusRing(startingHere.Tile, fuelRangeLimit);
-								}
-
-								if (TeleportingMod.settings.enableGlobalRangeLimit)
-								{
-									GenDraw.DrawWorldRadiusRing(startingHere.Tile, TeleportingMod.settings.globalRangeLimit);
-								}
-							}
-						}
-
-						Logger.Warning("Sanity check");
-
-						TeleportTargeter.StartChoosingGlobalThenLocal(
-							startingFrom: startingHere,
-							result_Callback: FinishedChoosing,
-							localTargetParams: TeleportBehavior.targetTeleportDestination,
-							localMouseAttachment: TeleportBehavior.localTeleportMouseAttachment,
-							globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
-							globalOnUpdate: OnUpdate,
-							globalExtraLabelGetter: ExtraLabelGetter,
-							globalTargetValidator: TeleportTargeter.TargetHasLoadedMap
-						);
-
-						void FinishedChoosing(GlobalTargetInfo destination)
-						{
-							Logger.DebugVerbose("TeleportBelt_Local::StartTeleport_LongRange:  Got destination:\t\t" + destination.Label + " at Cell: " + destination.Cell.ToString());
-							TeleportBehavior.ExecuteTeleport(Wearer, destination.Map, destination.Cell);
-						}
+						TeleportBehavior.StartTeleportPawn(true, Wearer, cheat: cheat);
 					}
 				}
 				else Logger.Error("TeleportBelt_Local::StartTeleport_LongRange: invalid wearer");
@@ -172,14 +83,16 @@ namespace alaestor_teleporting
 			else Logger.Error("TeleportBelt_Local::StartTeleport_LongRange: disallowed, CanDoLongRangeTelePort is false");
 		}
 
-		public override void Notify_KilledPawn(Pawn pawn)
+		public void SelfDestruct()
 		{
-			base.Notify_KilledPawn(pawn);
+			Logger.Debug("SelfDestruct!");
+			this.parent.SplitOff(1).Destroy();
 		}
 
 		public override void CompTick()
 		{ // ticks every 1/60th second (1t / 60tps)
 			base.CompTick();
+			Logger.Debug("CompTick");
 		}
 
 		public override void CompTickRare()
