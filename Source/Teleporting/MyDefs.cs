@@ -12,6 +12,7 @@ namespace alaestor_teleporting
 		public static readonly ThingDef teleportCartridge = ThingDef.Named("alaestor_teleporting_TeleportCartridge");
 		public static readonly ThingDef apparel_TeleportBelt = ThingDef.Named("alaestor_teleporting_Apparel_TeleportBelt");
 		public static readonly ThingDef portableTeleportUnit_Local = ThingDef.Named("alaestor_teleporting_PortableTeleportUnit_Local");
+		public static readonly ThingDef portableTeleportUnit_Global = ThingDef.Named("alaestor_teleporting_PortableTeleportUnit_Global");
 	}
 
 	[DefOf]

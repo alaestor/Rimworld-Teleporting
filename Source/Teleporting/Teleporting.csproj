@@ -57,7 +57,7 @@
     <Compile Include="CompCooldown.cs" />
     <Compile Include="CompNameLinkable.cs" />
     <Compile Include="CompTeleportApparel.cs" />
-    <Compile Include="CompUseEffect_LocalTeleport.cs" />
+    <Compile Include="CompUseEffect_Teleport.cs" />
     <Compile Include="GizmoHelper.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MyDefs.cs" />
