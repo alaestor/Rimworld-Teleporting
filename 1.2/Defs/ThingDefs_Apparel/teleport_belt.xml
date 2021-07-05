@@ -10,7 +10,7 @@
       <texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
-    <tickerType>Normal</tickerType>
+    <tickerType>Rare</tickerType>
     <statBases>
       <Mass>3</Mass>
       <WorkToMake>14000</WorkToMake>
