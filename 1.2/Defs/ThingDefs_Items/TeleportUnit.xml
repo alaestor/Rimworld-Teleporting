@@ -2,7 +2,7 @@
 <Defs>
 
   <ThingDef ParentName="ResourceBase">
-    <defName>alaestor_teleporting_LocalTeleportUnit</defName>
+    <defName>alaestor_teleporting_PortableTeleportUnit_Local</defName>
     <label>Short Range Teleport Unit</label>
     <description>Placeholder</description>
 	<thingClass>ThingWithComps</thingClass>
