@@ -298,12 +298,8 @@ namespace alaestor_teleporting
 			NameLinkableManager.TryToUnregister(Name);
 		}
 
-		// TODO these 3 gizmos should all be part of one button + a status icon (linked/unlinked)
-		public override IEnumerable<Gizmo> CompGetGizmosExtra()
+		private IEnumerable<Gizmo> CompCommonGizmosExtra()
 		{
-			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
-				yield return gizmo;
-
 			if (ShowGizmos)
 			{
 				if (CanBeNamed)
@@ -377,6 +373,25 @@ namespace alaestor_teleporting
 					}
 				}
 			}
+		}
+
+		public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
+		{
+			foreach (Gizmo gizmo in base.CompGetWornGizmosExtra())
+				yield return gizmo;
+
+			foreach (Gizmo gizmo in CompCommonGizmosExtra())
+				yield return gizmo;
+		}
+
+		// TODO these 3 gizmos should all be part of one button + a status icon (linked/unlinked)
+		public override IEnumerable<Gizmo> CompGetGizmosExtra()
+		{
+			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+				yield return gizmo;
+			
+			foreach (Gizmo gizmo in CompCommonGizmosExtra())
+				yield return gizmo;
 		}
 	}
 

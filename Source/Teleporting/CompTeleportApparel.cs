@@ -32,10 +32,13 @@ namespace alaestor_teleporting
 			}
 		}
 
-		private bool CanDoShortRangeTeleport => Props.shortRange;
-		private bool CanDoLongRangeTeleport => Props.longRange;
-		private bool CanTeleportOthers => Props.canTeleportOthers;
+		private CompNameLinkable NameLinkableComp => parent.GetComp<CompNameLinkable>() ?? null;
+		private bool HasNameLinkable => NameLinkableComp != null;
 
+		public bool CanDoShortRangeTeleport => Props.shortRange;
+		public bool CanDoLongRangeTeleport => Props.longRange;
+		public bool UseNameLinkable => Props.useNameLinkable;
+		public bool CanTeleportOthers => Props.canTeleportOthers;
 
 		// TODO check if wearer alive, capable of manipulation, etc
 		public void StartTeleport_ShortRange(bool cheat = false)
@@ -53,9 +56,9 @@ namespace alaestor_teleporting
 						TeleportBehavior.StartTeleportPawn(false, Wearer, cheat: cheat);
 					}
 				}
-				else Logger.Error("TeleportBelt_Local::StartTeleport_ShortRange: invalid wearer");
+				else Logger.Error("CompTeleportApparel::StartTeleport_ShortRange: invalid wearer");
 			}
-			else Logger.Error("TeleportBelt_Local::StartTeleport_ShortRange: disallowed, CanDoShortRangeTelePort is false");
+			else Logger.Error("CompTeleportApparel::StartTeleport_ShortRange: disallowed, CanDoShortRangeTelePort is false");
 		}
 
 		public void StartTeleport_LongRange(bool cheat = false)
@@ -64,7 +67,7 @@ namespace alaestor_teleporting
 			{
 				if (Wearer != null && Wearer.Map != null)
 				{
-					Logger.DebugVerbose("TeleportBelt_Local::StartTeleport_LongRange: called",
+					Logger.DebugVerbose("CompTeleportApparel::StartTeleport_LongRange: called",
 						"Wearer: " + Wearer.Label ?? "(no label)"
 					);
 
@@ -77,14 +80,65 @@ namespace alaestor_teleporting
 						TeleportBehavior.StartTeleportPawn(true, Wearer, cheat: cheat);
 					}
 				}
-				else Logger.Error("TeleportBelt_Local::StartTeleport_LongRange: invalid wearer");
+				else Logger.Error("CompTeleportApparel::StartTeleport_LongRange: invalid wearer");
 			}
-			else Logger.Error("TeleportBelt_Local::StartTeleport_LongRange: disallowed, CanDoLongRangeTelePort is false");
+			else Logger.Error("CompTeleportApparel::StartTeleport_LongRange: disallowed, CanDoLongRangeTelePort is false");
+		}
+
+		public void StartTeleport_LinkedThing(bool cheat = false)
+		{
+			if (UseNameLinkable)
+			{
+				if (HasNameLinkable)
+				{
+					CompNameLinkable nameLinkable = NameLinkableComp;
+					if (nameLinkable.IsLinkedToSomething)
+					{
+						if (nameLinkable.HasValidLinkedThing)
+						{
+							Thing destination = nameLinkable.LinkedThing;
+							if (destination.Map != null && destination.InteractionCell.IsValid)
+							{
+								if (TeleportBehavior.ExecuteTeleport(Wearer, destination.Map, destination.InteractionCell))
+								{
+									Logger.Debug(
+										"CompTeleportApparel::StartTeleport_LinkedThing: Teleported "
+											+ Wearer.Label
+											+ " from \"" + nameLinkable.Name
+											+ "\" to \"" + nameLinkable.GetNameOfLinkedLinkedThing + "\"",
+										"Destination Map: " + destination.Map.ToString(),
+										"Destination Cell: " + destination.InteractionCell.ToString()
+									);
+								}
+								else
+								{
+									Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: ExecuteTeleport failed.");
+								}
+							}
+							else
+							{
+								Logger.Error(
+									"CompTeleportApparel::StartTeleport_LinkedThing: destination map or cell was invalid!",
+									"Map: " + destination.Map.ToString(),
+									"Cell: " + destination.InteractionCell.ToString()
+								);
+							}
+
+						}
+						else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: nameLinkable is linked to invalid thing");
+					}
+					else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: nameLinkable isn't linked");
+				}
+				else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: UseNameLinkable is true but NameLinkable is null",
+					"Parent: " + parent.Label
+				);
+			}
+			else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: UseNameLinkable is false");
 		}
 
 		public void SelfDestruct()
 		{
-			Logger.Debug("SelfDestruct!");
+			Logger.DebugVerbose(parent.Label + " self destructed");
 			this.parent.SplitOff(1).Destroy();
 		}
 
@@ -128,7 +182,7 @@ namespace alaestor_teleporting
 						"TeleportApparel_ShortRange",
 						delegate
 						{
-							Logger.Debug("TeleportBelt_Local: called Gizmo: Short Range Teleport");
+							Logger.Debug("CompTeleportApparel: called Gizmo: Short Range Teleport");
 							StartTeleport_ShortRange();
 						}
 					);
@@ -140,9 +194,56 @@ namespace alaestor_teleporting
 						"TeleportApparel_LongRange",
 						delegate
 						{
-							Logger.Debug("TeleportBelt_Local: called Gizmo: Long Range Teleport");
+							Logger.Debug("CompTeleportApparel: called Gizmo: Long Range Teleport");
 							StartTeleport_LongRange();
 						}
+					);
+				}
+
+				if (UseNameLinkable)
+				{
+					if (HasNameLinkable)
+					{
+						var nameLinkable = NameLinkableComp;
+						if (nameLinkable.IsLinkedToSomething)
+						{// tl
+							if (nameLinkable.HasValidLinkedThing)
+							{
+								yield return GizmoHelper.MakeCommandAction(
+									"TeleportApparel_TeleportToLink",
+									delegate
+									{
+										Logger.Debug("CompTeleportApparel: called Gizmo: Teleport to Link");
+										StartTeleport_LinkedThing();
+									}
+								);
+							}
+
+							yield return GizmoHelper.MakeCommandAction(
+								"TeleportApparel_Unlink",
+								delegate
+								{
+									// change to be a right-click float option on item?
+									Logger.Debug("CompTeleportApparel: called Gizmo: Unlink");
+									nameLinkable.Unlink();
+									SelfDestruct();
+								}
+							);
+						}
+						else
+						{
+							yield return GizmoHelper.MakeCommandAction(
+								"TeleportApparel_MakeLink",
+								delegate
+								{
+									Logger.Debug("CompTeleportApparel: called Gizmo: Unlink");
+									nameLinkable.BeginMakeLink();
+								}
+							);
+						}
+					}
+					else Logger.Error("CompTeleportApparel: UseNameLinkable is true but NameLinkable is null",
+						"Parent: " + parent.Label
 					);
 				}
 
@@ -182,7 +283,19 @@ namespace alaestor_teleporting
 	{
 		public bool shortRange = false;
 		public bool longRange = false;
+		public bool useNameLinkable = false;
 		public bool canTeleportOthers = false;
+
+		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
+		{
+			foreach (string configError in base.ConfigErrors(parentDef))
+				yield return configError;
+
+			if (!(shortRange || longRange || useNameLinkable))
+			{
+				yield return "All teleport types are false. At least one should be true: shortRange, longRange, useNameLinkable";
+			}
+		}
 
 		public CompProperties_TeleportApparel()
 		{
