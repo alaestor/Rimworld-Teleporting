@@ -8,7 +8,8 @@ namespace alaestor_teleporting
 	public class CompCooldown : ThingComp
 	{
 		public CompProperties_Cooldown Props => (CompProperties_Cooldown)this.props;
-		public bool ShowDebugGizmos => Props.showDebugGizmos; // TODO
+		public bool ShowGizmos => Props.showGizmos;
+		public bool ShowDebugGizmos => Props.showDebugGizmos;
 
 		public int remaining;
 
@@ -103,27 +104,46 @@ namespace alaestor_teleporting
 			else return "";
 		}
 
+		private IEnumerable<Gizmo> CompCommonGizmosExtra()
+		{
+			if (ShowGizmos)
+			{
+				if (ShowDebugGizmos && DebugSettings.godMode)
+				{
+					yield return GizmoHelper.MakeCommandAction(
+						"CompCooldown_SetCool_Debug",
+						delegate
+						{
+							Logger.Debug("CompCooldown: called Godmode Gizmo: cooldown");
+							this.Reset();
+						}
+					);
+				}
+			}
+		}
+
+		public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
+		{
+			foreach (Gizmo gizmo in base.CompGetWornGizmosExtra())
+				yield return gizmo;
+
+			foreach (Gizmo gizmo in CompCommonGizmosExtra())
+				yield return gizmo;
+		}
+
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
 				yield return gizmo;
 
-			if (ShowDebugGizmos && DebugSettings.godMode)
-			{
-				yield return GizmoHelper.MakeCommandAction(
-					"CompCooldown_SetCool_Debug",
-					delegate
-					{
-						Logger.Debug("CompCooldown: called Godmode Gizmo: cooldown");
-						this.Reset();
-					}
-				);
-			}
+			foreach (Gizmo gizmo in CompCommonGizmosExtra())
+				yield return gizmo;
 		}
 	}
 
 	public class CompProperties_Cooldown : CompProperties
 	{
+		public bool showGizmos = true;
 		public bool showDebugGizmos = true;
 
 		public CompProperties_Cooldown()
