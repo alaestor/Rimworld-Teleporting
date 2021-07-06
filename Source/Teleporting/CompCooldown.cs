@@ -21,75 +21,75 @@ namespace alaestor_teleporting
 
 		public void Reset()
 		{
-			this.remaining = 0;
+			remaining = 0;
 			Logger.DebugVerbose("CompCooldown cooldown reset");
 		}
 
 		public void Set(int ticks)
 		{
-			if (ticks > 0) this.remaining = ticks;
-			else this.remaining = 0;
+			if (ticks > 0) remaining = ticks;
+			else remaining = 0;
 			Logger.DebugVerbose("CompCooldown cooldown set to " + ticks.ToString() + " ticks (" + ((int)(ticks / 60)).ToString() + " seconds)");
 		}
 
 		public void SetSeconds(int seconds)
 		{
-			this.Set(seconds * 60);
+			Set(seconds * 60);
 		}
 
 		public void Add(int ticks)
 		{
-			if (ticks > 0) this.remaining += ticks;
+			if (ticks > 0) remaining += ticks;
 			else Logger.Error("CompCooldown Tried to add negative cooldown time");
 			Logger.DebugVerbose("CompCooldown cooldown increased by adding " + ticks.ToString() + " ticks (" + ((int)(ticks / 60)).ToString() + " seconds)");
 		}
 
 		public void AddSeconds(int seconds)
 		{
-			this.Add(seconds * 60);
+			Add(seconds * 60);
 		}
 
 		public void Subtract(int ticks)
 		{
-			if (this.remaining > 0)
+			if (remaining > 0)
 			{
-				if (this.remaining - ticks >= 0) this.remaining -= ticks;
-				else this.remaining = 0;
+				if (remaining - ticks >= 0) remaining -= ticks;
+				else remaining = 0;
 			}
 		}
 
 		public void SubtractSeconds(int seconds)
 		{
-			if (this.remaining > 0)
+			if (remaining > 0)
 			{
-				if (this.remaining - (seconds * 60) >= 0) this.remaining -= seconds * 60;
-				else this.remaining = 0;
+				if (remaining - (seconds * 60) >= 0) remaining -= seconds * 60;
+				else remaining = 0;
 			}
 		}
 
 		public override void CompTick()
 		{ // ticks every 1/60th second (1t / 60tps)
 			base.CompTick();
-			this.Subtract(1);
+			Subtract(1);
 		}
 
 		public override void CompTickRare()
 		{ // ticks every 4.16 seconds (250t / 60tps)
 			base.CompTickRare();
-			this.Subtract(250);
+			Subtract(250);
 		}
 
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.remaining, "remaining", 0);
+			Scribe_Values.Look<int>(ref remaining, "remaining", 0);
 		}
 
 		public override void PostDraw()
 		{
-			if (this.IsOnCooldown)
+			if (IsOnCooldown)
 			{// overlay cooldown icon on thing
-				Thing thing = this.parent;
+				Thing thing = parent;
 				float vanillaPulse = (float)(0.300000011920929 + (Math.Sin(((double)Time.realtimeSinceStartup + 397.0 * (double)(thing.thingIDNumber % 571)) * 4.0) + 1.0) * 0.5 * 0.699999988079071);
 				Material material = FadedMaterialPool.FadedVersionOf(MaterialPool.MatFrom("Overlay/Cooldown", ShaderDatabase.MetaOverlay), vanillaPulse);
 				Matrix4x4 matrix = new Matrix4x4();
@@ -100,7 +100,7 @@ namespace alaestor_teleporting
 
 		public override string CompInspectStringExtra()
 		{
-			if (this.IsOnCooldown)
+			if (IsOnCooldown)
 			{
 				return "IsOnCooldown_Label".Translate() + ": " + (SecondsRemaining).ToString() + " seconds remaining";
 			}
@@ -118,7 +118,7 @@ namespace alaestor_teleporting
 						delegate
 						{
 							Logger.Debug("CompCooldown: called Godmode Gizmo: cooldown");
-							this.Reset();
+							Reset();
 						}
 					);
 				}
@@ -151,7 +151,7 @@ namespace alaestor_teleporting
 
 		public CompProperties_Cooldown()
 		{
-			this.compClass = typeof(CompCooldown);
+			compClass = typeof(CompCooldown);
 		}
 
 		public CompProperties_Cooldown(Type compClass) : base(compClass)
