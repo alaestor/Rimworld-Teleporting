@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -11,9 +11,12 @@ namespace alaestor_teleporting
 		public bool ShowGizmos => Props.showGizmos;
 		public bool ShowDebugGizmos => Props.showDebugGizmos;
 
-		public int remaining;
+		private int remaining;
 
-		public bool IsOnCooldown => this.remaining > 0;
+		public int TicksRemaining => remaining;
+		public int SecondsRemaining => (int)(remaining / 60);
+
+		public bool IsOnCooldown => TicksRemaining > 0;
 		public static implicit operator bool(CompCooldown c) => c.IsOnCooldown;
 
 		public void Reset()
@@ -99,7 +102,7 @@ namespace alaestor_teleporting
 		{
 			if (this.IsOnCooldown)
 			{
-				return "IsOnCooldown_Label".Translate() + ": " + ((int)(remaining / 60)).ToString() + " seconds remaining";
+				return "IsOnCooldown_Label".Translate() + ": " + (SecondsRemaining).ToString() + " seconds remaining";
 			}
 			else return "";
 		}
