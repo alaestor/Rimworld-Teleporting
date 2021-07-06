@@ -35,15 +35,17 @@ namespace alaestor_teleporting
 		private CompNameLinkable NameLinkableComp => parent.GetComp<CompNameLinkable>() ?? null;
 		private bool HasNameLinkable => NameLinkableComp != null;
 
-		public bool CanDoShortRangeTeleport => Props.shortRange;
-		public bool CanDoLongRangeTeleport => Props.longRange;
+		public bool CanDoTeleport_ShortRange => Props.shortRange;
+		public bool CanDoTeleport_LongRange => Props.longRange;
 		public bool UseNameLinkable => Props.useNameLinkable;
 		public bool CanTeleportOthers => Props.canTeleportOthers;
+
+		//public bool WearerCanUse => ;
 
 		// TODO check if wearer alive, capable of manipulation, etc
 		public void StartTeleport_ShortRange(bool cheat = false)
 		{
-			if (CanDoShortRangeTeleport)
+			if (CanDoTeleport_ShortRange)
 			{
 				if (Wearer != null && Wearer.Map != null)
 				{
@@ -63,7 +65,7 @@ namespace alaestor_teleporting
 
 		public void StartTeleport_LongRange(bool cheat = false)
 		{
-			if (CanDoLongRangeTeleport)
+			if (CanDoTeleport_LongRange)
 			{
 				if (Wearer != null && Wearer.Map != null)
 				{
@@ -142,27 +144,6 @@ namespace alaestor_teleporting
 			this.parent.SplitOff(1).Destroy();
 		}
 
-		public override void CompTick()
-		{ // ticks every 1/60th second (1t / 60tps)
-			base.CompTick();
-			Logger.Debug("CompTick");
-		}
-
-		public override void CompTickRare()
-		{ // ticks every 4.16 seconds (250t / 60tps)
-			base.CompTickRare();
-		}
-
-		public override void PostExposeData()
-		{
-			base.PostExposeData();
-		}
-
-		public override void PostDraw()
-		{
-			base.PostDraw();
-		}
-
 		public override string CompInspectStringExtra()
 		{
 			string str = base.CompInspectStringExtra();
@@ -176,7 +157,7 @@ namespace alaestor_teleporting
 
 			if (Find.Selector.SingleSelectedThing == Wearer)
 			{
-				if (CanDoShortRangeTeleport)
+				if (CanDoTeleport_ShortRange)
 				{
 					yield return GizmoHelper.MakeCommandAction(
 						"TeleportApparel_ShortRange",
@@ -188,7 +169,7 @@ namespace alaestor_teleporting
 					);
 				}
 
-				if (CanDoLongRangeTeleport)
+				if (CanDoTeleport_LongRange)
 				{
 					yield return GizmoHelper.MakeCommandAction(
 						"TeleportApparel_LongRange",
@@ -206,25 +187,23 @@ namespace alaestor_teleporting
 					{
 						var nameLinkable = NameLinkableComp;
 						if (nameLinkable.IsLinkedToSomething)
-						{// tl
-							if (nameLinkable.HasValidLinkedThing)
-							{
-								yield return GizmoHelper.MakeCommandAction(
-									"TeleportApparel_TeleportToLink",
-									delegate
-									{
-										Logger.Debug("CompTeleportApparel: called Gizmo: Teleport to Link");
-										StartTeleport_LinkedThing();
-									}
-								);
-							}
+						{
+							yield return GizmoHelper.MakeCommandAction(
+								"TeleportApparel_TeleportToLink",
+								delegate
+								{
+									Logger.Debug("CompTeleportApparel: called Gizmo: Teleport to Link");
+									StartTeleport_LinkedThing();
+								},
+								disabled: nameLinkable.HasInvalidLinkedThing
+							);
 
 							yield return GizmoHelper.MakeCommandAction(
 								"TeleportApparel_Unlink",
 								delegate
 								{
-									// change to be a right-click float option on item?
 									Logger.Debug("CompTeleportApparel: called Gizmo: Unlink");
+									// make confirmation window warning that it will be destroyed?
 									nameLinkable.Unlink();
 									SelfDestruct();
 								}
@@ -236,7 +215,7 @@ namespace alaestor_teleporting
 								"TeleportApparel_MakeLink",
 								delegate
 								{
-									Logger.Debug("CompTeleportApparel: called Gizmo: Unlink");
+									Logger.Debug("CompTeleportApparel: called Gizmo: Make Link");
 									nameLinkable.BeginMakeLink();
 								}
 							);
