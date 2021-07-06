@@ -13,7 +13,7 @@ namespace alaestor_teleporting
 
 		public static Command_Action MakeCommandAction(
 			string name,
-			Action action,
+			Action action = null,
 			SoundDef activateSound = null,
 			Texture2D icon = null,
 			bool disabled = false,
