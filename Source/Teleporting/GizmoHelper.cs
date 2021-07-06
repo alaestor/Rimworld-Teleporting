@@ -17,17 +17,18 @@ namespace alaestor_teleporting
 			SoundDef activateSound = null,
 			Texture2D icon = null,
 			bool disabled = false,
+			string disabledReason = null,
 			KeyBindingDef hotKey = null)
 		{
 			return new Command_Action
 			{
 				defaultLabel = (gizmo_prefix + name + label_suffix).Translate(),
-				defaultDesc = (name + description_suffix).Translate(),
+				defaultDesc = (gizmo_prefix + name + description_suffix).Translate(),
 				activateSound = activateSound ?? SoundDef.Named("Click"),
 				hotKey = hotKey,
 				icon = icon,
 				disabled = disabled,
-				disabledReason = (disabled ? (name + disabled_suffix).Translate() : null),
+				disabledReason = (disabled ? (disabledReason ?? (name + disabled_suffix).Translate()) : null),
 				action = action
 			};
 		}
