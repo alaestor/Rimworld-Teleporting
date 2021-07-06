@@ -6,6 +6,7 @@
     <label>teleport belt</label>
     <description>Placeholder</description>
     <!--thingClass>alaestor_teleporting.TeleportBelt_Local</thingClass-->
+	<thingClass>Apparel</thingClass>
     <graphicData>
       <texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -58,12 +59,12 @@
     <defName>alaestor_teleporting_Apparel_TeleportBelt_Link</defName>
     <label>Linkable teleport belt</label>
     <description>Placeholder</description>
-    <!--thingClass>alaestor_teleporting.TeleportBelt_Local</thingClass-->
+    <thingClass>Apparel</thingClass>
     <graphicData>
       <texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
-    <tickerType>Rare</tickerType>
+    <tickerType>Normal</tickerType>
     <statBases>
       <Mass>3</Mass>
       <WorkToMake>14000</WorkToMake>
@@ -98,6 +99,7 @@
       <!--tags><li>BeltDefense</li></tags-->
     </apparel>
 	<comps>
+	<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
 	  <li Class="alaestor_teleporting.CompProperties_NameLinkable">
 		<canBeNamed>false</canBeNamed>
 		<canBeLinked>true</canBeLinked>
@@ -108,6 +110,7 @@
         <shortRange>false</shortRange>
         <longRange>false</longRange>
         <useNameLinkable>true</useNameLinkable>
+		<useCooldown>true</useCooldown>
         <canTeleportOthers>false</canTeleportOthers>
       </li>
 	</comps>

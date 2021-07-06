@@ -32,11 +32,14 @@ namespace alaestor_teleporting
 			}
 		}
 
+		private CompCooldown CooldownComp => parent.GetComp<CompCooldown>() ?? null;
+		private bool HasCooldownComp => CooldownComp != null;
 		private CompNameLinkable NameLinkableComp => parent.GetComp<CompNameLinkable>() ?? null;
-		private bool HasNameLinkable => NameLinkableComp != null;
+		private bool HasNameLinkableComp => NameLinkableComp != null;
 
 		public bool CanDoTeleport_ShortRange => Props.shortRange;
 		public bool CanDoTeleport_LongRange => Props.longRange;
+		public bool UseCooldown => Props.useCooldown;
 		public bool UseNameLinkable => Props.useNameLinkable;
 		public bool CanTeleportOthers => Props.canTeleportOthers;
 
@@ -91,7 +94,7 @@ namespace alaestor_teleporting
 		{
 			if (UseNameLinkable)
 			{
-				if (HasNameLinkable)
+				if (HasNameLinkableComp)
 				{
 					CompNameLinkable nameLinkable = NameLinkableComp;
 					if (nameLinkable.IsLinkedToSomething)
@@ -144,10 +147,24 @@ namespace alaestor_teleporting
 			this.parent.SplitOff(1).Destroy();
 		}
 
-		public override string CompInspectStringExtra()
+		public override void Initialize(CompProperties props)
 		{
-			string str = base.CompInspectStringExtra();
-			return str;
+			base.Initialize(props);
+			if (UseCooldown && !HasCooldownComp)
+			{
+				Logger.Error(
+					"CompTeleportApparel set to use CompCooldown but has no CompCooldown",
+					"Parent: " + parent.Label
+				);
+			}
+
+			if (UseNameLinkable && !HasNameLinkableComp)
+			{
+				Logger.Error(
+					"CompTeleportApparel set to use CompNameLinkable but has no CompNameLinkable",
+					"Parent: " + parent.Label
+				);
+			}
 		}
 
 		public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
@@ -155,8 +172,32 @@ namespace alaestor_teleporting
 			foreach (Gizmo gizmo in base.CompGetWornGizmosExtra())
 				yield return gizmo;
 
+			if (CooldownComp != null)
+			{
+				yield return GizmoHelper.MakeCommandAction(
+					"TeleportApparel_CooldownTest",
+					delegate
+					{
+						Logger.Debug("CompTeleportApparel: called Gizmo: Cooldown test");
+						CooldownComp.SetSeconds(30);
+					}
+				);
+			}
+
 			if (Find.Selector.SingleSelectedThing == Wearer)
 			{
+
+				bool isOnCooldown = false;
+				string cooldownRemainingString = null;
+
+				if (UseCooldown && HasCooldownComp && CooldownComp.IsOnCooldown)
+				{
+					isOnCooldown = true;
+					cooldownRemainingString = string.Format(
+						"On cooldown for {0} more seconds", // TODO translated version
+						CooldownComp.SecondsRemaining);
+				}
+
 				if (CanDoTeleport_ShortRange)
 				{
 					yield return GizmoHelper.MakeCommandAction(
@@ -165,7 +206,9 @@ namespace alaestor_teleporting
 						{
 							Logger.Debug("CompTeleportApparel: called Gizmo: Short Range Teleport");
 							StartTeleport_ShortRange();
-						}
+						},
+						disabled: isOnCooldown,
+						disabledReason: cooldownRemainingString
 					);
 				}
 
@@ -177,26 +220,41 @@ namespace alaestor_teleporting
 						{
 							Logger.Debug("CompTeleportApparel: called Gizmo: Long Range Teleport");
 							StartTeleport_LongRange();
-						}
+						},
+						disabled: isOnCooldown,
+						disabledReason: cooldownRemainingString
 					);
 				}
 
 				if (UseNameLinkable)
 				{
-					if (HasNameLinkable)
+					if (HasNameLinkableComp)
 					{
 						var nameLinkable = NameLinkableComp;
 						if (nameLinkable.IsLinkedToSomething)
 						{
-							yield return GizmoHelper.MakeCommandAction(
-								"TeleportApparel_TeleportToLink",
-								delegate
-								{
-									Logger.Debug("CompTeleportApparel: called Gizmo: Teleport to Link");
-									StartTeleport_LinkedThing();
-								},
-								disabled: nameLinkable.HasInvalidLinkedThing
-							);
+							if (nameLinkable.HasValidLinkedThing)
+							{
+								yield return GizmoHelper.MakeCommandAction(
+									"TeleportApparel_TeleportToLink",
+									delegate
+									{
+										Logger.Debug("CompTeleportApparel: called Gizmo: Teleport to Link");
+										StartTeleport_LinkedThing();
+									},
+									disabled: isOnCooldown,
+									disabledReason: cooldownRemainingString
+								);
+							}
+							else
+							{
+								yield return GizmoHelper.MakeCommandAction(
+									"TeleportApparel_TeleportToLink",
+									disabled: true,
+									disabledReason: "Teleporting_CompNameLinkable_NotLinked".Translate()
+								);
+							}
+
 
 							yield return GizmoHelper.MakeCommandAction(
 								"TeleportApparel_Unlink",
@@ -221,9 +279,12 @@ namespace alaestor_teleporting
 							);
 						}
 					}
-					else Logger.Error("CompTeleportApparel: UseNameLinkable is true but NameLinkable is null",
-						"Parent: " + parent.Label
-					);
+					else
+					{
+						Logger.Error("CompTeleportApparel: UseNameLinkable is true but NameLinkable is null",
+							"Parent: " + parent.Label
+						);
+					}
 				}
 
 				/*
@@ -263,6 +324,7 @@ namespace alaestor_teleporting
 		public bool shortRange = false;
 		public bool longRange = false;
 		public bool useNameLinkable = false;
+		public bool useCooldown = false;
 		public bool canTeleportOthers = false;
 
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
