@@ -13,7 +13,7 @@ namespace alaestor_teleporting
 		public readonly bool longRangeFlag;
 		public readonly int distance;
 
-		public TeleportData(bool cheat, bool longRangeFlag, int distance)
+		public TeleportData(bool cheat = false, bool longRangeFlag = false, int distance = 0)
 		{
 			this.cheat = cheat;
 			this.longRangeFlag = longRangeFlag;
