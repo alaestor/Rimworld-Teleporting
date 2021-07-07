@@ -18,13 +18,13 @@ namespace alaestor_teleporting
 		public int longRange_CooldownDuration = longRange_CooldownDuration_Default;
 		public string longRange_CooldownDuration_Buffer = longRange_CooldownDuration_Default.ToString();
 
-		// Cooldowns intelect modifier
-		private static readonly bool enableIntelectDivisor_Default = true;
-		public bool enableIntelectDivisor = enableIntelectDivisor_Default;
+		// Console cooldown intelect modifier
+		private static readonly bool enableConsoleIntelectDivisor_Default = true;
+		public bool enableConsoleIntelectDivisor = enableConsoleIntelectDivisor_Default;
 
-		private static readonly int intelectDivisor_Default = 21;
-		public int intelectDivisor = intelectDivisor_Default;
-		public string intelectDivisor_Buffer = intelectDivisor_Default.ToString();
+		private static readonly int consoleIntelectDivisor_Default = 21;
+		public int consoleIntelectDivisor = consoleIntelectDivisor_Default;
+		public string consoleIntelectDivisor_Buffer = consoleIntelectDivisor_Default.ToString();
 
 
 
@@ -76,7 +76,7 @@ namespace alaestor_teleporting
 			// cooldown
 			this.shortRange_CooldownDuration_Buffer = shortRange_CooldownDuration.ToString();
 			this.longRange_CooldownDuration_Buffer = longRange_CooldownDuration.ToString();
-			this.intelectDivisor_Buffer = intelectDivisor.ToString();
+			this.consoleIntelectDivisor_Buffer = consoleIntelectDivisor.ToString();
 
 			// fuel
 			this.shortRange_FuelCost_Buffer = shortRange_FuelCost.ToString();
@@ -93,8 +93,8 @@ namespace alaestor_teleporting
 			this.enableCooldown = enableCooldown_Default;
 			this.shortRange_CooldownDuration = shortRange_CooldownDuration_Default;
 			this.longRange_CooldownDuration = longRange_CooldownDuration_Default;
-			this.enableIntelectDivisor = enableIntelectDivisor_Default;
-			this.intelectDivisor = intelectDivisor_Default;
+			this.enableConsoleIntelectDivisor = enableConsoleIntelectDivisor_Default;
+			this.consoleIntelectDivisor = consoleIntelectDivisor_Default;
 
 			// fuel
 			this.enableFuel = enableFuel_Default;
@@ -119,8 +119,8 @@ namespace alaestor_teleporting
 			Scribe_Values.Look(ref this.enableCooldown, "enableCooldown", enableCooldown_Default);
 			Scribe_Values.Look(ref this.shortRange_CooldownDuration, "shortRange_CooldownDuration", shortRange_CooldownDuration_Default);
 			Scribe_Values.Look(ref this.longRange_CooldownDuration, "longRange_CooldownDuration", longRange_CooldownDuration_Default);
-			Scribe_Values.Look(ref this.enableIntelectDivisor, "enableIntelectDivisor", enableIntelectDivisor_Default);
-			Scribe_Values.Look(ref this.intelectDivisor, "intelectDivisor", intelectDivisor_Default);
+			Scribe_Values.Look(ref this.enableConsoleIntelectDivisor, "enableIntelectDivisor", enableConsoleIntelectDivisor_Default);
+			Scribe_Values.Look(ref this.consoleIntelectDivisor, "intelectDivisor", consoleIntelectDivisor_Default);
 			Scribe_Values.Look(ref this.enableFuel, "enableFuel", enableFuel_Default);
 			Scribe_Values.Look(ref this.enablePlatformUnlinkFuelCost, "enablePlatformUnlinkFuelCost", enablePlatformUnlinkFuelCost_Default);
 			Scribe_Values.Look(ref this.shortRange_FuelCost, "shortRange_FuelCost", shortRange_FuelCost_Default);
@@ -170,10 +170,10 @@ namespace alaestor_teleporting
 				ls.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "enableCooldown_tooltip".Translate()); // Note: there are 60 ticks in a second
 				if (settings.enableCooldown)
 				{
-					ls.CheckboxLabeled("enableIntelectDivisor".Translate(), ref settings.enableIntelectDivisor, tooltip: "intelectDivisor_tooltip".Translate());
-					if (settings.enableIntelectDivisor)
+					ls.CheckboxLabeled("enableIntelectDivisor".Translate(), ref settings.enableConsoleIntelectDivisor, tooltip: "intelectDivisor_tooltip".Translate());
+					if (settings.enableConsoleIntelectDivisor)
 					{
-						ls.TextFieldNumericLabeled<int>("intelectDivisor".Translate(), ref settings.intelectDivisor, ref settings.intelectDivisor_Buffer, min: 1, max: 100);
+						ls.TextFieldNumericLabeled<int>("intelectDivisor".Translate(), ref settings.consoleIntelectDivisor, ref settings.consoleIntelectDivisor_Buffer, min: 1, max: 100);
 						ls.Gap();
 					}
 					ls.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);

@@ -160,10 +160,10 @@ namespace alaestor_teleporting
 							TeleportingMod.settings.longRange_CooldownDuration
 							: TeleportingMod.settings.shortRange_CooldownDuration) * 60;
 
-					if (TeleportingMod.settings.enableIntelectDivisor)
+					if (TeleportingMod.settings.enableConsoleIntelectDivisor)
 					{
 						int intelect = controllingPawn.skills.GetSkill(SkillDefOf.Intellectual).Level;
-						double multiplier = (double)intelect / TeleportingMod.settings.intelectDivisor;
+						double multiplier = (double)intelect / TeleportingMod.settings.consoleIntelectDivisor;
 
 
 						if (multiplier > 0.0)
@@ -180,8 +180,8 @@ namespace alaestor_teleporting
 							Logger.DebugVerbose("onTeleportSuccess :: cooldown :: Intelect divisor",
 								"pawn name:  \t" + controllingPawn.Name,
 								"intelect:   \t" + intelect.ToString(),
-								"divisor:    \t" + TeleportingMod.settings.intelectDivisor.ToString(),
-								"multiplier: \t" + multiplier.ToString() + " (" + ((double)intelect / TeleportingMod.settings.intelectDivisor).ToString() + ")",
+								"divisor:    \t" + TeleportingMod.settings.consoleIntelectDivisor.ToString(),
+								"multiplier: \t" + multiplier.ToString() + " (" + ((double)intelect / TeleportingMod.settings.consoleIntelectDivisor).ToString() + ")",
 								"reduction:  \t" + (cooldownTicks * multiplier).ToString(),
 								"Cooldown:   \t" + cooldownTicks.ToString() + " (" + (cooldownTicks / 60).ToString() + " seconds) from " + ((longRangeFlag ? TeleportingMod.settings.longRange_CooldownDuration : TeleportingMod.settings.shortRange_CooldownDuration) * 60).ToString()
 							);
