@@ -17,6 +17,9 @@ namespace alaestor_teleporting
 		private CompCooldown cooldownComp;
 		// private ??? fuelComp; // for teleport cartridges
 
+		private bool UseCooldown => TeleportingMod.settings.enableCooldown && TeleportingMod.settings.enableCooldown_Console;
+		private bool UseFuel => TeleportingMod.settings.enableFuel;
+
 		// if this isn't set, the job toil finishes before targetting begins
 		public bool hasStartedTargetting = false;
 
@@ -109,7 +112,8 @@ namespace alaestor_teleporting
 					myPawn.jobs.TryTakeOrderedJob(job);
 				});
 
-				if (TeleportingMod.settings.enableFuel)
+				// TODO move these to failure reasons
+				if (UseFuel)
 				{
 					if (this.refuelableComp != null)
 					{
@@ -137,7 +141,7 @@ namespace alaestor_teleporting
 
 		public void TryStartTeleport(Pawn controllingPawn, bool longRangeFlag)
 		{
-			if (TeleportingMod.settings.enableCooldown)
+			if (UseCooldown)
 			{
 				if (this.cooldownComp != null)
 				{
@@ -154,7 +158,7 @@ namespace alaestor_teleporting
 
 			void onTeleportSuccess(TeleportData teleportData)
 			{
-				if (TeleportingMod.settings.enableCooldown)
+				if (UseCooldown)
 				{
 					int cooldownTicks = (longRangeFlag ?
 							TeleportingMod.settings.longRange_CooldownDuration
@@ -190,7 +194,7 @@ namespace alaestor_teleporting
 					this.cooldownComp.Set(cooldownTicks);
 				}
 
-				if (TeleportingMod.settings.enableFuel)
+				if (UseFuel)
 				{
 					this.refuelableComp.ConsumeFuel(TeleportBehavior.FuelCostToTravel(longRangeFlag, teleportData.distance));
 				}
