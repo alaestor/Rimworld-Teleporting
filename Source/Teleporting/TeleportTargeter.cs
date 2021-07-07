@@ -8,6 +8,16 @@ namespace alaestor_teleporting
 {
 	class TeleportTargeter
 	{
+		public static int DistanceBetween(int tileA, int tileB)
+		{
+			return Find.WorldGrid.TraversalDistanceBetween(tileA, tileB, true, int.MaxValue);
+		}
+
+		public static int DistanceBetween(IntVec3 cellA, IntVec3 cellB)
+		{
+			return (int)Math.Ceiling(IntVec3Utility.DistanceTo(cellA, cellB));
+		}
+
 		public static bool TargetHasLoadedMap(GlobalTargetInfo target)
 		{
 			return target.IsValid

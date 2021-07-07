@@ -152,7 +152,7 @@ namespace alaestor_teleporting
 
 			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess, refuelableComp);
 
-			void onTeleportSuccess(int fuelConsumed)
+			void onTeleportSuccess(TeleportData teleportData)
 			{
 				if (TeleportingMod.settings.enableCooldown)
 				{
@@ -192,7 +192,7 @@ namespace alaestor_teleporting
 
 				if (TeleportingMod.settings.enableFuel)
 				{
-					this.refuelableComp.ConsumeFuel(fuelConsumed);
+					this.refuelableComp.ConsumeFuel(TeleportBehavior.FuelCostToTravel(longRangeFlag, teleportData.distance));
 				}
 			}
 		}

@@ -7,6 +7,20 @@ using Verse.AI;
 
 namespace alaestor_teleporting
 {
+	struct TeleportData
+	{
+		public readonly bool cheat;
+		public readonly bool longRangeFlag;
+		public readonly int distance;
+
+		public TeleportData(bool cheat, bool longRangeFlag, int distance)
+		{
+			this.cheat = cheat;
+			this.longRangeFlag = longRangeFlag;
+			this.distance = distance;
+		}
+	}
+
 	[StaticConstructorOnStartup]
 	class TeleportBehavior
 	{
@@ -29,6 +43,31 @@ namespace alaestor_teleporting
 			canTargetBuildings = false,
 			canTargetLocations = true
 		};
+
+		public static int FuelCostToTravel(bool longRangeFlag, int distance)
+		{
+			if (TeleportingMod.settings.enableFuel)
+			{
+				if (longRangeFlag)
+				{
+					if (distance > 0 || TeleportingMod.settings.longRange_FuelDistance > 0)
+					{
+						return
+							((int)Math.Ceiling(((double)distance) / TeleportingMod.settings.longRange_FuelDistance))
+							* TeleportingMod.settings.longRange_FuelCost;
+
+					}
+					else
+					{
+						return TeleportingMod.settings.longRange_FuelCost;
+					}
+				}
+				//else Logger.Warning("TeleportBehavior::FuelCostToTravel: short range fuel distance calculations are unimplemented");
+			}
+			//else Logger.Warning("TeleportBehavior::FuelCostToTravel: calculating fuelcost but fuel is disabled");
+
+			return 0;
+		}
 
 		public static bool ExecuteTeleport(Thing thing, Map destinationMap, IntVec3 destinationCell)
 		{
@@ -108,27 +147,11 @@ namespace alaestor_teleporting
 
 		public static void StartLongRangeTeleport(
 			Thing originator,
-			Action<int> onSuccess_Callback = null,
+			Action<TeleportData> onSuccess_Callback = null,
 			CompRefuelable refuelableComp = null,
 			bool cheat = false)
 		{
 			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(originator);
-
-			int FuelCostToTravel(int tileDistance)
-			{
-				if (cheat)
-				{
-					return 0;
-				}
-				else if (tileDistance == 0)
-				{
-					return TeleportingMod.settings.longRange_FuelCost;
-				}
-				else
-				{
-					return ((int)Math.Ceiling(((double)tileDistance) / TeleportingMod.settings.longRange_FuelDistance)) * TeleportingMod.settings.longRange_FuelCost;
-				}
-			}
 
 			int fromTile = 0;
 			bool choosingDestination = false;
@@ -159,7 +182,7 @@ namespace alaestor_teleporting
 					}
 					else if (fuelDistanceMatters && choosingDestination)
 					{ // replace console with fuel component "originator.TryGetComp...."?
-						int fuelCost = FuelCostToTravel(Find.WorldGrid.TraversalDistanceBetween(fromTile, target.Tile, true, int.MaxValue));
+						int fuelCost = FuelCostToTravel(true, TeleportTargeter.DistanceBetween(fromTile, target.Tile));
 						if (fuelCost > 0)
 						{
 							if (label.Length != 0)
@@ -189,8 +212,7 @@ namespace alaestor_teleporting
 					{
 						if (fuelDistanceMatters && choosingDestination)
 						{
-							return remainingFuel >= FuelCostToTravel(
-								Find.WorldGrid.TraversalDistanceBetween(fromTile, target.Tile, true, int.MaxValue));
+							return remainingFuel >= FuelCostToTravel(true, TeleportTargeter.DistanceBetween(fromTile, target.Tile));
 						}
 						else return true;
 					}
@@ -270,24 +292,19 @@ namespace alaestor_teleporting
 
 					if (ExecuteTeleport(fromTarget.Thing, toTarget.Map, toTarget.Cell))
 					{
-						int fuelCost = 0;
-
-						if (fuelDistanceMatters)
-						{
-							fuelCost = FuelCostToTravel(Find.WorldGrid.TraversalDistanceBetween(fromTarget.Tile, toTarget.Tile, true, int.MaxValue));
-						}
-						else if (fuelMatters)
-						{
-							fuelCost = TeleportingMod.settings.longRange_FuelCost;
-						}
-
-						onSuccess_Callback?.Invoke(fuelCost);
+						onSuccess_Callback?.Invoke(
+							new TeleportData(
+								cheat,
+								longRangeFlag: true,
+								TeleportTargeter.DistanceBetween(fromTarget.Tile, toTarget.Tile)
+							)
+						);
 					}
 				}
 			}
 		}
 
-		public static void StartShortRangeTeleport(Thing originator, Action<int> onSuccess_Callback = null)
+		public static void StartShortRangeTeleport(Thing originator, Action<TeleportData> onSuccess_Callback = null, bool cheat = false)
 		{
 			GlobalTargetInfo globalTarget = CameraJumper.GetWorldTarget(originator);
 			Map localMap = originator.Map;
@@ -297,7 +314,7 @@ namespace alaestor_teleporting
 				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null")
 			);
 
-			TeleportTargeter.StartChoosingLocal(globalTarget, FinishedChoosing_From, TeleportBehavior.targetTeleportSubjects);
+			TeleportTargeter.StartChoosingLocal(globalTarget, FinishedChoosing_From, targetTeleportSubjects);
 
 			void FinishedChoosing_From(LocalTargetInfo fromTarget)
 			{
@@ -307,7 +324,7 @@ namespace alaestor_teleporting
 					"Cell: " + fromTarget.Cell.ToString()
 				);
 
-				TeleportTargeter.StartChoosingLocal(globalTarget, FinishedChoosing_To, TeleportBehavior.targetTeleportDestination);
+				TeleportTargeter.StartChoosingLocal(globalTarget, FinishedChoosing_To, targetTeleportDestination);
 
 				void FinishedChoosing_To(LocalTargetInfo toTarget)
 				{
@@ -318,12 +335,20 @@ namespace alaestor_teleporting
 					);
 
 					if (ExecuteTeleport(fromTarget.Thing, localMap, toTarget.Cell))
-						onSuccess_Callback?.Invoke(TeleportingMod.settings.shortRange_FuelCost);
+					{
+						onSuccess_Callback?.Invoke(
+							new TeleportData(
+								cheat,
+								longRangeFlag: false,
+								TeleportTargeter.DistanceBetween(fromTarget.Thing.Position, toTarget.Cell)
+							)
+						);
+					}
 				}
 			}
 		}
 
-		public static void StartShortRangeTeleportPawn(Pawn pawn, Action onSuccess_Callback = null, bool cheat = false)
+		public static void StartShortRangeTeleportPawn(Pawn pawn, Action<TeleportData> onSuccess_Callback = null, bool cheat = false)
 		{
 			Logger.DebugVerbose("TeleportBehavior::StartShortRangeTeleportPawn: called",
 				"Pawn: " + (pawn != null ? pawn.Label : "null"),
@@ -348,13 +373,22 @@ namespace alaestor_teleporting
 					);
 
 					if (ExecuteTeleport(pawn, pawn.Map, destination.Cell))
-						onSuccess_Callback?.Invoke();
+					{ 
+						onSuccess_Callback?.Invoke(
+							new TeleportData(
+								cheat,
+								longRangeFlag: false,
+								TeleportTargeter.DistanceBetween(pawn.Position, destination.Cell)
+							)
+						);
+					}
 				}
 			}
 			else Logger.Error("TeleportBehavior::StartShortRangeTeleportPawn: invalid pawn");
 		}
 
-		public static void StartLongRangeTeleportPawn(Pawn pawn, Action onSuccess_Callback = null, bool cheat = false)
+		// TODO this should supprt refuelableComp
+		public static void StartLongRangeTeleportPawn(Pawn pawn, Action<TeleportData> onSuccess_Callback = null, bool cheat = false)
 		{
 			Logger.DebugVerbose("TeleportBehavior::StartLongRangeTeleportPawn: called",
 				"Pawn: " + (pawn != null ? pawn.Label : "null"),
@@ -389,8 +423,7 @@ namespace alaestor_teleporting
 					}
 					else if (fuelDistanceMatters)
 					{
-						int distance = Find.WorldGrid.TraversalDistanceBetween(startingHere.Tile, target.Tile, true, int.MaxValue);
-						if (distance > TeleportingMod.settings.longRange_FuelDistance)
+						if (TeleportTargeter.DistanceBetween(startingHere.Tile, target.Tile) > TeleportingMod.settings.longRange_FuelDistance)
 						{
 							if (label.Length != 0)
 								label += "\n";
@@ -440,14 +473,22 @@ namespace alaestor_teleporting
 				);
 
 				if (ExecuteTeleport(pawn, destination.Map, destination.Cell))
-					onSuccess_Callback?.Invoke();
+				{
+					onSuccess_Callback?.Invoke(
+						new TeleportData(
+							cheat,
+							longRangeFlag: true,
+							TeleportTargeter.DistanceBetween(pawn.Tile, destination.Tile)
+						)
+					);
+				}
 			}
 		}
 
 		public static void StartTeleportPawn(
 			bool longRangeFlag,
 			Pawn pawn,
-			Action onSuccess_Callback = null,
+			Action<TeleportData> onSuccess_Callback = null,
 			bool cheat = false)
 		{
 			Logger.Debug(
@@ -471,8 +512,8 @@ namespace alaestor_teleporting
 		public static void StartTeleportTargetting(
 			bool longRangeFlag,
 			Thing originator,
-			Action<int> onSuccess_Callback = null,
-			CompRefuelable refuelableComp = null,
+			Action<TeleportData> onSuccess_Callback = null,
+			CompRefuelable refuelableComp = null, // this could just be int, the remaining fuel
 			bool cheat = false)
 		{
 			Logger.Debug(
