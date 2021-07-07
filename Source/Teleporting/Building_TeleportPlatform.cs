@@ -8,11 +8,15 @@ namespace alaestor_teleporting
 {
 	public class Building_TeleportPlatform : Building
 	{
+		private CompCooldown cooldownComp;
 		private CompNameLinkable nameLinkableComp;
 		private CompRefuelable refuelableComp;
 		private CompPowerTrader powerComp;
 
-		private bool FuelMatters => (TeleportingMod.settings.enableFuel && TeleportingMod.settings.enablePlatformUnlinkFuelCost);
+		private bool HasCooldownComp => cooldownComp != null;
+		private bool UseCooldown => TeleportingMod.settings.enableCooldown && TeleportingMod.settings.enableCooldown_Platform;
+		private bool HasRefuelableComp => refuelableComp != null;
+		private bool UseFuel => TeleportingMod.settings.enableFuel && TeleportingMod.settings.enablePlatformUnlinkFuelCost;
 
 		public override void ExposeData()
 		{
@@ -23,6 +27,7 @@ namespace alaestor_teleporting
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
+			this.cooldownComp = this.GetComp<CompCooldown>();
 			this.nameLinkableComp = this.GetComp<CompNameLinkable>();
 			this.refuelableComp = this.GetComp<CompRefuelable>();
 			this.powerComp = this.GetComp<CompPowerTrader>();
@@ -38,11 +43,11 @@ namespace alaestor_teleporting
 			}
 		}
 
-		public bool HasEnoughFuel => !FuelMatters || (((int)refuelableComp.Fuel) >= 1);
+		public bool HasEnoughFuel => !UseFuel || (((int)refuelableComp.Fuel) >= 1);
 
 		public void ConsumeFuel()
 		{
-			if (FuelMatters)
+			if (UseFuel)
 				refuelableComp.ConsumeFuel(1);
 		}
 
@@ -60,7 +65,7 @@ namespace alaestor_teleporting
 		{
 			if (nameLinkableComp.IsLinkedToSomething)
 			{
-				if (HasEnoughFuel || !FuelMatters)
+				if (HasEnoughFuel || !UseFuel)
 				{
 					ConsumeFuel();
 					nameLinkableComp.Unlink();
@@ -84,7 +89,8 @@ namespace alaestor_teleporting
 
 		public void TryStartTeleport(Pawn usingPawn)
 		{
-			if (FuelMatters && refuelableComp != null && !refuelableComp.IsFull)
+			// fuel check
+			if (UseFuel && HasRefuelableComp && !HasEnoughFuel)
 			{
 				Logger.Warning(
 					"Building_TeleportPlatform::TryStartTeleport: " + usingPawn.Label + " tried to teleport but fuel isnt full",
@@ -94,20 +100,19 @@ namespace alaestor_teleporting
 				return;
 			}
 
-			/*
-			if (TeleportingMod.settings.enableCooldown)
+			// cooldown check
+			if (UseCooldown)
 			{
-				if (this.cooldownComp != null)
+				if (HasCooldownComp)
 				{
-					if (this.cooldownComp.IsOnCooldown)
+					if (cooldownComp.IsOnCooldown)
 					{
-						Logger.Warning("Tried to start a teleport but console was on cooldown");
+						Logger.Warning("Building_TeleportPlatform::TryStartTeleport: Tried to teleport but was on cooldown");
 						return;
 					}
 				}
-				else Logger.Error("Teleporting: cooldown is enabled but cooldownComp is null");
+				else Logger.Error("Building_TeleportPlatform::TryStartTeleport: UseCooldown is true but cooldownComp is null");
 			}
-			*/
 
 			if (nameLinkableComp.HasValidLinkedThing)
 			{
@@ -124,12 +129,16 @@ namespace alaestor_teleporting
 							"Destination Map: " + destination.Map.ToString(),
 							"Destination Cell: " + destination.InteractionCell.ToString()
 						);
-						/*
-						if (TeleportingMod.settings.enableCooldown)
+
+						// set cooldown
+						if (UseCooldown)
 						{
-							int cooldownTicks = TeleportingMod.settings.shortRange_CooldownDuration * 60;
+							if (HasCooldownComp)
+							{
+								cooldownComp.SetSeconds(TeleportingMod.settings.nameLinkable_CooldownDuration);
+							}
+							else Logger.Error("Building_TeleportPlatform::TryStartTeleport: UseCooldown is true but cooldownComp is null");
 						}
-						*/
 					}
 					else
 					{
@@ -161,11 +170,9 @@ namespace alaestor_teleporting
 					return new FloatMenuOption((string)"CannotUseNoPower".Translate(), (Action)null);
 				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving))
 					return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), (Action)null);
-				/*
-				else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
-					return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
-				*/
-				else if (FuelMatters && this.refuelableComp != null && !HasEnoughFuel)
+				else if (UseCooldown && HasCooldownComp && cooldownComp.IsOnCooldown)
+					return new FloatMenuOption(string.Format("On cooldown for {0} more second(s)", cooldownComp.SecondsRemaining), (Action)null); // TODO translate
+				else if (UseFuel && HasRefuelableComp && !HasEnoughFuel)
 					return new FloatMenuOption((string)"out of fuel".Translate(), (Action)null); // TODO translate
 				else if (nameLinkableComp.IsLinkedToSomething && nameLinkableComp.HasInvalidLinkedThing)
 					return new FloatMenuOption("Link broken: cannot find target", (Action)null);
