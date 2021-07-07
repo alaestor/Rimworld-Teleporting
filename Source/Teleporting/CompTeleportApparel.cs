@@ -43,9 +43,6 @@ namespace alaestor_teleporting
 		public bool UseNameLinkable => Props.useNameLinkable;
 		public bool CanTeleportOthers => Props.canTeleportOthers;
 
-		//public bool WearerCanUse => ;
-
-		// TODO check if wearer alive, capable of manipulation, etc
 		public void StartTeleport_ShortRange(bool cheat = false)
 		{
 			if (CanDoTeleport_ShortRange)
@@ -104,20 +101,44 @@ namespace alaestor_teleporting
 							Thing destination = nameLinkable.LinkedThing;
 							if (destination.Map != null && destination.InteractionCell.IsValid)
 							{
-								if (TeleportBehavior.ExecuteTeleport(Wearer, destination.Map, destination.InteractionCell))
+								if (CanTeleportOthers)
 								{
-									Logger.Debug(
-										"CompTeleportApparel::StartTeleport_LinkedThing: Teleported "
-											+ Wearer.Label
-											+ " from \"" + nameLinkable.Name
-											+ "\" to \"" + nameLinkable.GetNameOfLinkedLinkedThing + "\"",
-										"Destination Map: " + destination.Map.ToString(),
-										"Destination Cell: " + destination.InteractionCell.ToString()
-									);
+									TeleportTargeter.StartChoosingLocal(
+										Wearer,
+										DoTeleport,
+										TeleportBehavior.targetTeleportSubjects,
+										mouseAttachment: TeleportBehavior.localTeleportMouseAttachment);
 								}
 								else
 								{
-									Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: ExecuteTeleport failed.");
+									DoTeleport(Wearer);
+								}
+
+								void DoTeleport(LocalTargetInfo target)
+								{
+									if (target.IsValid && target.HasThing && target.Thing is Pawn pawn)
+									{
+										if (TeleportBehavior.ExecuteTeleport(pawn, destination.Map, destination.InteractionCell))
+										{
+											Logger.Debug(
+												"CompTeleportApparel::StartTeleport_LinkedThing::DoTeleport: Teleported "
+													+ pawn.Label
+													+ " from \"" + nameLinkable.Name
+													+ "\" to \"" + nameLinkable.GetNameOfLinkedLinkedThing + "\"",
+												"Destination Map: " + destination.Map.ToString(),
+												"Destination Cell: " + destination.InteractionCell.ToString()
+											);
+										}
+										else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing::DoTeleport: ExecuteTeleport failed.");
+									}
+									else
+									{
+										Logger.Error(
+											"CompTeleportApparel::StartTeleport_LinkedThing::DoTeleport: invalid target",
+											"valid: " + target.IsValid.ToString(),
+											"thing: " + (target.HasThing ? (target.Thing.Label) : "None" )
+										);
+									}
 								}
 							}
 							else
@@ -134,9 +155,7 @@ namespace alaestor_teleporting
 					}
 					else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: nameLinkable isn't linked");
 				}
-				else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: UseNameLinkable is true but NameLinkable is null",
-					"Parent: " + parent.Label
-				);
+				else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: UseNameLinkable is true but NameLinkable is null");
 			}
 			else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: UseNameLinkable is false");
 		}
