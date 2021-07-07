@@ -119,8 +119,8 @@ namespace alaestor_teleporting
 			Scribe_Values.Look(ref this.enableCooldown, "enableCooldown", enableCooldown_Default);
 			Scribe_Values.Look(ref this.shortRange_CooldownDuration, "shortRange_CooldownDuration", shortRange_CooldownDuration_Default);
 			Scribe_Values.Look(ref this.longRange_CooldownDuration, "longRange_CooldownDuration", longRange_CooldownDuration_Default);
-			Scribe_Values.Look(ref this.enableConsoleIntelectDivisor, "enableIntelectDivisor", enableConsoleIntelectDivisor_Default);
-			Scribe_Values.Look(ref this.consoleIntelectDivisor, "intelectDivisor", consoleIntelectDivisor_Default);
+			Scribe_Values.Look(ref this.enableConsoleIntelectDivisor, "enableConsoleIntelectDivisor", enableConsoleIntelectDivisor_Default);
+			Scribe_Values.Look(ref this.consoleIntelectDivisor, "consoleIntelectDivisor", consoleIntelectDivisor_Default);
 			Scribe_Values.Look(ref this.enableFuel, "enableFuel", enableFuel_Default);
 			Scribe_Values.Look(ref this.enablePlatformUnlinkFuelCost, "enablePlatformUnlinkFuelCost", enablePlatformUnlinkFuelCost_Default);
 			Scribe_Values.Look(ref this.shortRange_FuelCost, "shortRange_FuelCost", shortRange_FuelCost_Default);
@@ -170,10 +170,10 @@ namespace alaestor_teleporting
 				ls.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "enableCooldown_tooltip".Translate()); // Note: there are 60 ticks in a second
 				if (settings.enableCooldown)
 				{
-					ls.CheckboxLabeled("enableIntelectDivisor".Translate(), ref settings.enableConsoleIntelectDivisor, tooltip: "intelectDivisor_tooltip".Translate());
+					ls.CheckboxLabeled("enableConsoleIntelectDivisor".Translate(), ref settings.enableConsoleIntelectDivisor, tooltip: "consoleIntelectDivisor_tooltip".Translate());
 					if (settings.enableConsoleIntelectDivisor)
 					{
-						ls.TextFieldNumericLabeled<int>("intelectDivisor".Translate(), ref settings.consoleIntelectDivisor, ref settings.consoleIntelectDivisor_Buffer, min: 1, max: 100);
+						ls.TextFieldNumericLabeled<int>("consoleIntelectDivisor".Translate(), ref settings.consoleIntelectDivisor, ref settings.consoleIntelectDivisor_Buffer, min: 1, max: 100);
 						ls.Gap();
 					}
 					ls.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
