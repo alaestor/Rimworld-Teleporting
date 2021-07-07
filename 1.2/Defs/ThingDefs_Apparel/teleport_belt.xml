@@ -11,7 +11,7 @@
       <texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
-    <tickerType>Rare</tickerType>
+    <tickerType>Normal</tickerType>
     <statBases>
       <Mass>3</Mass>
       <WorkToMake>14000</WorkToMake>
@@ -46,10 +46,12 @@
       <!--tags><li>BeltDefense</li></tags-->
     </apparel>
 	<comps>
+	  <li Class="alaestor_teleporting.CompProperties_Cooldown"/>
       <li Class="alaestor_teleporting.CompProperties_TeleportApparel">
         <shortRange>true</shortRange>
         <longRange>true</longRange>
         <useNameLinkable>false</useNameLinkable>
+		<useCooldown>true</useCooldown>
         <canTeleportOthers>false</canTeleportOthers>
       </li>
 	</comps>
@@ -99,7 +101,7 @@
       <!--tags><li>BeltDefense</li></tags-->
     </apparel>
 	<comps>
-	<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+	  <li Class="alaestor_teleporting.CompProperties_Cooldown"/>
 	  <li Class="alaestor_teleporting.CompProperties_NameLinkable">
 		<canBeNamed>false</canBeNamed>
 		<canBeLinked>true</canBeLinked>

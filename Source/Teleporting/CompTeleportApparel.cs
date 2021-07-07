@@ -32,16 +32,66 @@ namespace alaestor_teleporting
 			}
 		}
 
+		// Cooldown
 		private CompCooldown CooldownComp => parent.GetComp<CompCooldown>() ?? null;
 		private bool HasCooldownComp => CooldownComp != null;
+		public bool UseCooldown => Props.useCooldown && TeleportingMod.settings.enableCooldown_ApparelComp;
+
+		// NameLinkable
 		private CompNameLinkable NameLinkableComp => parent.GetComp<CompNameLinkable>() ?? null;
 		private bool HasNameLinkableComp => NameLinkableComp != null;
+		public bool UseNameLinkable => Props.useNameLinkable;
 
+		// Teleport settings
 		public bool CanDoTeleport_ShortRange => Props.shortRange;
 		public bool CanDoTeleport_LongRange => Props.longRange;
-		public bool UseCooldown => Props.useCooldown;
-		public bool UseNameLinkable => Props.useNameLinkable;
 		public bool CanTeleportOthers => Props.canTeleportOthers;
+
+		private void HandleCooldown(
+			bool cheat = false,
+			bool shortRange_Teleport = false,
+			bool longRange_Teleport = false,
+			bool nameLink_Teleport = false)
+		{
+			if (!cheat)
+			{
+				if (UseCooldown)
+				{
+					if (HasCooldownComp)
+					{
+						if (shortRange_Teleport)
+						{
+							CooldownComp.SetSeconds(TeleportingMod.settings.shortRange_CooldownDuration);
+						}
+						else if (longRange_Teleport)
+						{
+							CooldownComp.SetSeconds(TeleportingMod.settings.longRange_CooldownDuration);
+						}
+						else if (nameLink_Teleport)
+						{
+							CooldownComp.SetSeconds(TeleportingMod.settings.nameLinkable_CooldownDuration);
+						}
+						else Logger.Error("CompTeleportApparel::HandleCooldown: all teleport types were false");
+					}
+					else Logger.Error("CompTeleportApparel::HandleCooldown: UseCooldown is true but CooldownComp is null");
+				}
+			}
+		}
+
+		private void AfterSuccessfulTeleport_nameLink(bool cheat = false)
+		{
+			HandleCooldown(cheat: cheat, nameLink_Teleport: true);
+		}
+
+		private void AfterSuccessfulTeleport(TeleportData teleportData)
+		{
+			HandleCooldown(
+				cheat: teleportData.cheat,
+				shortRange_Teleport: !teleportData.longRangeFlag,
+				longRange_Teleport: teleportData.longRangeFlag);
+
+			// uses & self destruct
+		}
 
 		public void StartTeleport_ShortRange(bool cheat = false)
 		{
@@ -51,11 +101,11 @@ namespace alaestor_teleporting
 				{
 					if (CanTeleportOthers)
 					{
-						TeleportBehavior.StartTeleportTargetting(false, Wearer, cheat: cheat);
+						TeleportBehavior.StartTeleportTargetting(false, Wearer, AfterSuccessfulTeleport, cheat: cheat);
 					}
 					else
 					{
-						TeleportBehavior.StartTeleportPawn(false, Wearer, cheat: cheat);
+						TeleportBehavior.StartTeleportPawn(false, Wearer, AfterSuccessfulTeleport, cheat: cheat);
 					}
 				}
 				else Logger.Error("CompTeleportApparel::StartTeleport_ShortRange: invalid wearer");
@@ -75,11 +125,11 @@ namespace alaestor_teleporting
 
 					if (CanTeleportOthers)
 					{
-						TeleportBehavior.StartTeleportTargetting(true, Wearer, cheat: cheat);
+						TeleportBehavior.StartTeleportTargetting(true, Wearer, AfterSuccessfulTeleport, cheat: cheat);
 					}
 					else
 					{
-						TeleportBehavior.StartTeleportPawn(true, Wearer, cheat: cheat);
+						TeleportBehavior.StartTeleportPawn(true, Wearer, AfterSuccessfulTeleport, cheat: cheat);
 					}
 				}
 				else Logger.Error("CompTeleportApparel::StartTeleport_LongRange: invalid wearer");
@@ -128,6 +178,7 @@ namespace alaestor_teleporting
 												"Destination Map: " + destination.Map.ToString(),
 												"Destination Cell: " + destination.InteractionCell.ToString()
 											);
+											AfterSuccessfulTeleport_nameLink(cheat: cheat);
 										}
 										else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing::DoTeleport: ExecuteTeleport failed.");
 									}
@@ -191,21 +242,8 @@ namespace alaestor_teleporting
 			foreach (Gizmo gizmo in base.CompGetWornGizmosExtra())
 				yield return gizmo;
 
-			if (CooldownComp != null)
-			{
-				yield return GizmoHelper.MakeCommandAction(
-					"TeleportApparel_CooldownTest",
-					delegate
-					{
-						Logger.Debug("CompTeleportApparel: called Gizmo: Cooldown test");
-						CooldownComp.SetSeconds(30);
-					}
-				);
-			}
-
 			if (Find.Selector.SingleSelectedThing == Wearer)
 			{
-
 				bool isOnCooldown = false;
 				string cooldownRemainingString = null;
 
