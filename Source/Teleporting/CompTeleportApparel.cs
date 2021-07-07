@@ -251,7 +251,7 @@ namespace alaestor_teleporting
 				{
 					isOnCooldown = true;
 					cooldownRemainingString = string.Format(
-						"On cooldown for {0} more seconds", // TODO translated version
+						"On cooldown for {0} more second(s)", // TODO translated version
 						CooldownComp.SecondsRemaining);
 				}
 
