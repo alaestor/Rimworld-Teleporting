@@ -10,13 +10,28 @@ namespace alaestor_teleporting
 		private static readonly bool enableCooldown_Default = true;
 		public bool enableCooldown = enableCooldown_Default;
 
-		private static readonly int shortRange_CooldownDuration_Default = 15;
+		private static readonly bool enableCooldown_Console_Default = true;
+		public bool enableCooldown_Console = enableCooldown_Console_Default;
+
+		private static readonly bool enableCooldown_ApparelComp_Default = true;
+		public bool enableCooldown_ApparelComp = enableCooldown_ApparelComp_Default;
+
+		private static readonly bool enableCooldown_Platform_Default = true;
+		public bool enableCooldown_Platform = enableCooldown_Platform_Default;
+
+		private static readonly int nameLinkable_CooldownDuration_Default = 10;
+		public int nameLinkable_CooldownDuration = nameLinkable_CooldownDuration_Default;
+		public string nameLinkable_CooldownDuration_Buffer = nameLinkable_CooldownDuration_Default.ToString();
+
+		private static readonly int shortRange_CooldownDuration_Default = 30;
 		public int shortRange_CooldownDuration = shortRange_CooldownDuration_Default;
 		public string shortRange_CooldownDuration_Buffer = shortRange_CooldownDuration_Default.ToString();
 
-		private static readonly int longRange_CooldownDuration_Default = 60;
+		private static readonly int longRange_CooldownDuration_Default = 120;
 		public int longRange_CooldownDuration = longRange_CooldownDuration_Default;
 		public string longRange_CooldownDuration_Buffer = longRange_CooldownDuration_Default.ToString();
+
+		
 
 		// Console cooldown intelect modifier
 		private static readonly bool enableConsoleIntelectDivisor_Default = true;
@@ -74,6 +89,7 @@ namespace alaestor_teleporting
 		public void RefreshStringBuffers()
 		{
 			// cooldown
+			this.nameLinkable_CooldownDuration_Buffer = nameLinkable_CooldownDuration.ToString();
 			this.shortRange_CooldownDuration_Buffer = shortRange_CooldownDuration.ToString();
 			this.longRange_CooldownDuration_Buffer = longRange_CooldownDuration.ToString();
 			this.consoleIntelectDivisor_Buffer = consoleIntelectDivisor.ToString();
@@ -91,6 +107,10 @@ namespace alaestor_teleporting
 		{
 			// cooldown
 			this.enableCooldown = enableCooldown_Default;
+			this.enableCooldown_Console = enableCooldown_Console_Default;
+			this.enableCooldown_ApparelComp = enableCooldown_ApparelComp_Default;
+			this.enableCooldown_Platform = enableCooldown_Platform_Default;
+			this.nameLinkable_CooldownDuration = nameLinkable_CooldownDuration_Default;
 			this.shortRange_CooldownDuration = shortRange_CooldownDuration_Default;
 			this.longRange_CooldownDuration = longRange_CooldownDuration_Default;
 			this.enableConsoleIntelectDivisor = enableConsoleIntelectDivisor_Default;
@@ -117,6 +137,10 @@ namespace alaestor_teleporting
 		public override void ExposeData()
 		{
 			Scribe_Values.Look(ref this.enableCooldown, "enableCooldown", enableCooldown_Default);
+			Scribe_Values.Look(ref this.enableCooldown_Console, "enableCooldown_Console", enableCooldown_Console_Default);
+			Scribe_Values.Look(ref this.enableCooldown_ApparelComp, "enableCooldown_ApparelComp", enableCooldown_ApparelComp_Default);
+			Scribe_Values.Look(ref this.enableCooldown_Platform, "enableCooldown_Platform", enableCooldown_Platform_Default);
+			Scribe_Values.Look(ref this.nameLinkable_CooldownDuration, "nameLinkable_CooldownDuration", nameLinkable_CooldownDuration_Default);
 			Scribe_Values.Look(ref this.shortRange_CooldownDuration, "shortRange_CooldownDuration", shortRange_CooldownDuration_Default);
 			Scribe_Values.Look(ref this.longRange_CooldownDuration, "longRange_CooldownDuration", longRange_CooldownDuration_Default);
 			Scribe_Values.Look(ref this.enableConsoleIntelectDivisor, "enableConsoleIntelectDivisor", enableConsoleIntelectDivisor_Default);
@@ -170,14 +194,20 @@ namespace alaestor_teleporting
 				ls.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "enableCooldown_tooltip".Translate()); // Note: there are 60 ticks in a second
 				if (settings.enableCooldown)
 				{
+					ls.CheckboxLabeled("enableCooldown_Console".Translate(), ref settings.enableCooldown_Console, tooltip: "enableCooldown_Console_tooltip".Translate());
+					ls.CheckboxLabeled("enableCooldown_ApparelComp".Translate(), ref settings.enableCooldown_ApparelComp, tooltip: "enableCooldown_ApparelComp_tooltip".Translate());
+					ls.CheckboxLabeled("enableCooldown_Platform".Translate(), ref settings.enableCooldown_Platform, tooltip: "enableCooldown_Platform_tooltip".Translate());
+					ls.Gap();
+					ls.TextFieldNumericLabeled<int>("nameLinkable_CooldownDuration ".Translate(), ref settings.nameLinkable_CooldownDuration, ref settings.nameLinkable_CooldownDuration_Buffer);
+					ls.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
+					ls.TextFieldNumericLabeled<int>("longRange_CooldownDuration".Translate(), ref settings.longRange_CooldownDuration, ref settings.longRange_CooldownDuration_Buffer);
+					ls.Gap();
 					ls.CheckboxLabeled("enableConsoleIntelectDivisor".Translate(), ref settings.enableConsoleIntelectDivisor, tooltip: "consoleIntelectDivisor_tooltip".Translate());
 					if (settings.enableConsoleIntelectDivisor)
 					{
 						ls.TextFieldNumericLabeled<int>("consoleIntelectDivisor".Translate(), ref settings.consoleIntelectDivisor, ref settings.consoleIntelectDivisor_Buffer, min: 1, max: 100);
 						ls.Gap();
 					}
-					ls.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
-					ls.TextFieldNumericLabeled<int>("longRange_CooldownDuration".Translate(), ref settings.longRange_CooldownDuration, ref settings.longRange_CooldownDuration_Buffer);
 				}
 			}
 
