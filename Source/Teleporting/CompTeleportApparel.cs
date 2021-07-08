@@ -63,7 +63,7 @@ namespace alaestor_teleporting
 					{
 						CooldownComp.SetSeconds(setCooldown);
 					}
-					else Logger.Error("CompTeleportApparel::HandleCooldown: UseCooldown is true but CooldownComp is null");
+					else Logger.Error("CompTeleportApparel::AfterSuccessfulTeleport: UseCooldown is true but CooldownComp is null");
 				}
 
 				if (UseRefuelable)
