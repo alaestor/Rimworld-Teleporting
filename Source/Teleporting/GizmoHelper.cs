@@ -18,12 +18,13 @@ namespace alaestor_teleporting
 			Texture2D icon = null,
 			bool disabled = false,
 			string disabledReason = null,
+			string description = null,
 			KeyBindingDef hotKey = null)
 		{
 			return new Command_Action
 			{
 				defaultLabel = (gizmo_prefix + name + label_suffix).Translate(),
-				defaultDesc = (gizmo_prefix + name + description_suffix).Translate(),
+				defaultDesc = description ?? (gizmo_prefix + name + description_suffix).Translate(),
 				activateSound = activateSound ?? SoundDef.Named("Click"),
 				hotKey = hotKey,
 				icon = icon,
