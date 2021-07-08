@@ -47,6 +47,9 @@ namespace alaestor_teleporting
 		private static readonly bool enableFuel_Default = true;
 		public bool enableFuel = enableFuel_Default;
 
+		private static readonly bool enableApparelFuel_Default = true;
+		public bool enableApparelFuel = enableApparelFuel_Default;
+
 		private static readonly bool enablePlatformUnlinkFuelCost_Default = true;
 		public bool enablePlatformUnlinkFuelCost = enablePlatformUnlinkFuelCost_Default;
 
@@ -118,6 +121,7 @@ namespace alaestor_teleporting
 
 			// fuel
 			this.enableFuel = enableFuel_Default;
+			this.enableApparelFuel = enableApparelFuel_Default;
 			this.enablePlatformUnlinkFuelCost = enablePlatformUnlinkFuelCost_Default;
 			this.shortRange_FuelCost = shortRange_FuelCost_Default;
 			this.longRange_FuelCost = longRange_FuelCost_Default;
@@ -136,6 +140,7 @@ namespace alaestor_teleporting
 
 		public override void ExposeData()
 		{
+			// cooldown
 			Scribe_Values.Look(ref this.enableCooldown, "enableCooldown", enableCooldown_Default);
 			Scribe_Values.Look(ref this.enableCooldown_Console, "enableCooldown_Console", enableCooldown_Console_Default);
 			Scribe_Values.Look(ref this.enableCooldown_ApparelComp, "enableCooldown_ApparelComp", enableCooldown_ApparelComp_Default);
@@ -145,11 +150,16 @@ namespace alaestor_teleporting
 			Scribe_Values.Look(ref this.longRange_CooldownDuration, "longRange_CooldownDuration", longRange_CooldownDuration_Default);
 			Scribe_Values.Look(ref this.enableConsoleIntelectDivisor, "enableConsoleIntelectDivisor", enableConsoleIntelectDivisor_Default);
 			Scribe_Values.Look(ref this.consoleIntelectDivisor, "consoleIntelectDivisor", consoleIntelectDivisor_Default);
+			
+			// fuel
 			Scribe_Values.Look(ref this.enableFuel, "enableFuel", enableFuel_Default);
+			Scribe_Values.Look(ref this.enableApparelFuel, "enableApparelFuel", enableApparelFuel_Default);
 			Scribe_Values.Look(ref this.enablePlatformUnlinkFuelCost, "enablePlatformUnlinkFuelCost", enablePlatformUnlinkFuelCost_Default);
 			Scribe_Values.Look(ref this.shortRange_FuelCost, "shortRange_FuelCost", shortRange_FuelCost_Default);
 			Scribe_Values.Look(ref this.longRange_FuelCost, "longRange_FuelCost", longRange_FuelCost_Default);
 			Scribe_Values.Look(ref this.longRange_FuelDistance, "longRange_FuelDistance", longRange_FuelDistance_Default);
+			
+			// debug
 			Scribe_Values.Look(ref this.enableDebugGizmosInGodmode, "enableDebugGizmosInGodmode", enableDebugGizmosInGodmode_Default);
 			Scribe_Values.Look(ref this.enableDebugLogging, "enableDebugLogging", enableDebugLogging_Default);
 			Scribe_Values.Look(ref this.enableDebugLoggingVerbose, "enableDebugLoggingVerbose", enableDebugLoggingVerbose_Default);
@@ -218,6 +228,7 @@ namespace alaestor_teleporting
 				if (settings.enableFuel)
 				{
 					ls.Gap(10);
+					ls.CheckboxLabeled("enableApparelFuel".Translate(), ref settings.enableApparelFuel, tooltip: "enableApparelFuel_tooltip".Translate());
 					ls.CheckboxLabeled("enablePlatformUnlinkFuelCost".Translate(), ref settings.enablePlatformUnlinkFuelCost, tooltip: "enablePlatformUnlinkFuelCost_tooltip".Translate());
 					ls.Gap(10);
 					ls.TextFieldNumericLabeled<int>("shortRange_FuelCost".Translate(), ref settings.shortRange_FuelCost, ref settings.shortRange_FuelCost_Buffer);
