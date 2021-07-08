@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -52,25 +52,6 @@ namespace alaestor_teleporting
 		public bool CanDoTeleport_ShortRange => Props.shortRange;
 		public bool CanDoTeleport_LongRange => Props.longRange;
 		public bool CanTeleportOthers => Props.canTeleportOthers;
-
-		private void HandleFuel(
-			bool cheat = false,
-			bool shortRange_Teleport = false,
-			bool longRange_Teleport = false,
-			bool nameLink_Teleport = false)
-		{
-			if (!cheat)
-			{
-				if (UseRefuelable)
-				{
-					if (HasRefuelableComp)
-					{
-						
-					}
-					else Logger.Error("CompTeleportApparel::HandleFuel: UseRefuelable is true but RefuelableComp is null");
-				}
-			}
-		}
 
 		private void AfterSuccessfulTeleport(bool cheat = false, int setCooldown = 0, int consumeFuel = 0)
 		{
