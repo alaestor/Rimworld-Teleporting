@@ -32,44 +32,10 @@
 			<!--tags><li>BeltDefense</li></tags-->
 		</apparel>
 	</ThingDef>
-
-	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
-		<defName>alaestor_teleporting_Apparel_TeleportBelt_Local</defName>
-		<label>teleport belt</label>
-		<description>Placeholder</description>
-		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
-		<costList>
-			<ComponentIndustrial>2</ComponentIndustrial>
-			<Steel>50</Steel>
-			<Plasteel>20</Plasteel>
-		</costList>
-		<comps>
-			<li Class="CompProperties_Refuelable">
-				<fuelConsumptionRate>0</fuelConsumptionRate>
-				<fuelCapacity>10.0</fuelCapacity>
-				<initialFuelPercent>1.0</initialFuelPercent>
-				<fuelFilter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></fuelFilter>
-				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
-				<autoRefuelPercent>0.0</autoRefuelPercent>
-				<showAllowAutoRefuelToggle>false</showAllowAutoRefuelToggle>
-				<destroyOnNoFuel>true</destroyOnNoFuel>
-				<fuelLabel>Teleport Cartridges</fuelLabel>
-				<atomicFueling>true</atomicFueling>
-			</li>
-			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
-			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
-				<shortRange>true</shortRange>
-				<longRange>true</longRange>
-				<useNameLinkable>false</useNameLinkable>
-				<useCooldown>true</useCooldown>
-				<canTeleportOthers>false</canTeleportOthers>
-			</li>
-		</comps>
-	</ThingDef>
-
+	
 	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
 		<defName>alaestor_teleporting_Apparel_TeleportBelt_Link</defName>
-		<label>Linkable teleport belt</label>
+		<label>teleport belt (linkable)</label>
 		<description>Placeholder</description>
 		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
 		<costList>
@@ -78,18 +44,6 @@
 			<Plasteel>20</Plasteel>
 		</costList>
 		<comps>
-			<li Class="CompProperties_Refuelable">
-				<fuelConsumptionRate>0</fuelConsumptionRate>
-				<fuelCapacity>3.0</fuelCapacity>
-				<initialFuelPercent>1.0</initialFuelPercent>
-				<fuelFilter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></fuelFilter>
-				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
-				<autoRefuelPercent>0.0</autoRefuelPercent>
-				<showAllowAutoRefuelToggle>false</showAllowAutoRefuelToggle>
-				<destroyOnNoFuel>true</destroyOnNoFuel>
-				<fuelLabel>Teleport Cartridges</fuelLabel>
-				<atomicFueling>true</atomicFueling>
-			</li>
 			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
 			<li Class="alaestor_teleporting.CompProperties_NameLinkable">
 				<canBeNamed>false</canBeNamed>
@@ -103,7 +57,55 @@
 				<useNameLinkable>true</useNameLinkable>
 				<useCooldown>true</useCooldown>
 				<canTeleportOthers>false</canTeleportOthers>
+				<limitedUses>3</limitedUses>
 			</li>
 		</comps>
 	</ThingDef>
+
+	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
+		<defName>alaestor_teleporting_Apparel_TeleportBelt_Local</defName>
+		<label>teleport belt (SR)</label>
+		<description>Placeholder</description>
+		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<costList>
+			<ComponentIndustrial>2</ComponentIndustrial>
+			<Steel>50</Steel>
+			<Plasteel>20</Plasteel>
+		</costList>
+		<comps>
+			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
+				<shortRange>true</shortRange>
+				<longRange>false</longRange>
+				<useNameLinkable>false</useNameLinkable>
+				<useCooldown>true</useCooldown>
+				<canTeleportOthers>false</canTeleportOthers>
+				<limitedUses>4</limitedUses>
+			</li>
+		</comps>
+	</ThingDef>
+	
+	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
+		<defName>alaestor_teleporting_Apparel_TeleportBelt_Global</defName>
+		<label>teleport belt (LR)</label>
+		<description>Placeholder</description>
+		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<costList>
+			<ComponentIndustrial>2</ComponentIndustrial>
+			<Steel>50</Steel>
+			<Plasteel>20</Plasteel>
+		</costList>
+		<comps>
+			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
+				<shortRange>true</shortRange>
+				<longRange>true</longRange>
+				<useNameLinkable>false</useNameLinkable>
+				<useCooldown>true</useCooldown>
+				<canTeleportOthers>false</canTeleportOthers>
+				<limitedUses>2</limitedUses>
+			</li>
+		</comps>
+	</ThingDef>
+	
 </Defs>

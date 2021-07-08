@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -42,11 +42,49 @@ namespace alaestor_teleporting
 		private bool HasNameLinkableComp => NameLinkableComp != null;
 		public bool UseNameLinkable => Props.useNameLinkable;
 
-		// Refuelable consumable
-		private CompRefuelable RefuelableComp => parent.GetComp<CompRefuelable>() ?? null;
-		private bool HasRefuelableComp => RefuelableComp != null;
-		public bool UseRefuelable => TeleportingMod.settings.enableFuel && Props.useRefuelable; // && settings.enableConsumableApparel
-		public int RemainingFuel => (int)RefuelableComp.Fuel; // calling this when HasRefuelableComp is false will error
+		// Consumable fuel
+		private bool IsConsumable => Props.limitedUses > 0 && TeleportingMod.settings.enableFuel && TeleportingMod.settings.enableApparelFuel;
+		private int fuelRemaining;
+		public int FuelRemaining => fuelRemaining;
+		public int InitialFuelQuantity
+		{
+			get
+			{
+				int mult = Props.limitedUses > 0 ? Props.limitedUses : 1;
+				if (CanDoTeleport_LongRange)
+				{
+					return TeleportingMod.settings.longRange_FuelCost * mult;
+				}
+				else if (CanDoTeleport_ShortRange)
+				{
+					return TeleportingMod.settings.shortRange_FuelCost * mult;
+				}
+				else if (UseNameLinkable)
+				{
+					return 1 * mult;
+				}
+				else
+				{
+					return mult;
+				}
+			}
+		}
+
+		public void ConsumeFuel(int n)
+		{
+			if (IsConsumable)
+			{
+				if (fuelRemaining - n >= 0)
+				{
+					Logger.DebugVerbose("Consuming fuel", "initial: " + InitialFuelQuantity.ToString(), "current: " + fuelRemaining.ToString(), "n: " + n.ToString());
+					fuelRemaining -= n;
+					if (fuelRemaining == 0)
+						SelfDestruct();
+				}
+				else Logger.Error("CompTeleportApparel::ConsumeFuel: overconsumption");
+			}
+			else Logger.Error("CompTeleportApparel::ConsumeFuel: tried to consume fuel but is not consumable");
+		}
 
 		// Teleport settings
 		public bool CanDoTeleport_ShortRange => Props.shortRange;
@@ -66,13 +104,9 @@ namespace alaestor_teleporting
 					else Logger.Error("CompTeleportApparel::AfterSuccessfulTeleport: UseCooldown is true but CooldownComp is null");
 				}
 
-				if (UseRefuelable)
+				if (IsConsumable)
 				{
-					if (HasRefuelableComp)
-					{
-						RefuelableComp.ConsumeFuel(consumeFuel);
-					}
-					else Logger.Error("CompTeleportApparel::HandleCooldown: UseRefuelable is true but RefuelableComp is null");
+					ConsumeFuel(consumeFuel);
 				}
 			}
 		}
@@ -136,7 +170,7 @@ namespace alaestor_teleporting
 						"Wearer: " + Wearer.Label ?? "(no label)"
 					);
 
-					int fuel = (UseRefuelable && HasRefuelableComp) ? (int)RefuelableComp.Fuel : TeleportingMod.settings.longRange_FuelCost;
+					int fuel = (IsConsumable) ? fuelRemaining : TeleportingMod.settings.longRange_FuelCost;
 
 					if (CanTeleportOthers)
 					{
@@ -225,14 +259,17 @@ namespace alaestor_teleporting
 			}
 			else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: UseNameLinkable is false");
 		}
-
-		/*
 		public void SelfDestruct()
 		{
 			Logger.DebugVerbose(parent.Label + " self destructed");
 			this.parent.SplitOff(1).Destroy();
 		}
-		*/
+
+		public override void PostExposeData()
+		{
+			base.PostExposeData();
+			Scribe_Values.Look<int>(ref this.fuelRemaining, "fuelRemaining", IsConsumable ? InitialFuelQuantity : 0);
+		}
 
 		public override void Initialize(CompProperties props)
 		{
@@ -253,13 +290,8 @@ namespace alaestor_teleporting
 				);
 			}
 
-			if (UseRefuelable && !HasRefuelableComp)
-			{
-				Logger.Error(
-					"CompTeleportApparel set to use CompRefuelable but has no CompRefuelable",
-					"Parent: " + parent.Label
-				);
-			}
+			if (IsConsumable)
+				fuelRemaining = InitialFuelQuantity;
 		}
 
 		public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
@@ -281,11 +313,12 @@ namespace alaestor_teleporting
 				}
 
 				string fuelRemainingDesc = null;
-				if (UseRefuelable && HasRefuelableComp)
+				if (IsConsumable)
 				{
-					fuelRemainingDesc = string.Format("{0} fuel remaining", (int)RefuelableComp.Fuel);
+					fuelRemainingDesc = string.Format("{0} fuel remaining", fuelRemaining);
 				}
 
+				// gizmos
 
 				if (CanDoTeleport_ShortRange)
 				{
@@ -352,7 +385,7 @@ namespace alaestor_teleporting
 								delegate
 								{
 									Logger.Debug("CompTeleportApparel: called Gizmo: Unlink");
-									RefuelableComp.ConsumeFuel(1);
+									ConsumeFuel(1);
 									nameLinkable.Unlink();
 								},
 								description: fuelRemainingDesc
@@ -378,34 +411,20 @@ namespace alaestor_teleporting
 					}
 				}
 
-				/*
 				if (DebugSettings.godMode)
 				{
-					yield return new Command_Action
+					if (IsConsumable)
 					{
-						defaultLabel = "Cheat_ShortTeleDebugGizmo_Label".Translate(), //"Tele Local",
-						defaultDesc = "Cheat_ShortTeleDebugGizmo_Desc".Translate(), //"Teleport on map layer",
-						activateSound = SoundDef.Named("Click"),
-						action = delegate
-						{
-							Logger.Debug("TeleportBelt_Local:: called Godmode Gizmo: Short Range Teleport");
-							TeleportBehavior.StartTeleportTargetting(false, Wearer, cheat: true);
-						}
-					};
-
-					yield return new Command_Action
-					{
-						defaultLabel = "Cheat_LongTeleDebugGizmo_Label".Translate(),
-						defaultDesc = "Cheat_LongTeleDebugGizmo_Desc".Translate(),
-						activateSound = SoundDef.Named("Click"),
-						action = delegate
-						{
-							Logger.Debug("TeleportBelt_Local:: called Godmode Gizmo: Long Range Teleport");
-							TeleportBehavior.StartTeleportTargetting(true, Wearer, cheat: true);
-						}
-					};
+						yield return GizmoHelper.MakeCommandAction(
+							"TeleportApparel_RefillFuel",
+							delegate
+							{
+								Logger.Debug("CompTeleportApparel: called godmode Gizmo: refill fuel");
+								fuelRemaining = InitialFuelQuantity;
+							}
+						);
+					}
 				}
-				*/
 			}
 		}
 	}
@@ -416,8 +435,8 @@ namespace alaestor_teleporting
 		public bool longRange = false;
 		public bool useNameLinkable = false;
 		public bool useCooldown = false;
-		public bool useRefuelable = false;
 		public bool canTeleportOthers = false;
+		public int limitedUses = -1;
 
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
 		{
