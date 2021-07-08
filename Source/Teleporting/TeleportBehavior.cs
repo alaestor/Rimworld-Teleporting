@@ -62,7 +62,11 @@ namespace alaestor_teleporting
 						return TeleportingMod.settings.longRange_FuelCost;
 					}
 				}
-				//else Logger.Warning("TeleportBehavior::FuelCostToTravel: short range fuel distance calculations are unimplemented");
+				else
+				{
+					// Logger.Warning("TeleportBehavior::FuelCostToTravel: short range fuel distance calculations are unimplemented");
+					return TeleportingMod.settings.shortRange_FuelCost;
+				}
 			}
 			//else Logger.Warning("TeleportBehavior::FuelCostToTravel: calculating fuelcost but fuel is disabled");
 
