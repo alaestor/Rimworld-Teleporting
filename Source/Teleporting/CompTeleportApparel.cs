@@ -35,19 +35,25 @@ namespace alaestor_teleporting
 		// Cooldown
 		private CompCooldown CooldownComp => parent.GetComp<CompCooldown>() ?? null;
 		private bool HasCooldownComp => CooldownComp != null;
-		public bool UseCooldown => Props.useCooldown && TeleportingMod.settings.enableCooldown_ApparelComp;
+		public bool UseCooldown => Props.useCooldown && TeleportingMod.settings.enableCooldown && TeleportingMod.settings.enableCooldown_ApparelComp;
 
 		// NameLinkable
 		private CompNameLinkable NameLinkableComp => parent.GetComp<CompNameLinkable>() ?? null;
 		private bool HasNameLinkableComp => NameLinkableComp != null;
 		public bool UseNameLinkable => Props.useNameLinkable;
 
+		// Refuelable consumable
+		private CompRefuelable RefuelableComp => parent.GetComp<CompRefuelable>() ?? null;
+		private bool HasRefuelableComp => RefuelableComp != null;
+		public bool UseRefuelable => TeleportingMod.settings.enableFuel && Props.useRefuelable; // && settings.enableConsumableApparel
+		public int RemainingFuel => (int)RefuelableComp.Fuel; // calling this when HasRefuelableComp is false will error
+
 		// Teleport settings
 		public bool CanDoTeleport_ShortRange => Props.shortRange;
 		public bool CanDoTeleport_LongRange => Props.longRange;
 		public bool CanTeleportOthers => Props.canTeleportOthers;
 
-		private void HandleCooldown(
+		private void HandleFuel(
 			bool cheat = false,
 			bool shortRange_Teleport = false,
 			bool longRange_Teleport = false,
@@ -55,42 +61,68 @@ namespace alaestor_teleporting
 		{
 			if (!cheat)
 			{
-				if (UseCooldown)
+				if (UseRefuelable)
 				{
-					if (HasCooldownComp)
+					if (HasRefuelableComp)
 					{
-						if (shortRange_Teleport)
-						{
-							CooldownComp.SetSeconds(TeleportingMod.settings.shortRange_CooldownDuration);
-						}
-						else if (longRange_Teleport)
-						{
-							CooldownComp.SetSeconds(TeleportingMod.settings.longRange_CooldownDuration);
-						}
-						else if (nameLink_Teleport)
-						{
-							CooldownComp.SetSeconds(TeleportingMod.settings.nameLinkable_CooldownDuration);
-						}
-						else Logger.Error("CompTeleportApparel::HandleCooldown: all teleport types were false");
+						
 					}
-					else Logger.Error("CompTeleportApparel::HandleCooldown: UseCooldown is true but CooldownComp is null");
+					else Logger.Error("CompTeleportApparel::HandleFuel: UseRefuelable is true but RefuelableComp is null");
 				}
 			}
 		}
 
-		private void AfterSuccessfulTeleport_nameLink(bool cheat = false)
+		private void AfterSuccessfulTeleport(bool cheat = false, int setCooldown = 0, int consumeFuel = 0)
 		{
-			HandleCooldown(cheat: cheat, nameLink_Teleport: true);
+			if (!cheat)
+			{
+				if (UseCooldown)
+				{
+					if (HasCooldownComp)
+					{
+						CooldownComp.SetSeconds(setCooldown);
+					}
+					else Logger.Error("CompTeleportApparel::HandleCooldown: UseCooldown is true but CooldownComp is null");
+				}
+
+				if (UseRefuelable)
+				{
+					if (HasRefuelableComp)
+					{
+						RefuelableComp.ConsumeFuel(consumeFuel);
+					}
+					else Logger.Error("CompTeleportApparel::HandleCooldown: UseRefuelable is true but RefuelableComp is null");
+				}
+			}
 		}
 
-		private void AfterSuccessfulTeleport(TeleportData teleportData)
+		private void AfterSuccessfulTeleport_Link(bool cheat = false)
 		{
-			HandleCooldown(
-				cheat: teleportData.cheat,
-				shortRange_Teleport: !teleportData.longRangeFlag,
-				longRange_Teleport: teleportData.longRangeFlag);
+			AfterSuccessfulTeleport(
+				cheat: cheat,
+				setCooldown: TeleportingMod.settings.nameLinkable_CooldownDuration,
+				consumeFuel: 0
+			);
+		}
 
-			// uses & self destruct
+		private void AfterSuccessfulTeleport_Normal(TeleportData teleportData)
+		{
+			if (teleportData.longRangeFlag)
+			{
+				AfterSuccessfulTeleport(
+					cheat: teleportData.cheat,
+					setCooldown: TeleportingMod.settings.longRange_CooldownDuration,
+					consumeFuel: TeleportBehavior.FuelCostToTravel(true, teleportData.distance)
+				);
+			}
+			else
+			{
+				AfterSuccessfulTeleport(
+					cheat: teleportData.cheat,
+					setCooldown:  TeleportingMod.settings.shortRange_CooldownDuration,
+					consumeFuel: TeleportBehavior.FuelCostToTravel(false, teleportData.distance)
+				);
+			}
 		}
 
 		public void StartTeleport_ShortRange(bool cheat = false)
@@ -101,11 +133,11 @@ namespace alaestor_teleporting
 				{
 					if (CanTeleportOthers)
 					{
-						TeleportBehavior.StartTeleportTargetting(false, Wearer, AfterSuccessfulTeleport, cheat: cheat);
+						TeleportBehavior.StartTeleportTargetting(false, Wearer, AfterSuccessfulTeleport_Normal, cheat: cheat);
 					}
 					else
 					{
-						TeleportBehavior.StartTeleportPawn(false, Wearer, AfterSuccessfulTeleport, cheat: cheat);
+						TeleportBehavior.StartTeleportPawn(false, Wearer, AfterSuccessfulTeleport_Normal, cheat: cheat);
 					}
 				}
 				else Logger.Error("CompTeleportApparel::StartTeleport_ShortRange: invalid wearer");
@@ -123,13 +155,15 @@ namespace alaestor_teleporting
 						"Wearer: " + Wearer.Label ?? "(no label)"
 					);
 
+					int fuel = (UseRefuelable && HasRefuelableComp) ? (int)RefuelableComp.Fuel : TeleportingMod.settings.longRange_FuelCost;
+
 					if (CanTeleportOthers)
 					{
-						TeleportBehavior.StartTeleportTargetting(true, Wearer, AfterSuccessfulTeleport, cheat: cheat);
+						TeleportBehavior.StartTeleportTargetting(true, Wearer, AfterSuccessfulTeleport_Normal, fuel, cheat);
 					}
 					else
 					{
-						TeleportBehavior.StartTeleportPawn(true, Wearer, AfterSuccessfulTeleport, cheat: cheat);
+						TeleportBehavior.StartTeleportPawn(true, Wearer, AfterSuccessfulTeleport_Normal, fuel, cheat);
 					}
 				}
 				else Logger.Error("CompTeleportApparel::StartTeleport_LongRange: invalid wearer");
@@ -178,7 +212,7 @@ namespace alaestor_teleporting
 												"Destination Map: " + destination.Map.ToString(),
 												"Destination Cell: " + destination.InteractionCell.ToString()
 											);
-											AfterSuccessfulTeleport_nameLink(cheat: cheat);
+											AfterSuccessfulTeleport_Link(cheat: cheat);
 										}
 										else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing::DoTeleport: ExecuteTeleport failed.");
 									}
@@ -211,11 +245,13 @@ namespace alaestor_teleporting
 			else Logger.Error("CompTeleportApparel::StartTeleport_LinkedThing: UseNameLinkable is false");
 		}
 
+		/*
 		public void SelfDestruct()
 		{
 			Logger.DebugVerbose(parent.Label + " self destructed");
 			this.parent.SplitOff(1).Destroy();
 		}
+		*/
 
 		public override void Initialize(CompProperties props)
 		{
@@ -235,6 +271,14 @@ namespace alaestor_teleporting
 					"Parent: " + parent.Label
 				);
 			}
+
+			if (UseRefuelable && !HasRefuelableComp)
+			{
+				Logger.Error(
+					"CompTeleportApparel set to use CompRefuelable but has no CompRefuelable",
+					"Parent: " + parent.Label
+				);
+			}
 		}
 
 		public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
@@ -244,9 +288,9 @@ namespace alaestor_teleporting
 
 			if (Find.Selector.SingleSelectedThing == Wearer)
 			{
+				// common comps
 				bool isOnCooldown = false;
 				string cooldownRemainingString = null;
-
 				if (UseCooldown && HasCooldownComp && CooldownComp.IsOnCooldown)
 				{
 					isOnCooldown = true;
@@ -254,6 +298,13 @@ namespace alaestor_teleporting
 						"On cooldown for {0} more second(s)", // TODO translated version
 						CooldownComp.SecondsRemaining);
 				}
+
+				string fuelRemainingDesc = null;
+				if (UseRefuelable && HasRefuelableComp)
+				{
+					fuelRemainingDesc = string.Format("{0} fuel remaining", (int)RefuelableComp.Fuel);
+				}
+
 
 				if (CanDoTeleport_ShortRange)
 				{
@@ -265,7 +316,8 @@ namespace alaestor_teleporting
 							StartTeleport_ShortRange();
 						},
 						disabled: isOnCooldown,
-						disabledReason: cooldownRemainingString
+						disabledReason: cooldownRemainingString,
+						description: fuelRemainingDesc
 					);
 				}
 
@@ -279,7 +331,8 @@ namespace alaestor_teleporting
 							StartTeleport_LongRange();
 						},
 						disabled: isOnCooldown,
-						disabledReason: cooldownRemainingString
+						disabledReason: cooldownRemainingString,
+						description: fuelRemainingDesc
 					);
 				}
 
@@ -318,10 +371,10 @@ namespace alaestor_teleporting
 								delegate
 								{
 									Logger.Debug("CompTeleportApparel: called Gizmo: Unlink");
-									// make confirmation window warning that it will be destroyed?
+									RefuelableComp.ConsumeFuel(1);
 									nameLinkable.Unlink();
-									SelfDestruct();
-								}
+								},
+								description: fuelRemainingDesc
 							);
 						}
 						else
@@ -382,6 +435,7 @@ namespace alaestor_teleporting
 		public bool longRange = false;
 		public bool useNameLinkable = false;
 		public bool useCooldown = false;
+		public bool useRefuelable = false;
 		public bool canTeleportOthers = false;
 
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
