@@ -148,7 +148,7 @@ namespace alaestor_teleporting
 		public static void StartLongRangeTeleport(
 			Thing originator,
 			Action<TeleportData> onSuccess_Callback = null,
-			CompRefuelable refuelableComp = null,
+			int availableFuel = -1,
 			bool cheat = false)
 		{
 			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(originator);
@@ -157,9 +157,8 @@ namespace alaestor_teleporting
 			bool choosingDestination = false;
 
 			// stuff for distance
-			bool fuelMatters = TeleportingMod.settings.enableFuel && refuelableComp != null;
+			bool fuelMatters = TeleportingMod.settings.enableFuel && availableFuel > 0;
 			bool fuelDistanceMatters = fuelMatters && TeleportingMod.settings.longRange_FuelDistance > 0;
-			int remainingFuel = refuelableComp != null ? (int)Math.Floor(refuelableComp.Fuel) : 0;
 
 			string ExtraLabelGetter(GlobalTargetInfo target)
 			{
@@ -181,15 +180,15 @@ namespace alaestor_teleporting
 						label += "TeleportBehavior_Global_OutofRange".Translate();
 					}
 					else if (fuelDistanceMatters && choosingDestination)
-					{ // replace console with fuel component "originator.TryGetComp...."?
+					{
 						int fuelCost = FuelCostToTravel(true, TeleportTargeter.DistanceBetween(fromTile, target.Tile));
 						if (fuelCost > 0)
 						{
 							if (label.Length != 0)
 								label += "\n";
 
-							label += String.Format("Cost: {0} of {1}", fuelCost, remainingFuel); // TODO translate
-							if (remainingFuel < fuelCost)
+							label += String.Format("Cost: {0} of {1}", fuelCost, availableFuel); // TODO translate
+							if (availableFuel < fuelCost)
 							{
 								label += "\n" + "TeleportBehavior_Global_NotEnoughFuel".Translate();
 							}
@@ -212,7 +211,7 @@ namespace alaestor_teleporting
 					{
 						if (fuelDistanceMatters && choosingDestination)
 						{
-							return remainingFuel >= FuelCostToTravel(true, TeleportTargeter.DistanceBetween(fromTile, target.Tile));
+							return availableFuel >= FuelCostToTravel(true, TeleportTargeter.DistanceBetween(fromTile, target.Tile));
 						}
 						else return true;
 					}
@@ -225,7 +224,7 @@ namespace alaestor_teleporting
 				if (fuelDistanceMatters && choosingDestination)
 				{
 					int fuelRangeLimit =
-						((int)Math.Floor(((double)remainingFuel) / TeleportingMod.settings.longRange_FuelCost))
+						((int)Math.Floor(((double)availableFuel) / TeleportingMod.settings.longRange_FuelCost))
 						* TeleportingMod.settings.longRange_FuelDistance;
 
 					GenDraw.DrawWorldRadiusRing(fromTile, fuelRangeLimit);
@@ -240,7 +239,7 @@ namespace alaestor_teleporting
 			Logger.DebugVerbose("TeleportBehavior::StartLongRangeTeleport: called",
 				"originator: " + (originator != null ? originator.Label : "null"),
 				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null"),
-				"remainingFuel: " + (refuelableComp != null ? refuelableComp.ToString() : "null"),
+				"remainingFuel: " + ((availableFuel > 0) ? availableFuel.ToString() : "N/A"),
 				"Cheat: " + cheat.ToString()
 			);
 
@@ -387,8 +386,11 @@ namespace alaestor_teleporting
 			else Logger.Error("TeleportBehavior::StartShortRangeTeleportPawn: invalid pawn");
 		}
 
-		// TODO this should supprt refuelableComp
-		public static void StartLongRangeTeleportPawn(Pawn pawn, Action<TeleportData> onSuccess_Callback = null, bool cheat = false)
+		public static void StartLongRangeTeleportPawn(
+			Pawn pawn,
+			Action<TeleportData> onSuccess_Callback = null,
+			int availableFuel = -1,
+			bool cheat = false)
 		{
 			Logger.DebugVerbose("TeleportBehavior::StartLongRangeTeleportPawn: called",
 				"Pawn: " + (pawn != null ? pawn.Label : "null"),
@@ -423,11 +425,17 @@ namespace alaestor_teleporting
 					}
 					else if (fuelDistanceMatters)
 					{
-						if (TeleportTargeter.DistanceBetween(startingHere.Tile, target.Tile) > TeleportingMod.settings.longRange_FuelDistance)
+						int fuelCost = FuelCostToTravel(true, TeleportTargeter.DistanceBetween(startingHere.Tile, target.Tile));
+						if (fuelCost > 0)
 						{
 							if (label.Length != 0)
 								label += "\n";
-							label += "TeleportBehavior_Global_NotEnoughFuel".Translate();
+
+							label += String.Format("Cost: {0} of {1}", fuelCost, availableFuel); // TODO translate
+							if (availableFuel < fuelCost)
+							{
+								label += "\n" + "TeleportBehavior_Global_NotEnoughFuel".Translate();
+							}
 						}
 					}
 				}
@@ -435,20 +443,40 @@ namespace alaestor_teleporting
 				return label;
 			}
 
+			bool CanTargetTile(GlobalTargetInfo target)
+			{
+				if (TeleportTargeter.TargetHasLoadedMap(target))
+				{
+					if (cheat) // ignore range and fuel limits
+					{
+						return true;
+					}
+					else if (TeleportTargeter.TargetIsWithinGlobalRangeLimit(startingHere.Tile, target.Tile))
+					{
+						if (fuelDistanceMatters)
+						{
+							return availableFuel >= FuelCostToTravel(true, TeleportTargeter.DistanceBetween(startingHere.Tile, target.Tile));
+						}
+						else return true;
+					}
+				}
+				return false;
+			}
+
 			void OnUpdate()
 			{
-				if (!cheat)
+				if (fuelDistanceMatters)
 				{
-					if (fuelDistanceMatters)
-					{
-						int fuelRangeLimit = TeleportingMod.settings.longRange_FuelDistance;
-						GenDraw.DrawWorldRadiusRing(startingHere.Tile, fuelRangeLimit);
-					}
+					int fuelRangeLimit =
+						((int)Math.Floor(((double)availableFuel) / TeleportingMod.settings.longRange_FuelCost))
+						* TeleportingMod.settings.longRange_FuelDistance;
 
-					if (TeleportingMod.settings.enableGlobalRangeLimit)
-					{
-						GenDraw.DrawWorldRadiusRing(startingHere.Tile, TeleportingMod.settings.globalRangeLimit);
-					}
+					GenDraw.DrawWorldRadiusRing(startingHere.Tile, fuelRangeLimit);
+				}
+
+				if (TeleportingMod.settings.enableGlobalRangeLimit)
+				{
+					GenDraw.DrawWorldRadiusRing(startingHere.Tile, TeleportingMod.settings.globalRangeLimit);
 				}
 			}
 
@@ -460,7 +488,7 @@ namespace alaestor_teleporting
 				globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
 				globalOnUpdate: OnUpdate,
 				globalExtraLabelGetter: ExtraLabelGetter,
-				globalTargetValidator: TeleportTargeter.TargetHasLoadedMap
+				globalTargetValidator: CanTargetTile
 			);
 
 			void FinishedChoosing_To(GlobalTargetInfo destination)
@@ -489,6 +517,7 @@ namespace alaestor_teleporting
 			bool longRangeFlag,
 			Pawn pawn,
 			Action<TeleportData> onSuccess_Callback = null,
+			int availableFuel = -1,
 			bool cheat = false)
 		{
 			Logger.Debug(
@@ -501,11 +530,11 @@ namespace alaestor_teleporting
 
 			if (longRangeFlag)
 			{
-				StartLongRangeTeleportPawn(pawn, onSuccess_Callback, cheat);
+				StartLongRangeTeleportPawn(pawn, onSuccess_Callback, availableFuel, cheat);
 			}
 			else
 			{
-				StartShortRangeTeleportPawn(pawn, onSuccess_Callback, cheat);
+				StartShortRangeTeleportPawn(pawn, onSuccess_Callback, cheat); // to take availableFuel?
 			}
 		}
 
@@ -513,7 +542,7 @@ namespace alaestor_teleporting
 			bool longRangeFlag,
 			Thing originator,
 			Action<TeleportData> onSuccess_Callback = null,
-			CompRefuelable refuelableComp = null, // this could just be int, the remaining fuel
+			int availableFuel = -1,
 			bool cheat = false)
 		{
 			Logger.Debug(
@@ -526,11 +555,11 @@ namespace alaestor_teleporting
 
 			if (longRangeFlag)
 			{
-				TeleportBehavior.StartLongRangeTeleport(originator, onSuccess_Callback, refuelableComp, cheat);
+				TeleportBehavior.StartLongRangeTeleport(originator, onSuccess_Callback, availableFuel, cheat);
 			}
 			else
 			{
-				TeleportBehavior.StartShortRangeTeleport(originator, onSuccess_Callback); // to take refuelableComp?
+				TeleportBehavior.StartShortRangeTeleport(originator, onSuccess_Callback); // to take availableFuel?
 			}
 		}
 	}

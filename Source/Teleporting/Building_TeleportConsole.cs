@@ -154,7 +154,7 @@ namespace alaestor_teleporting
 				else Logger.Error("Teleporting: cooldown is enabled but cooldownComp is null");
 			}
 
-			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess, refuelableComp);
+			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess, (int)refuelableComp.Fuel);
 
 			void onTeleportSuccess(TeleportData teleportData)
 			{
