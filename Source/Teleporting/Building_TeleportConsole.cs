@@ -19,7 +19,13 @@ namespace alaestor_teleporting
 		private bool UseCooldown => TeleportingMod.settings.enableCooldown && TeleportingMod.settings.enableCooldown_Console;
 		private bool UseFuel => TeleportingMod.settings.enableFuel;
 
+		public bool HasResearchFor_Teleport => Find.ResearchManager.GetProgress(MyDefs.research_tier_4_0) >= 1.0;
+		public bool HasResearchFor_Teleport_ShortRange => HasResearchFor_Teleport;
+		public bool HasResearchFor_Teleport_LongRange => HasResearchFor_Teleport;
+
+
 		public bool hasStartedTargetting = false;
+
 
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
@@ -103,24 +109,37 @@ namespace alaestor_teleporting
 				{
 					if (refuelableComp != null)
 					{
-						if (refuelableComp.Fuel >= TeleportingMod.settings.shortRange_FuelCost)
+						if (HasResearchFor_Teleport_ShortRange)
 						{
-							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, this);
+							if (refuelableComp.Fuel >= TeleportingMod.settings.shortRange_FuelCost)
+							{
+								yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, this);
+							}
+							else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), null); // restring
 						}
-						else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), null); // restring
 
-						if (refuelableComp.Fuel >= TeleportingMod.settings.longRange_FuelCost)
+						if (HasResearchFor_Teleport_LongRange)
 						{
-							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, this);
+							if (refuelableComp.Fuel >= TeleportingMod.settings.longRange_FuelCost)
+							{
+								yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, this);
+							}
+							else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), null); // restring
 						}
-						else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), null); // restring
 					}
 					else Logger.Error("Teleporting: fuel is enabled but refuelableComp is null", refuelableComp.ToString());
 				}
 				else
 				{
-					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, this);
-					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, this);
+					if (HasResearchFor_Teleport_ShortRange)
+					{
+						yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, this);
+					}
+
+					if (HasResearchFor_Teleport_LongRange)
+					{
+						yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, this);
+					}
 				}
 			}
 		}
@@ -133,12 +152,29 @@ namespace alaestor_teleporting
 				{
 					if (cooldownComp.IsOnCooldown)
 					{
-						Logger.Warning("Tried to start a teleport but console was on cooldown");
+						Logger.Warning("Building_TeleportConsole::TryStartTeleport: Tried to start a teleport but console was on cooldown");
 						return;
 					}
 				}
-				else Logger.Error("Teleporting: cooldown is enabled but cooldownComp is null");
+				else
+				{
+					Logger.Error("Building_TeleportConsole::TryStartTeleport: cooldown is enabled but cooldownComp is null");
+					return;
+				}
 			}
+
+			if ((longRangeFlag && !HasResearchFor_Teleport_LongRange) 
+				|| (!longRangeFlag && !HasResearchFor_Teleport_ShortRange))
+			{
+				Logger.Error(
+					"Building_TeleportConsole::TryStartTeleport: tried to teleport but is missing required research",
+					"longRangeFlag: " + longRangeFlag.ToString(),
+					"HasResearchFor_Teleport_LongRange: " + HasResearchFor_Teleport_LongRange.ToString(),
+					"HasResearchFor_Teleport_ShortRange: " + HasResearchFor_Teleport_ShortRange.ToString()
+				);
+				return;
+			}
+
 
 			TeleportBehavior.StartTeleportTargetting(longRangeFlag, this, onTeleportSuccess, (int)refuelableComp.Fuel);
 
@@ -194,7 +230,6 @@ namespace alaestor_teleporting
 
 			if (DebugSettings.godMode)
 			{
-
 				yield return GizmoHelper.MakeCommandAction(
 					"TeleportConsole_Local_Debug",
 					delegate
