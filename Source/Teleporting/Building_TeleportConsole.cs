@@ -10,7 +10,7 @@ using Verse.AI;
 
 namespace alaestor_teleporting
 {
-	public class Building_TeleportConsole : Building
+	public class Building_TeleportConsole : Building_WorkTable
 	{
 		private CompPowerTrader powerComp;
 		private CompRefuelable refuelableComp;
