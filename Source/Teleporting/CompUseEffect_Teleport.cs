@@ -28,7 +28,7 @@ namespace alaestor_teleporting
 		public void SelfDestruct()
 		{
 			Logger.DebugVerbose(parent.Label + " self destructed");
-			this.parent.SplitOff(1).Destroy();
+			parent.SplitOff(1).Destroy();
 		}
 
 		public override void DoEffect(Pawn usedBy)

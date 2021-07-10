@@ -27,19 +27,19 @@ namespace alaestor_teleporting
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.cooldownComp = this.GetComp<CompCooldown>();
-			this.nameLinkableComp = this.GetComp<CompNameLinkable>();
-			this.refuelableComp = this.GetComp<CompRefuelable>();
-			this.powerComp = this.GetComp<CompPowerTrader>();
+			cooldownComp = GetComp<CompCooldown>();
+			nameLinkableComp = GetComp<CompNameLinkable>();
+			refuelableComp = GetComp<CompRefuelable>();
+			powerComp = GetComp<CompPowerTrader>();
 		}
 
 		public bool CanUseNow
 		{
 			get
 			{
-				if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
+				if (Spawned && Map.gameConditionManager.ElectricityDisabled)
 					return false;
-				return this.powerComp == null || this.powerComp.PowerOn;
+				return powerComp == null || powerComp.PowerOn;
 			}
 		}
 
@@ -162,24 +162,24 @@ namespace alaestor_teleporting
 
 			FloatMenuOption GetFailureReason()
 			{
-				if (!myPawn.CanReach((LocalTargetInfo)(Thing)this, PathEndMode.InteractionCell, Danger.Some))
-					return new FloatMenuOption((string)"CannotUseNoPath".Translate(), (Action)null);
-				else if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
-					return new FloatMenuOption((string)"CannotUseSolarFlare".Translate(), (Action)null);
-				else if (this.powerComp != null && !this.powerComp.PowerOn)
-					return new FloatMenuOption((string)"CannotUseNoPower".Translate(), (Action)null);
+				if (!myPawn.CanReach(this, PathEndMode.InteractionCell, Danger.Some))
+					return new FloatMenuOption("CannotUseNoPath".Translate(), null);
+				else if (Spawned && Map.gameConditionManager.ElectricityDisabled)
+					return new FloatMenuOption("CannotUseSolarFlare".Translate(), null);
+				else if (powerComp != null && !powerComp.PowerOn)
+					return new FloatMenuOption("CannotUseNoPower".Translate(), null);
 				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving))
-					return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), (Action)null);
+					return new FloatMenuOption("CannotUseReason".Translate("IncapableOfCapacity".Translate(PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), null);
 				else if (UseCooldown && HasCooldownComp && cooldownComp.IsOnCooldown)
-					return new FloatMenuOption(string.Format("On cooldown for {0} more second(s)", cooldownComp.SecondsRemaining), (Action)null); // TODO translate
+					return new FloatMenuOption(string.Format("On cooldown for {0} more second(s)", cooldownComp.SecondsRemaining), null); // TODO translate
 				else if (UseFuel && HasRefuelableComp && !HasEnoughFuel)
-					return new FloatMenuOption((string)"out of fuel".Translate(), (Action)null); // TODO translate
+					return new FloatMenuOption("out of fuel".Translate(), null); // TODO translate
 				else if (nameLinkableComp.IsLinkedToSomething && nameLinkableComp.HasInvalidLinkedThing)
-					return new FloatMenuOption("Link broken: cannot find target", (Action)null);
-				else if (this.CanUseNow)
-					return (FloatMenuOption)null; // allow use
+					return new FloatMenuOption("Link broken: cannot find target", null);
+				else if (CanUseNow)
+					return null; // allow use
 				Logger.Warning(myPawn.ToString() + "Could not use teleport pad for unknown reason.");
-				return new FloatMenuOption("Cannot use now", (Action)null);
+				return new FloatMenuOption("Cannot use now", null);
 			}
 
 			if (failureReason != null)
@@ -190,26 +190,26 @@ namespace alaestor_teleporting
 			{
 
 				string use_Label = "UseTeleportPlatform_Label".Translate();
-				Action use_Action = (Action)(() =>
+				Action use_Action = () =>
 				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_TeleportToLink, (LocalTargetInfo)(Thing)this);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_TeleportToLink, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
-				});
+				};
 
 				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(
-					use_Label, use_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+					use_Label, use_Action, MenuOptionPriority.Default), myPawn, this);
 			}
 			else if (!nameLinkableComp.IsLinkedToSomething && nameLinkableComp.CanBeLinked)
 			{
 				string makeLink_Label = "LinkTeleportPlatform_Label".Translate();
-				Action makeLink_Action = (Action)(() =>
+				Action makeLink_Action = () =>
 				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_MakeLink, (LocalTargetInfo)(Thing)this);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_MakeLink, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
-				});
+				};
 
 				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(
-					makeLink_Label, makeLink_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+					makeLink_Label, makeLink_Action, MenuOptionPriority.Default), myPawn, this);
 			}
 		}
 
@@ -227,7 +227,7 @@ namespace alaestor_teleporting
 						Rename();
 						Logger.Debug("TeleportPlatform: called Gizmo: rename");
 					}
-					//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
 				);
 			}
 
@@ -240,7 +240,7 @@ namespace alaestor_teleporting
 						Unlink();
 						Logger.Debug("TeleportPlatform: called Gizmo: unlink");
 					}
-					//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
 				);
 
 			}

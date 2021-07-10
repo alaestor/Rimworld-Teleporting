@@ -17,7 +17,7 @@ namespace alaestor_teleporting
 			Action<string> Output_Callback)
 		{
 			//this.nameLinkable = nameLinkableComp;
-			this.curName = initialString;
+			curName = initialString;
 			this.Validator = Validator;
 			this.Output_Callback = Output_Callback;
 		}
@@ -39,13 +39,13 @@ namespace alaestor_teleporting
 			*/
 		}
 
-		protected override void SetName(string name) => this.Output_Callback(name); //this.nameLinkable.Name = name; // = this.curName
+		protected override void SetName(string name) => Output_Callback(name); //this.nameLinkable.Name = name; // = this.curName
 	}
 
 	public class CompNameLinkable : ThingComp
 	{
-		public CompProperties_NameLinkable Props => (CompProperties_NameLinkable)this.props;
-		public bool CanBeNamed => Props.canBeNamed; 
+		public CompProperties_NameLinkable Props => (CompProperties_NameLinkable)props;
+		public bool CanBeNamed => Props.canBeNamed;
 		public bool CanBeLinked => Props.canBeLinked;
 		public bool ShowGizmos => Props.showGizmos;
 		public bool ShowDebugGizmos => Props.showDebugGizmos;
@@ -96,9 +96,9 @@ namespace alaestor_teleporting
 				{
 					if (NameLinkableManager.NameIsAvailable(newName))
 					{
-						return (AcceptanceReport)true;
+						return true;
 					}
-					else return (AcceptanceReport)"NameIsInUse".Translate();
+					else return "NameIsInUse".Translate();
 				}
 
 				Find.WindowStack.Add(new Dialog_NameInputWindow(name ?? "", Rename_Validator, Rename_Callback));
@@ -254,7 +254,7 @@ namespace alaestor_teleporting
 				{
 					s += "Linked to: \"" + linkedName + "\"";
 				}
-				else s += "Not linked.";
+				else s += "CompNameLinkable_NotLinked".Translate();
 			}
 
 			return s;
@@ -263,8 +263,8 @@ namespace alaestor_teleporting
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<string>(ref this.name, "name", null);
-			Scribe_Values.Look<string>(ref this.linkedName, "linkedToName", null);
+			Scribe_Values.Look<string>(ref name, "name", null);
+			Scribe_Values.Look<string>(ref linkedName, "linkedToName", null);
 			//Scribe_Collections.Look<>
 
 			if (Scribe.mode == LoadSaveMode.LoadingVars) //LoadSaveMode.PostLoadInit ?
@@ -389,7 +389,7 @@ namespace alaestor_teleporting
 		{
 			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
 				yield return gizmo;
-			
+
 			foreach (Gizmo gizmo in CompCommonGizmosExtra())
 				yield return gizmo;
 		}
@@ -410,7 +410,7 @@ namespace alaestor_teleporting
 
 		public CompProperties_NameLinkable()
 		{
-			this.compClass = typeof(CompNameLinkable);
+			compClass = typeof(CompNameLinkable);
 		}
 
 		public CompProperties_NameLinkable(Type compClass) : base(compClass)

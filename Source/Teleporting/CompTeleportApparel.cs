@@ -14,7 +14,7 @@ namespace alaestor_teleporting
 {
 	public class CompTeleportApparel : ThingComp
 	{
-		public CompProperties_TeleportApparel Props => (CompProperties_TeleportApparel)this.props;
+		public CompProperties_TeleportApparel Props => (CompProperties_TeleportApparel)props;
 
 		public Pawn Wearer
 		{
@@ -134,7 +134,7 @@ namespace alaestor_teleporting
 			{
 				AfterSuccessfulTeleport(
 					cheat: teleportData.cheat,
-					setCooldown:  TeleportingMod.settings.shortRange_CooldownDuration,
+					setCooldown: TeleportingMod.settings.shortRange_CooldownDuration,
 					consumeFuel: TeleportBehavior.FuelCostToTravel(false, teleportData.distance)
 				);
 			}
@@ -236,7 +236,7 @@ namespace alaestor_teleporting
 										Logger.Error(
 											"CompTeleportApparel::StartTeleport_LinkedThing::DoTeleport: invalid target",
 											"valid: " + target.IsValid.ToString(),
-											"thing: " + (target.HasThing ? (target.Thing.Label) : "None" )
+											"thing: " + (target.HasThing ? (target.Thing.Label) : "None")
 										);
 									}
 								}
@@ -262,13 +262,13 @@ namespace alaestor_teleporting
 		public void SelfDestruct()
 		{
 			Logger.DebugVerbose(parent.Label + " self destructed");
-			this.parent.SplitOff(1).Destroy();
+			parent.SplitOff(1).Destroy();
 		}
 
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.fuelRemaining, "fuelRemaining", IsConsumable ? InitialFuelQuantity : 0);
+			Scribe_Values.Look<int>(ref fuelRemaining, "fuelRemaining", IsConsumable ? InitialFuelQuantity : 0);
 		}
 
 		public override void Initialize(CompProperties props)
@@ -451,7 +451,7 @@ namespace alaestor_teleporting
 
 		public CompProperties_TeleportApparel()
 		{
-			this.compClass = typeof(CompTeleportApparel);
+			compClass = typeof(CompTeleportApparel);
 		}
 
 		public CompProperties_TeleportApparel(Type compClass) : base(compClass)

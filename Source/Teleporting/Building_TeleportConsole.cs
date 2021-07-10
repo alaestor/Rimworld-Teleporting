@@ -15,57 +15,43 @@ namespace alaestor_teleporting
 		private CompPowerTrader powerComp;
 		private CompRefuelable refuelableComp;
 		private CompCooldown cooldownComp;
-		// private ??? fuelComp; // for teleport cartridges
 
 		private bool UseCooldown => TeleportingMod.settings.enableCooldown && TeleportingMod.settings.enableCooldown_Console;
 		private bool UseFuel => TeleportingMod.settings.enableFuel;
 
-		// if this isn't set, the job toil finishes before targetting begins
 		public bool hasStartedTargetting = false;
-
-		/*
-		public override void Tick()
-		{
-			base.Tick();
-		}
-
-		public override void TickRare()
-		{
-			base.TickRare();
-		}
-		*/
-
-		public override void ExposeData()
-		{
-			base.ExposeData();
-			Scribe_Values.Look<bool>(ref this.hasStartedTargetting, "hasStartedTargetting", false);
-		}
-
-		public bool IsDoneTargeting()
-		{
-			if (this.hasStartedTargetting && !(Find.Targeter.IsTargeting || Find.WorldTargeter.IsTargeting))
-			{
-				this.hasStartedTargetting = false;
-				return true;
-			}
-			else return false;
-		}
 
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.powerComp = this.GetComp<CompPowerTrader>();
-			this.refuelableComp = this.GetComp<CompRefuelable>();
-			this.cooldownComp = this.GetComp<CompCooldown>();
+			powerComp = GetComp<CompPowerTrader>();
+			refuelableComp = GetComp<CompRefuelable>();
+			cooldownComp = GetComp<CompCooldown>();
+		}
+
+		public override void ExposeData()
+		{
+			base.ExposeData();
+			Scribe_Values.Look<bool>(ref hasStartedTargetting, "hasStartedTargetting", false);
+		}
+
+		public bool IsDoneTargeting()
+		{
+			if (hasStartedTargetting && !(Find.Targeter.IsTargeting || Find.WorldTargeter.IsTargeting))
+			{
+				hasStartedTargetting = false;
+				return true;
+			}
+			else return false;
 		}
 
 		public bool CanUseNow
 		{
 			get
 			{
-				if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
+				if (Spawned && Map.gameConditionManager.ElectricityDisabled)
 					return false;
-				return this.powerComp == null || this.powerComp.PowerOn;
+				return powerComp == null || powerComp.PowerOn;
 			}
 		}
 
@@ -74,22 +60,22 @@ namespace alaestor_teleporting
 			FloatMenuOption failureReason = GetFailureReason();
 			FloatMenuOption GetFailureReason()
 			{
-				if (!myPawn.CanReach((LocalTargetInfo)(Thing)this, PathEndMode.InteractionCell, Danger.Some))
-					return new FloatMenuOption((string)"CannotUseNoPath".Translate(), (Action)null);
-				else if (this.Spawned && this.Map.gameConditionManager.ElectricityDisabled)
-					return new FloatMenuOption((string)"CannotUseSolarFlare".Translate(), (Action)null);
-				else if (this.powerComp != null && !this.powerComp.PowerOn)
-					return new FloatMenuOption((string)"CannotUseNoPower".Translate(), (Action)null);
+				if (!myPawn.CanReach(this, PathEndMode.InteractionCell, Danger.Some))
+					return new FloatMenuOption("CannotUseNoPath".Translate(), null);
+				else if (Spawned && Map.gameConditionManager.ElectricityDisabled)
+					return new FloatMenuOption("CannotUseSolarFlare".Translate(), null);
+				else if (powerComp != null && !powerComp.PowerOn)
+					return new FloatMenuOption("CannotUseNoPower".Translate(), null);
 				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
-					return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Manipulation.label, myPawn.Named("PAWN"))), (Action)null);
+					return new FloatMenuOption("CannotUseReason".Translate("IncapableOfCapacity".Translate(PawnCapacityDefOf.Manipulation.label, myPawn.Named("PAWN"))), null);
 				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving))
-					return new FloatMenuOption((string)"CannotUseReason".Translate((NamedArgument)"IncapableOfCapacity".Translate((NamedArgument)PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), (Action)null);
-				else if (TeleportingMod.settings.enableCooldown && this.cooldownComp != null && this.cooldownComp.IsOnCooldown)
-					return new FloatMenuOption("IsOnCooldown".Translate(), (Action)null);
-				else if (this.CanUseNow)
-					return (FloatMenuOption)null; // allow use
+					return new FloatMenuOption("CannotUseReason".Translate("IncapableOfCapacity".Translate(PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), null);
+				else if (TeleportingMod.settings.enableCooldown && cooldownComp != null && cooldownComp.IsOnCooldown)
+					return new FloatMenuOption("IsOnCooldown".Translate(), null);
+				else if (CanUseNow)
+					return null; // allow use
 				Logger.Warning(myPawn.ToString() + "Could not use teleport console for unknown reason.");
-				return new FloatMenuOption("Cannot use now", (Action)null);
+				return new FloatMenuOption("Cannot use now", null);
 			}
 
 			if (failureReason != null)
@@ -99,42 +85,42 @@ namespace alaestor_teleporting
 			else
 			{
 				string short_Label = "ShortRangeTeleport_Label".Translate();
-				Action short_Action = (Action)(() =>
+				Action short_Action = () =>
 				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_ShortRange, (LocalTargetInfo)(Thing)this);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_ShortRange, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
-				});
+				};
 
 				string long_Label = "LongRangeTeleport_Label".Translate();
-				Action long_Action = (Action)(() =>
+				Action long_Action = () =>
 				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_LongRange, (LocalTargetInfo)(Thing)this);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_LongRange, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
-				});
+				};
 
 				// TODO move these to failure reasons
 				if (UseFuel)
 				{
-					if (this.refuelableComp != null)
+					if (refuelableComp != null)
 					{
-						if (this.refuelableComp.Fuel >= TeleportingMod.settings.shortRange_FuelCost)
+						if (refuelableComp.Fuel >= TeleportingMod.settings.shortRange_FuelCost)
 						{
-							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, this);
 						}
-						else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), (Action)null); // restring
+						else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), null); // restring
 
-						if (this.refuelableComp.Fuel >= TeleportingMod.settings.longRange_FuelCost)
+						if (refuelableComp.Fuel >= TeleportingMod.settings.longRange_FuelCost)
 						{
-							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+							yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, this);
 						}
-						else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), (Action)null); // restring
+						else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), null); // restring
 					}
 					else Logger.Error("Teleporting: fuel is enabled but refuelableComp is null", refuelableComp.ToString());
 				}
 				else
 				{
-					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
-					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, (LocalTargetInfo)(Thing)this);
+					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, this);
+					yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, this);
 				}
 			}
 		}
@@ -143,9 +129,9 @@ namespace alaestor_teleporting
 		{
 			if (UseCooldown)
 			{
-				if (this.cooldownComp != null)
+				if (cooldownComp != null)
 				{
-					if (this.cooldownComp.IsOnCooldown)
+					if (cooldownComp.IsOnCooldown)
 					{
 						Logger.Warning("Tried to start a teleport but console was on cooldown");
 						return;
@@ -191,12 +177,12 @@ namespace alaestor_teleporting
 							);
 						}
 					}
-					this.cooldownComp.Set(cooldownTicks);
+					cooldownComp.Set(cooldownTicks);
 				}
 
 				if (UseFuel)
 				{
-					this.refuelableComp.ConsumeFuel(TeleportBehavior.FuelCostToTravel(longRangeFlag, teleportData.distance));
+					refuelableComp.ConsumeFuel(TeleportBehavior.FuelCostToTravel(longRangeFlag, teleportData.distance));
 				}
 			}
 		}

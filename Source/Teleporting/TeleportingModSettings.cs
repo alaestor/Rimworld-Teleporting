@@ -31,7 +31,7 @@ namespace alaestor_teleporting
 		public int longRange_CooldownDuration = longRange_CooldownDuration_Default;
 		public string longRange_CooldownDuration_Buffer = longRange_CooldownDuration_Default.ToString();
 
-		
+
 
 		// Console cooldown intelect modifier
 		private static readonly bool enableConsoleIntelectDivisor_Default = true;
@@ -92,79 +92,79 @@ namespace alaestor_teleporting
 		public void RefreshStringBuffers()
 		{
 			// cooldown
-			this.nameLinkable_CooldownDuration_Buffer = nameLinkable_CooldownDuration.ToString();
-			this.shortRange_CooldownDuration_Buffer = shortRange_CooldownDuration.ToString();
-			this.longRange_CooldownDuration_Buffer = longRange_CooldownDuration.ToString();
-			this.consoleIntelectDivisor_Buffer = consoleIntelectDivisor.ToString();
+			nameLinkable_CooldownDuration_Buffer = nameLinkable_CooldownDuration.ToString();
+			shortRange_CooldownDuration_Buffer = shortRange_CooldownDuration.ToString();
+			longRange_CooldownDuration_Buffer = longRange_CooldownDuration.ToString();
+			consoleIntelectDivisor_Buffer = consoleIntelectDivisor.ToString();
 
 			// fuel
-			this.shortRange_FuelCost_Buffer = shortRange_FuelCost.ToString();
-			this.longRange_FuelCost_Buffer = longRange_FuelCost.ToString();
-			this.longRange_FuelDistance_Buffer = longRange_FuelDistance.ToString();
+			shortRange_FuelCost_Buffer = shortRange_FuelCost.ToString();
+			longRange_FuelCost_Buffer = longRange_FuelCost.ToString();
+			longRange_FuelDistance_Buffer = longRange_FuelDistance.ToString();
 
 			// range limit
-			this.globalRangeLimit_Buffer = globalRangeLimit_Default.ToString();
+			globalRangeLimit_Buffer = globalRangeLimit_Default.ToString();
 		}
 
 		public void ResetToDefaults()
 		{
 			// cooldown
-			this.enableCooldown = enableCooldown_Default;
-			this.enableCooldown_Console = enableCooldown_Console_Default;
-			this.enableCooldown_ApparelComp = enableCooldown_ApparelComp_Default;
-			this.enableCooldown_Platform = enableCooldown_Platform_Default;
-			this.nameLinkable_CooldownDuration = nameLinkable_CooldownDuration_Default;
-			this.shortRange_CooldownDuration = shortRange_CooldownDuration_Default;
-			this.longRange_CooldownDuration = longRange_CooldownDuration_Default;
-			this.enableConsoleIntelectDivisor = enableConsoleIntelectDivisor_Default;
-			this.consoleIntelectDivisor = consoleIntelectDivisor_Default;
+			enableCooldown = enableCooldown_Default;
+			enableCooldown_Console = enableCooldown_Console_Default;
+			enableCooldown_ApparelComp = enableCooldown_ApparelComp_Default;
+			enableCooldown_Platform = enableCooldown_Platform_Default;
+			nameLinkable_CooldownDuration = nameLinkable_CooldownDuration_Default;
+			shortRange_CooldownDuration = shortRange_CooldownDuration_Default;
+			longRange_CooldownDuration = longRange_CooldownDuration_Default;
+			enableConsoleIntelectDivisor = enableConsoleIntelectDivisor_Default;
+			consoleIntelectDivisor = consoleIntelectDivisor_Default;
 
 			// fuel
-			this.enableFuel = enableFuel_Default;
-			this.enableApparelFuel = enableApparelFuel_Default;
-			this.enablePlatformUnlinkFuelCost = enablePlatformUnlinkFuelCost_Default;
-			this.shortRange_FuelCost = shortRange_FuelCost_Default;
-			this.longRange_FuelCost = longRange_FuelCost_Default;
-			this.longRange_FuelDistance = longRange_FuelDistance_Default;
+			enableFuel = enableFuel_Default;
+			enableApparelFuel = enableApparelFuel_Default;
+			enablePlatformUnlinkFuelCost = enablePlatformUnlinkFuelCost_Default;
+			shortRange_FuelCost = shortRange_FuelCost_Default;
+			longRange_FuelCost = longRange_FuelCost_Default;
+			longRange_FuelDistance = longRange_FuelDistance_Default;
 
 			// range limit
 			enableGlobalRangeLimit = enableGlobalRangeLimit_Default;
 
 			// debug and cheats
-			this.enableDebugGizmosInGodmode = enableDebugGizmosInGodmode_Default;
-			this.enableDebugLogging = enableDebugLogging_Default;
-			this.enableDebugLoggingVerbose = enableDebugLoggingVerbose_Default;
+			enableDebugGizmosInGodmode = enableDebugGizmosInGodmode_Default;
+			enableDebugLogging = enableDebugLogging_Default;
+			enableDebugLoggingVerbose = enableDebugLoggingVerbose_Default;
 
-			this.RefreshStringBuffers();
+			RefreshStringBuffers();
 		}
 
 		public override void ExposeData()
 		{
 			// cooldown
-			Scribe_Values.Look(ref this.enableCooldown, "enableCooldown", enableCooldown_Default);
-			Scribe_Values.Look(ref this.enableCooldown_Console, "enableCooldown_Console", enableCooldown_Console_Default);
-			Scribe_Values.Look(ref this.enableCooldown_ApparelComp, "enableCooldown_ApparelComp", enableCooldown_ApparelComp_Default);
-			Scribe_Values.Look(ref this.enableCooldown_Platform, "enableCooldown_Platform", enableCooldown_Platform_Default);
-			Scribe_Values.Look(ref this.nameLinkable_CooldownDuration, "nameLinkable_CooldownDuration", nameLinkable_CooldownDuration_Default);
-			Scribe_Values.Look(ref this.shortRange_CooldownDuration, "shortRange_CooldownDuration", shortRange_CooldownDuration_Default);
-			Scribe_Values.Look(ref this.longRange_CooldownDuration, "longRange_CooldownDuration", longRange_CooldownDuration_Default);
-			Scribe_Values.Look(ref this.enableConsoleIntelectDivisor, "enableConsoleIntelectDivisor", enableConsoleIntelectDivisor_Default);
-			Scribe_Values.Look(ref this.consoleIntelectDivisor, "consoleIntelectDivisor", consoleIntelectDivisor_Default);
-			
-			// fuel
-			Scribe_Values.Look(ref this.enableFuel, "enableFuel", enableFuel_Default);
-			Scribe_Values.Look(ref this.enableApparelFuel, "enableApparelFuel", enableApparelFuel_Default);
-			Scribe_Values.Look(ref this.enablePlatformUnlinkFuelCost, "enablePlatformUnlinkFuelCost", enablePlatformUnlinkFuelCost_Default);
-			Scribe_Values.Look(ref this.shortRange_FuelCost, "shortRange_FuelCost", shortRange_FuelCost_Default);
-			Scribe_Values.Look(ref this.longRange_FuelCost, "longRange_FuelCost", longRange_FuelCost_Default);
-			Scribe_Values.Look(ref this.longRange_FuelDistance, "longRange_FuelDistance", longRange_FuelDistance_Default);
-			
-			// debug
-			Scribe_Values.Look(ref this.enableDebugGizmosInGodmode, "enableDebugGizmosInGodmode", enableDebugGizmosInGodmode_Default);
-			Scribe_Values.Look(ref this.enableDebugLogging, "enableDebugLogging", enableDebugLogging_Default);
-			Scribe_Values.Look(ref this.enableDebugLoggingVerbose, "enableDebugLoggingVerbose", enableDebugLoggingVerbose_Default);
+			Scribe_Values.Look(ref enableCooldown, "enableCooldown", enableCooldown_Default);
+			Scribe_Values.Look(ref enableCooldown_Console, "enableCooldown_Console", enableCooldown_Console_Default);
+			Scribe_Values.Look(ref enableCooldown_ApparelComp, "enableCooldown_ApparelComp", enableCooldown_ApparelComp_Default);
+			Scribe_Values.Look(ref enableCooldown_Platform, "enableCooldown_Platform", enableCooldown_Platform_Default);
+			Scribe_Values.Look(ref nameLinkable_CooldownDuration, "nameLinkable_CooldownDuration", nameLinkable_CooldownDuration_Default);
+			Scribe_Values.Look(ref shortRange_CooldownDuration, "shortRange_CooldownDuration", shortRange_CooldownDuration_Default);
+			Scribe_Values.Look(ref longRange_CooldownDuration, "longRange_CooldownDuration", longRange_CooldownDuration_Default);
+			Scribe_Values.Look(ref enableConsoleIntelectDivisor, "enableConsoleIntelectDivisor", enableConsoleIntelectDivisor_Default);
+			Scribe_Values.Look(ref consoleIntelectDivisor, "consoleIntelectDivisor", consoleIntelectDivisor_Default);
 
-			this.RefreshStringBuffers();
+			// fuel
+			Scribe_Values.Look(ref enableFuel, "enableFuel", enableFuel_Default);
+			Scribe_Values.Look(ref enableApparelFuel, "enableApparelFuel", enableApparelFuel_Default);
+			Scribe_Values.Look(ref enablePlatformUnlinkFuelCost, "enablePlatformUnlinkFuelCost", enablePlatformUnlinkFuelCost_Default);
+			Scribe_Values.Look(ref shortRange_FuelCost, "shortRange_FuelCost", shortRange_FuelCost_Default);
+			Scribe_Values.Look(ref longRange_FuelCost, "longRange_FuelCost", longRange_FuelCost_Default);
+			Scribe_Values.Look(ref longRange_FuelDistance, "longRange_FuelDistance", longRange_FuelDistance_Default);
+
+			// debug
+			Scribe_Values.Look(ref enableDebugGizmosInGodmode, "enableDebugGizmosInGodmode", enableDebugGizmosInGodmode_Default);
+			Scribe_Values.Look(ref enableDebugLogging, "enableDebugLogging", enableDebugLogging_Default);
+			Scribe_Values.Look(ref enableDebugLoggingVerbose, "enableDebugLoggingVerbose", enableDebugLoggingVerbose_Default);
+
+			RefreshStringBuffers();
 
 			base.ExposeData();
 		}
@@ -182,7 +182,7 @@ namespace alaestor_teleporting
 			TeleportingModSettings settings = TeleportingMod.settings;
 
 			Listing_Standard ls = new Listing_Standard();
-			ls.ColumnWidth = (float)(((double)inRect.width - 40.0) / 2.0);
+			ls.ColumnWidth = (float)((inRect.width - 40.0) / 2.0);
 			ls.Begin(inRect);
 			AddSettings_Cooldown_Options();
 			AddSettings_Fuel_Options();

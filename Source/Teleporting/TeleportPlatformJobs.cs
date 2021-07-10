@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
@@ -8,7 +7,7 @@ namespace alaestor_teleporting
 	public abstract class JobDriver_UseTeleportPlatform_Generic : JobDriver
 	{
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
-			=> this.pawn.Reserve(this.job.targetA, this.job, errorOnFailed: errorOnFailed);
+			=> pawn.Reserve(job.targetA, job, errorOnFailed: errorOnFailed);
 
 		/*
 		protected JobCondition IsToilDone()
@@ -36,12 +35,12 @@ namespace alaestor_teleporting
 		{
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportPlatform_TeleportToLink>(TargetIndex.A);
 			this.FailOnBurningImmobile<JobDriver_UseTeleportPlatform_TeleportToLink>(TargetIndex.A);
-			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn((Func<Toil, bool>)
-				(to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow));
+			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn(
+				to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow);
 
 			Toil useTeleporterToil = new Toil();
 			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Instant; //ToilCompleteMode.Never;
-			useTeleporterToil.initAction = (Action)(() =>
+			useTeleporterToil.initAction = () =>
 			{
 				Pawn actor = useTeleporterToil.actor;
 				Building_TeleportPlatform platform = (Building_TeleportPlatform)actor.jobs.curJob.GetTarget(TargetIndex.A).Thing;
@@ -50,7 +49,7 @@ namespace alaestor_teleporting
 
 				platform.TryStartTeleport(actor);
 				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportPlatform_TeleportToLink at ThindID " + platform.ThingID.ToString());
-			});
+			};
 			//useTeleporterToil.AddEndCondition(IsToilDone);
 			yield return useTeleporterToil;
 		}
@@ -62,12 +61,12 @@ namespace alaestor_teleporting
 		{
 			this.FailOnDespawnedOrNull<JobDriver_UseTeleportPlatform_MakeLink>(TargetIndex.A);
 			this.FailOnBurningImmobile<JobDriver_UseTeleportPlatform_MakeLink>(TargetIndex.A);
-			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn((Func<Toil, bool>)
-				(to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow));
+			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn(
+				to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow);
 
 			Toil useTeleporterToil = new Toil();
 			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Instant; //ToilCompleteMode.Never;
-			useTeleporterToil.initAction = (Action)(() =>
+			useTeleporterToil.initAction = () =>
 			{
 				Pawn actor = useTeleporterToil.actor;
 				Building_TeleportPlatform platform = (Building_TeleportPlatform)actor.jobs.curJob.GetTarget(TargetIndex.A).Thing;
@@ -76,7 +75,7 @@ namespace alaestor_teleporting
 
 				platform.MakeLink();
 				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportPlatform_Unlink at ThindID " + platform.ThingID.ToString());
-			});
+			};
 			//useTeleporterToil.AddEndCondition(IsToilDone);
 			yield return useTeleporterToil;
 		}

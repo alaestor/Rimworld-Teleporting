@@ -376,7 +376,7 @@ namespace alaestor_teleporting
 					);
 
 					if (ExecuteTeleport(pawn, pawn.Map, destination.Cell))
-					{ 
+					{
 						onSuccess_Callback?.Invoke(
 							new TeleportData(
 								cheat,
