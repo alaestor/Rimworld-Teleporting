@@ -20,12 +20,21 @@
 		<castEdgeShadows>false</castEdgeShadows>
 		<fillPercent>0.3</fillPercent>
 		<canOverlapZones>false</canOverlapZones>
-		<statBases><MaxHitPoints>250</MaxHitPoints><WorkToBuild>15000</WorkToBuild><Flammability>1.0</Flammability><Mass>150</Mass></statBases>
-		<building><destroySound>BuildingDestroyed_Metal_Big</destroySound></building>
+		<statBases>
+			<MarketValue>933</MarketValue>
+			<MaxHitPoints>250</MaxHitPoints>
+			<WorkToBuild>15000</WorkToBuild>
+			<Flammability>1.0</Flammability>
+			<Mass>150</Mass>
+		</statBases>
 		<costList>
-			<Steel>120</Steel>
+			<alaestor_teleporting_TeleportCartridge>1</alaestor_teleporting_TeleportCartridge>
+			<Plasteel>45</Plasteel>
 			<ComponentIndustrial>4</ComponentIndustrial>
 		</costList>
+		<researchPrerequisites><li>alaestor_teleporting_Research_tier_1_0</li></researchPrerequisites>
+		<constructionSkillPrerequisite>12</constructionSkillPrerequisite>
+		<building><destroySound>BuildingDestroyed_Metal_Big</destroySound></building>
 		<defaultPlacingRot>North</defaultPlacingRot>
 		<interactionCellOffset>(0,0,0)</interactionCellOffset>
 		<hasInteractionCell>true</hasInteractionCell>
@@ -60,10 +69,6 @@
 		</comps>
 		<designationHotKey>Misc3</designationHotKey>
 		<placeWorkers><li>PlaceWorker_PreventInteractionSpotOverlap</li></placeWorkers>
-		<!--researchPrerequisites>
-		<li>MicroelectronicsBasics</li>
-		</researchPrerequisites-->
-		<constructionSkillPrerequisite>15</constructionSkillPrerequisite>
 	</ThingDef>
 
 </Defs>
