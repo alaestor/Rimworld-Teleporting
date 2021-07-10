@@ -31,16 +31,14 @@
     <hasInteractionCell>true</hasInteractionCell>
     <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
     <designationCategory>Misc</designationCategory>
-	<tickerType>Rare</tickerType>
+	<tickerType>Normal</tickerType>
     <comps>
       <li Class="CompProperties_Power">
         <compClass>CompPowerTrader</compClass>
         <shortCircuitInRain>true</shortCircuitInRain>
         <basePowerConsumption>200</basePowerConsumption>
       </li>
-	  <!--
 	  <li Class="alaestor_teleporting.CompProperties_Cooldown"/>
-	  -->
 	  <li Class="CompProperties_Refuelable">
         <fuelConsumptionRate>0</fuelConsumptionRate>
         <fuelCapacity>1.0</fuelCapacity>
