@@ -8,21 +8,8 @@
 			<Mass>3</Mass>
 			<WorkToMake>14000</WorkToMake>
 			<Flammability>0.4</Flammability>
-			<EnergyShieldRechargeRate>0.13</EnergyShieldRechargeRate>
-			<EnergyShieldEnergyMax>1.1</EnergyShieldEnergyMax>
 			<EquipDelay>2</EquipDelay>
 		</statBases>
-		<!--recipeMaker>
-			<unfinishedThingDef>UnfinishedBelt</unfinishedThingDef>
-			<researchPrerequisite>ShieldBelt</researchPrerequisite>
-			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-			<workSkill>Crafting</workSkill>
-			<effectWorking>Smith</effectWorking>
-			<soundWorking>Recipe_Machining</soundWorking>
-			<recipeUsers><li>TableMachining</li></recipeUsers>
-			<useIngredientsForColor>false</useIngredientsForColor>
-			<skillRequirements><Crafting>6</Crafting></skillRequirements>
-		</recipeMaker-->
 		<thingCategories><li>ApparelUtility</li></thingCategories>
 		<apparel>
 			<careIfWornByCorpse>false</careIfWornByCorpse>
@@ -30,7 +17,6 @@
 			<wearPerDay>0</wearPerDay>
 			<bodyPartGroups><li>Waist</li></bodyPartGroups>
 			<layers><li>Belt</li></layers>
-			<!--tags><li>BeltDefense</li></tags-->
 		</apparel>
 	</ThingDef>
 	
