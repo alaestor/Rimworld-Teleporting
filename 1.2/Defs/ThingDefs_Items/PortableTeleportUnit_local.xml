@@ -17,7 +17,7 @@
 			<Mass>0.2</Mass>
 			<DeteriorationRate>2.0</DeteriorationRate>
 			<Flammability>0.2</Flammability>
-			<MarketValue>1300</MarketValue>
+			<MarketValue>432</MarketValue>
 		</statBases>
 		<useHitPoints>true</useHitPoints>
 		<techLevel>Ultra</techLevel>
