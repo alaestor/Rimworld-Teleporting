@@ -39,19 +39,24 @@
 		<fillPercent>0.5</fillPercent>
 		<canOverlapZones>false</canOverlapZones>
 		<statBases>
+			<MarketValue>533</MarketValue>
 			<MaxHitPoints>250</MaxHitPoints>
 			<WorkToBuild>15000</WorkToBuild>
 			<Flammability>1.0</Flammability>
 			<Mass>150</Mass>
 		</statBases>
+		<costList>
+			<Uranium>20</Uranium>
+			<Plasteel>15</Plasteel>
+			<Steel>75</Steel>
+			<ComponentIndustrial>4</ComponentIndustrial>
+		</costList>
+		<researchPrerequisites><li>alaestor_teleporting_Research_tier_1_0</li></researchPrerequisites>
+		<constructionSkillPrerequisite>15</constructionSkillPrerequisite>
 		<building>
 			<destroySound>BuildingDestroyed_Metal_Big</destroySound>
 			<unpoweredWorkTableWorkSpeedFactor>0.0</unpoweredWorkTableWorkSpeedFactor>
 		</building>
-		<costList>
-			<Steel>120</Steel>
-			<ComponentIndustrial>4</ComponentIndustrial>
-		</costList>
 		<defaultPlacingRot>North</defaultPlacingRot>
 		<interactionCellOffset>(0,0,-1)</interactionCellOffset>
 		<hasInteractionCell>true</hasInteractionCell>
@@ -79,8 +84,6 @@
 		</comps>
 		<designationHotKey>Misc3</designationHotKey>
 		<placeWorkers><li>PlaceWorker_PreventInteractionSpotOverlap</li></placeWorkers>
-		<researchPrerequisites><li>alaestor_teleporting_Research_tier_1_0</li></researchPrerequisites>
-		<constructionSkillPrerequisite>15</constructionSkillPrerequisite>
 	</ThingDef>
 
 </Defs>
