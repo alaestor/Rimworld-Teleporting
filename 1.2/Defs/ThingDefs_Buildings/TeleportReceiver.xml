@@ -33,20 +33,10 @@
     <designationCategory>Misc</designationCategory>
 	<tickerType>Rare</tickerType>
     <comps>
-      <li Class="CompProperties_Power">
-        <compClass>CompPowerTrader</compClass>
-        <shortCircuitInRain>true</shortCircuitInRain>
-        <basePowerConsumption>200</basePowerConsumption>
-      </li>
-	  <!--
-	  <li Class="alaestor_teleporting.CompProperties_Cooldown"/>
-	  -->
 	  <li Class="alaestor_teleporting.CompProperties_NameLinkable">
 		<canBeNamed>true</canBeNamed>
 		<canBeLinked>false</canBeLinked>
 	  </li>
-	  <li Class="CompProperties_Flickable"/>
-      <li Class="CompProperties_Breakdownable"/>
     </comps>
     <designationHotKey>Misc3</designationHotKey>
     <placeWorkers><li>PlaceWorker_PreventInteractionSpotOverlap</li></placeWorkers>
