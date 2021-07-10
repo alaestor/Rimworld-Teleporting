@@ -69,9 +69,7 @@
 		</comps>
 		<designationHotKey>Misc3</designationHotKey>
 		<placeWorkers><li>PlaceWorker_PreventInteractionSpotOverlap</li></placeWorkers>
-		<!--researchPrerequisites>
-		<li>MicroelectronicsBasics</li>
-		</researchPrerequisites-->
+		<researchPrerequisites><li>alaestor_teleporting_Research_tier_1_0</li></researchPrerequisites>
 		<constructionSkillPrerequisite>15</constructionSkillPrerequisite>
 	</ThingDef>
 
