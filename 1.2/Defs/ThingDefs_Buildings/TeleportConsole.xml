@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
 	<ThingDef ParentName="BuildingBase">
@@ -36,7 +36,12 @@
 		<castEdgeShadows>true</castEdgeShadows>
 		<fillPercent>0.5</fillPercent>
 		<canOverlapZones>false</canOverlapZones>
-		<statBases><MaxHitPoints>250</MaxHitPoints><WorkToBuild>15000</WorkToBuild><Flammability>1.0</Flammability><Mass>150</Mass></statBases>
+		<statBases>
+			<MaxHitPoints>250</MaxHitPoints>
+			<WorkToBuild>15000</WorkToBuild>
+			<Flammability>1.0</Flammability>
+			<Mass>150</Mass>
+		</statBases>
 		<building>
 			<destroySound>BuildingDestroyed_Metal_Big</destroySound>
 			<unpoweredWorkTableWorkSpeedFactor>0.0</unpoweredWorkTableWorkSpeedFactor>
