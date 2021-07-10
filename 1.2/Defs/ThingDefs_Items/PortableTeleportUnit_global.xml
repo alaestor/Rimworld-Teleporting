@@ -39,4 +39,21 @@
 		<thingSetMakerTags><li>RewardStandardHighFreq</li></thingSetMakerTags>
 	</ThingDef>
   
+	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
+		<defName>alaestor_teleporting_recipe_PortableTeleportUnit_Global</defName>
+		<label>Portable Teleport Unit (LR)</label>
+		<description>Make a long range PTU.</description>
+		<jobString>Making a long range PTU</jobString>
+		<products><alaestor_teleporting_PortableTeleportUnit_Global>1</alaestor_teleporting_PortableTeleportUnit_Global></products>
+		<ingredients>
+			<li><filter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></filter><count>1</count></li>
+			<li><filter><thingDefs><li>ComponentSpacer</li></thingDefs></filter><count>1</count></li>
+		</ingredients>
+		<researchPrerequisite>alaestor_teleporting_Research_tier_2_0</researchPrerequisite>
+		<skillRequirements>
+			<Crafting>15</Crafting>
+			<Intellectual>10</Intellectual>
+		</skillRequirements>
+	</RecipeDef>
+  
 </Defs>
