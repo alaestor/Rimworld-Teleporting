@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
 	<ThingDef ParentName="BuildingBase">
@@ -20,6 +20,7 @@
 			<li>alaestor_teleporting_recipe_TeleportBelt_Link</li>
 			<li>alaestor_teleporting_recipe_Apparel_TeleportBelt_Local</li>
 			<li>alaestor_teleporting_recipe_Apparel_TeleportBelt_Global</li>
+			<li>alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced</li>
 		</recipes>
 
 		<graphicData>
