@@ -6,11 +6,7 @@
 		<label>teleport belt (linkable)</label>
 		<description>Placeholder</description>
 		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
-		<costList>
-			<ComponentIndustrial>2</ComponentIndustrial>
-			<Steel>50</Steel>
-			<Plasteel>20</Plasteel>
-		</costList>
+		<statBases><MarketValue>509</MarketValue></statBases>
 		<comps>
 			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
 			<li Class="alaestor_teleporting.CompProperties_NameLinkable">
@@ -29,5 +25,23 @@
 			</li>
 		</comps>
 	</ThingDef>
+	
+	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
+		<defName>alaestor_teleporting_recipe_TeleportBelt_Link</defName>
+		<label>Teleport Belt (Linkable)</label>
+		<description>Make a linkable teleport belt.</description>
+		<jobString>Making a linkable teleport belt</jobString>
+		<products><alaestor_teleporting_Apparel_TeleportBelt_Link>1</alaestor_teleporting_Apparel_TeleportBelt_Link></products>
+		<ingredients>
+			<li><filter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></filter><count>1</count></li>
+			<li><filter><thingDefs><li>ComponentIndustrial</li></thingDefs></filter><count>2</count></li>
+			<li><filter><thingDefs><li>Plasteel</li></thingDefs></filter><count>5</count></li>
+		</ingredients>
+		<researchPrerequisite>alaestor_teleporting_Research_tier_1_0</researchPrerequisite>
+		<skillRequirements>
+			<Crafting>15</Crafting>
+			<Intellectual>10</Intellectual>
+		</skillRequirements>
+	</RecipeDef>
 
 </Defs>
