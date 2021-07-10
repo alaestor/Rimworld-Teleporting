@@ -7,7 +7,7 @@
 		<description>Placeholder</description>
 		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
 		<statBases>
-			<MarketValue>1002</MarketValue>
+			<MarketValue>934</MarketValue>
 		</statBases>
 		<comps>
 			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
@@ -31,7 +31,8 @@
 		<ingredients>
 			<li><filter><thingDefs><li>alaestor_teleporting_PortableTeleportUnit_Local</li></thingDefs></filter><count>1</count></li>
 			<li><filter><thingDefs><li>Plasteel</li></thingDefs></filter><count>30</count></li>
-			<li><filter><thingDefs><li>Silver</li></thingDefs></filter><count>30</count></li>
+			<li><filter><thingDefs><li>Silver</li></thingDefs></filter><count>20</count></li>
+			<li><filter><thingDefs><li>ComponentIndustrial</li></thingDefs></filter><count>1</count></li>
 		</ingredients>
 		<researchPrerequisite>alaestor_teleporting_Research_tier_3_0</researchPrerequisite>
 		<skillRequirements>
