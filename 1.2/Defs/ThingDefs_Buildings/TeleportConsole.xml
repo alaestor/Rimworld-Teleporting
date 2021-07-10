@@ -15,6 +15,7 @@
 
 		<recipes>
 			<li>alaestor_teleporting_recipe_TeleportCartridge</li>
+			<li>alaestor_teleporting_recipe_PortableTeleportUnit_Local</li>
 			<li>alaestor_teleporting_recipe_TeleportBelt_Link</li>
 		</recipes>
 
