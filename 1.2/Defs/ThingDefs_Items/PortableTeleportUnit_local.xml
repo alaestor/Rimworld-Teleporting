@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<ThingDef ParentName="ResourceBase">
+		<defName>alaestor_teleporting_PortableTeleportUnit_Local</defName>
+		<label>Portable Teleport Unit (SR)</label>
+		<description>A portable short-range teleport unit</description>
+		<thingClass>ThingWithComps</thingClass>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<graphicData>
+			<texPath>Things/Item/Special/MechSerumHealer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<Mass>0.2</Mass>
+			<DeteriorationRate>2.0</DeteriorationRate>
+			<Flammability>0.2</Flammability>
+			<MarketValue>1300</MarketValue>
+		</statBases>
+		<useHitPoints>true</useHitPoints>
+		<techLevel>Ultra</techLevel>
+		<thingCategories><li>Items</li></thingCategories>
+		<tradeability>Sellable</tradeability>
+		<comps>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>MechSerumUsed</soundOnUsed>
+			</li>
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Short range teleport</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="CompProperties_UseEffect">
+				<compClass>alaestor_teleporting.CompUseEffect_Teleport_Local</compClass>
+			</li>
+		</comps>
+		<thingSetMakerTags><li>RewardStandardHighFreq</li></thingSetMakerTags>
+	</ThingDef>
+  
+</Defs>
