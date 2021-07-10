@@ -61,28 +61,5 @@
 			</li>
 		</comps>
 	</ThingDef>
-
-	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
-		<defName>alaestor_teleporting_Apparel_TeleportBelt_Local</defName>
-		<label>teleport belt (SR)</label>
-		<description>Placeholder</description>
-		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
-		<costList>
-			<ComponentIndustrial>2</ComponentIndustrial>
-			<Steel>50</Steel>
-			<Plasteel>20</Plasteel>
-		</costList>
-		<comps>
-			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
-			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
-				<shortRange>true</shortRange>
-				<longRange>false</longRange>
-				<useNameLinkable>false</useNameLinkable>
-				<useCooldown>true</useCooldown>
-				<canTeleportOthers>false</canTeleportOthers>
-				<limitedUses>4</limitedUses>
-			</li>
-		</comps>
-	</ThingDef>
 	
 </Defs>
