@@ -3,7 +3,7 @@
 
 	<!-- Defs/WorkGiverDef/WorkGiverDefs.xml -->
 	<alaestor_teleporting_DoBillsTeleportConsole.label>make things at the teleport console</alaestor_teleporting_DoBillsTeleportConsole.label>
-	<alaestor_teleporting_DoBillsTeleportConsole.verb>work</alaestor_teleporting_DoBillsTeleportConsole.description>
-	<alaestor_teleporting_DoBillsTeleportConsole.gerund>working at</alaestor_teleporting_DoBillsTeleportConsole.description>
+	<alaestor_teleporting_DoBillsTeleportConsole.verb>work</alaestor_teleporting_DoBillsTeleportConsole.verb>
+	<alaestor_teleporting_DoBillsTeleportConsole.gerund>working at</alaestor_teleporting_DoBillsTeleportConsole.gerund>
 
 </LanguageData>
