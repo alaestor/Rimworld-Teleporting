@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -17,12 +17,6 @@ namespace alaestor_teleporting
 		private bool UseCooldown => TeleportingMod.settings.enableCooldown && TeleportingMod.settings.enableCooldown_Platform;
 		private bool HasRefuelableComp => refuelableComp != null;
 		private bool UseFuel => TeleportingMod.settings.enableFuel && TeleportingMod.settings.enablePlatformUnlinkFuelCost;
-
-		public override void ExposeData()
-		{
-			base.ExposeData();
-			//Scribe_Values.Look<bool>(ref this.hasStartedTargetting, "hasStartedTargetting", false);
-		}
 
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
@@ -242,7 +236,6 @@ namespace alaestor_teleporting
 					}
 				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
 				);
-
 			}
 		}
 	}
