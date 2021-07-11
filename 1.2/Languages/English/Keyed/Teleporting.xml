@@ -33,7 +33,7 @@
 	<Teleporting_CompNameLinkable_Unnamed>(unnamed)</Teleporting_CompNameLinkable_Unnamed>
 	<Teleporting_CompNameLinkable_Unlinked>(unlinked)</Teleporting_CompNameLinkable_Unlinked>
 	<Teleporting_CompNameLinkable_NameIsInUse>Name is already in use</Teleporting_CompNameLinkable_NameIsInUse>
-	<Teleporting_CompNameLinkable_CouldntFindName_FMT>Couldn't find {0}</Teleporting_CompNameLinkable_CouldntFindName_FMT>
+	<Teleporting_CompNameLinkable_CouldntFindName_FMT>Couldn't find "{0}"</Teleporting_CompNameLinkable_CouldntFindName_FMT>
 	<Teleporting_CompNameLinkable_Inspect_IsNamed_FMT>Name: "{0}"</Teleporting_CompNameLinkable_Inspect_IsNamed_FMT>
 	<Teleporting_CompNameLinkable_Inspect_IsNotNamed>Not Named.</Teleporting_CompNameLinkable_Inspect_IsNotNamed>
 	<Teleporting_CompNameLinkable_Inspect_IsLinked_FMT>Linked to: "{0}"</Teleporting_CompNameLinkable_Inspect_IsLinked_FMT>
