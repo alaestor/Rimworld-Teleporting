@@ -3,8 +3,8 @@
 
 	<ThingDef ParentName="ResourceBase">
 		<defName>alaestor_teleporting_PortableTeleportUnit_Local</defName>
-		<label>Portable Teleport Unit (SR)</label>
-		<description>A portable short-range teleport unit</description>
+		<label>> portable teleport unit (SR)</label>
+		<description>> A portable short-range teleport unit</description>
 		<thingClass>ThingWithComps</thingClass>
 		<resourceReadoutPriority>Middle</resourceReadoutPriority>
 		<graphicData>
@@ -41,9 +41,9 @@
 	
 	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
 		<defName>alaestor_teleporting_recipe_PortableTeleportUnit_Local</defName>
-		<label>Portable Teleport Unit (SR)</label>
-		<description>Make a short range PTU.</description>
-		<jobString>Making a short range PTU</jobString>
+		<label>> Portable Teleport Unit (SR)</label>
+		<description>> Make a short range PTU</description>
+		<jobString>> Making a short range PTU</jobString>
 		<products><alaestor_teleporting_PortableTeleportUnit_Local>1</alaestor_teleporting_PortableTeleportUnit_Local></products>
 		<ingredients>
 			<li><filter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></filter><count>1</count></li>

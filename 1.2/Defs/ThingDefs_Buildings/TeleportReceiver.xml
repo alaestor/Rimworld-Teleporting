@@ -3,8 +3,8 @@
 
 	<ThingDef ParentName="BuildingBase">
 		<defName>alaestor_teleporting_TeleportReceiver</defName>
-		<label>Teleport Receiver</label>
-		<description>Placeholder text</description>
+		<label>> Teleport Receiver</label>
+		<description>> A platform capable of being targetted by static spatial conduits. It can't create conduits, so it can only receive and not send.</description>
 		<thingClass>alaestor_teleporting.Building_TeleportPlatform</thingClass>
 		<graphicData>
 			<texPath>Things/Building/TeleportReceiver/TeleportReceiver</texPath>

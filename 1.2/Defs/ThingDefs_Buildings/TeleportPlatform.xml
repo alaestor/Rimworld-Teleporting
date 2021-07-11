@@ -3,8 +3,8 @@
 
 	<ThingDef ParentName="BuildingBase">
 		<defName>alaestor_teleporting_TeleportPlatform</defName>
-		<label>Teleport Platform</label>
-		<description>Placeholder text</description>
+		<label>> Teleport Platform</label>
+		<description>> A platform capable of opening static spatial conduits for teleportation</description>
 		<thingClass>alaestor_teleporting.Building_TeleportPlatform</thingClass>
 		<graphicData>
 			<texPath>Things/Building/TeleportPlatform/TeleportPlatform</texPath>

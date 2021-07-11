@@ -10,8 +10,8 @@
 
 	<ResearchProjectDef ParentName="alaestor_teleporting_ResearchProjectBase">
 		<defName>alaestor_teleporting_Research_tier_1_0</defName>
-		<label>Static Spatial Conduits</label>
-		<description>placeholder</description>
+		<label>> Static Spatial Conduits</label>
+		<description>> Manipulation of static interdimensional conduits through space-time.</description>
 		<baseCost>4000</baseCost>
 		<prerequisites><li>AdvancedFabrication</li></prerequisites>
 		<researchViewX>1.00</researchViewX>
@@ -20,8 +20,8 @@
 
   <ResearchProjectDef ParentName="alaestor_teleporting_ResearchProjectBase">
 		<defName>alaestor_teleporting_Research_tier_2_0</defName>
-		<label>Dynamic Spatial Conduits</label>
-		<description>placeholder</description>
+		<label>> Dynamic Spatial Conduits</label>
+		<description>> Manipulation of dynamic interdimensional conduits through space-time.</description>
 		<baseCost>4000</baseCost>
 		<prerequisites><li>alaestor_teleporting_Research_tier_1_0</li></prerequisites>
 		<researchViewX>2.00</researchViewX>
@@ -30,8 +30,8 @@
 	
 	<ResearchProjectDef ParentName="alaestor_teleporting_ResearchProjectBase">
 		<defName>alaestor_teleporting_Research_tier_3_0</defName>
-		<label>Spatial Folding</label>
-		<description>placeholder</description>
+		<label>> Spatial Folding</label>
+		<description>> Fractal manipulation of space-time pockets.</description>
 		<baseCost>4000</baseCost>
 		<prerequisites><li>alaestor_teleporting_Research_tier_2_0</li></prerequisites>
 		<researchViewX>3.00</researchViewX>
@@ -40,8 +40,8 @@
 	
 	<ResearchProjectDef ParentName="alaestor_teleporting_ResearchProjectBase">
 		<defName>alaestor_teleporting_Research_tier_4_0</defName>
-		<label>Mastery of Teleportation</label>
-		<description>placeholder</description>
+		<label>> Mastery of Teleportation</label>
+		<description>> Mastery of manipulating space-time. Unlocks the ability for colonists to use the teleport console for site-to-site transports.</description>
 		<baseCost>4000</baseCost>
 		<prerequisites><li>alaestor_teleporting_Research_tier_3_0</li></prerequisites>
 		<researchViewX>4.00</researchViewX>

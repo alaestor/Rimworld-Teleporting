@@ -3,7 +3,7 @@
 
 	<ResearchTabDef>
 		<defName>alaestor_teleporting_researchtab</defName>
-		<label>Teleporting</label>
+		<label>> Teleporting</label>
 	</ResearchTabDef>
 
 </Defs>

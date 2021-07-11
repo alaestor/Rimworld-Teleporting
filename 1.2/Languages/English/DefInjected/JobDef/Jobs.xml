@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+	<!-- Defs/JobDefs/Jobs_Teleporter.xml -->
+	<UseTeleportConsole_ShortRange.reportString>Teleporting short-range via console.</UseTeleportConsole_ShortRange.reportString>
+	<UseTeleportConsole_LongRange.reportString>Teleporting long-range via console.</UseTeleportConsole_LongRange.reportString>
+	<UseTeleportPlatform_TeleportToLink.reportString>Teleporting via platform.</UseTeleportPlatform_TeleportToLink.reportString>
+	<UseTeleportPlatform_MakeLink.reportString>Linking teleport platform.</UseTeleportPlatform_MakeLink.reportString>
+
+</LanguageData>

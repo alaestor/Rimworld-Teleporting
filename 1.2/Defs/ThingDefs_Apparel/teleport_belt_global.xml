@@ -3,8 +3,8 @@
 	
 	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
 		<defName>alaestor_teleporting_Apparel_TeleportBelt_Global</defName>
-		<label>teleport belt (LR)</label>
-		<description>Placeholder</description>
+		<label>> teleport belt (LR)</label>
+		<description>> A personal teleportation belt, capable of long-range teleports</description>
 		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
 		<statBases>
 			<MarketValue>1270</MarketValue>
@@ -24,9 +24,9 @@
 	
 	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
 		<defName>alaestor_teleporting_recipe_Apparel_TeleportBelt_Global</defName>
-		<label>Teleport Belt (LR)</label>
-		<description>Make a long range teleport belt.</description>
-		<jobString>Making a teleport belt (LR)</jobString>
+		<label>> Teleport Belt (LR)</label>
+		<description>> Make a long range teleport belt</description>
+		<jobString>> Making a teleport belt (LR)</jobString>
 		<products><alaestor_teleporting_Apparel_TeleportBelt_Global>1</alaestor_teleporting_Apparel_TeleportBelt_Global></products>
 		<ingredients>
 			<li><filter><thingDefs><li>alaestor_teleporting_PortableTeleportUnit_Global</li></thingDefs></filter><count>1</count></li>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+	<!-- Defs/ResearchProjectDefs/teleporting_ResearchProjects.xml -->
+	<alaestor_teleporting_Research_tier_1_0.label>Static Spatial Conduits</alaestor_teleporting_Research_tier_1_0.label>
+	<alaestor_teleporting_Research_tier_1_0.description>Manipulation of static interdimensional conduits through space-time.</alaestor_teleporting_Research_tier_1_0.description>
+	<alaestor_teleporting_Research_tier_2_0.label>Dynamic Spatial Conduits</alaestor_teleporting_Research_tier_2_0.label>
+	<alaestor_teleporting_Research_tier_2_0.description>Manipulation of dynamic interdimensional conduits through space-time.</alaestor_teleporting_Research_tier_2_0.description>
+	<alaestor_teleporting_Research_tier_3_0.label>Spatial Folding</alaestor_teleporting_Research_tier_3_0.label>
+	<alaestor_teleporting_Research_tier_3_0.description>Fractal manipulation of space-time pockets.</alaestor_teleporting_Research_tier_3_0.description>
+	<alaestor_teleporting_Research_tier_4_0.label>Mastery of Teleportation</alaestor_teleporting_Research_tier_4_0.label>
+	<alaestor_teleporting_Research_tier_4_0.description>Mastery of manipulating space-time. Unlocks the ability for colonists to use the teleport console for site-to-site transports.</alaestor_teleporting_Research_tier_4_0.description>
+
+</LanguageData>
