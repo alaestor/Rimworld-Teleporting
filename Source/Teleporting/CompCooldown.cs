@@ -102,7 +102,7 @@ namespace alaestor_teleporting
 		{
 			if (IsOnCooldown)
 			{
-				return "IsOnCooldown_Label".Translate() + ": " + (SecondsRemaining).ToString() + " seconds remaining";
+				return string.Format("Teleporting_CooldownComp_Inspect_OnCooldown_FMT".Translate(), SecondsRemaining.ToString());
 			}
 			else return "";
 		}

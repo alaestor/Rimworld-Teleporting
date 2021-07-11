@@ -60,7 +60,7 @@ namespace alaestor_teleporting
 
 		public string Name
 		{
-			get => name ?? "(unnamed)";
+			get => name ?? "Teleporting_CompNameLinkable_Unnamed".Translate();
 			set
 			{
 				if (CanBeNamed)
@@ -98,7 +98,7 @@ namespace alaestor_teleporting
 					{
 						return true;
 					}
-					else return "NameIsInUse".Translate();
+					else return "Teleporting_CompNameLinkable_NameIsInUse".Translate();
 				}
 
 				Find.WindowStack.Add(new Dialog_NameInputWindow(name ?? "", Rename_Validator, Rename_Callback));
@@ -124,7 +124,7 @@ namespace alaestor_teleporting
 		public bool HasValidLinkedThing => linkedName != null && NameLinkableManager.IsLinkedThingValid(linkedName);
 		public bool HasInvalidLinkedThing => !HasValidLinkedThing;
 
-		public string GetNameOfLinkedLinkedThing => linkedName ?? "(unlinked)";
+		public string GetNameOfLinkedLinkedThing => linkedName ?? "Teleporting_CompNameLinkable_Unlinked".Translate();
 
 		public void LinkTo(string linkableName)
 		{
@@ -181,13 +181,13 @@ namespace alaestor_teleporting
 			if (CanBeLinked)
 			{
 				Logger.DebugVerbose("CompNameLinkable::BeginMakeLink: called");
-				AcceptanceReport MakeLink_Validator(string newName)
+				AcceptanceReport MakeLink_Validator(string linkableName)
 				{
-					if (NameLinkableManager.IsLinkedThingValid(newName))
+					if (NameLinkableManager.IsLinkedThingValid(linkableName))
 					{
 						return true;
 					}
-					else return "Couldn't find " + newName; // TODO format and translate
+					else return string.Format("Teleporting_CompNameLinkable_CouldntFindName_FMT".Translate(), linkableName);
 				}
 
 				Find.WindowStack.Add(new Dialog_NameInputWindow("", MakeLink_Validator, MakeLink_Callback));
@@ -204,6 +204,7 @@ namespace alaestor_teleporting
 		// OBJECT stuff
 		//
 
+		// TODO either use or delete this
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
@@ -237,11 +238,11 @@ namespace alaestor_teleporting
 			{
 				if (IsNamed)
 				{
-					s += "Name: \"" + Name + "\"";
+					s += string.Format("Teleporting_CompNameLinkable_Inspect_IsNamed_FMT".Translate(), Name); 
 				}
 				else
 				{
-					s += "Not named.";
+					s += "Teleporting_CompNameLinkable_Inspect_IsNotNamed".Translate();
 				}
 			}
 
@@ -252,9 +253,9 @@ namespace alaestor_teleporting
 
 				if (HasValidLinkedThing)
 				{
-					s += "Linked to: \"" + linkedName + "\"";
+					s += string.Format("Teleporting_CompNameLinkable_Inspect_IsLinked_FMT".Translate(), linkedName);
 				}
-				else s += "CompNameLinkable_NotLinked".Translate();
+				else s += "Teleporting_CompNameLinkable_Inspect_IsNotLinked".Translate();
 			}
 
 			return s;
@@ -277,12 +278,13 @@ namespace alaestor_teleporting
 			}
 			else if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				//?
+				//? TODO either use or delete this
 			}
 		}
 
 		public override void Initialize(CompProperties props)
 		{
+			// TODO use or delete this
 			base.Initialize(props);
 		}
 

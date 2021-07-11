@@ -181,7 +181,7 @@ namespace alaestor_teleporting
 						if (label.Length != 0)
 							label += "\n";
 
-						label += "TeleportBehavior_Global_OutofRange".Translate();
+						label += "Teleporting_TeleportBehavior_Global_OutofRange".Translate();
 					}
 					else if (fuelDistanceMatters && choosingDestination)
 					{
@@ -191,10 +191,10 @@ namespace alaestor_teleporting
 							if (label.Length != 0)
 								label += "\n";
 
-							label += String.Format("Cost: {0} of {1}", fuelCost, availableFuel); // TODO translate
+							label += String.Format("Teleporting_TeleportBehavior_Global_FuelCost_FMT".Translate(), fuelCost, availableFuel);
 							if (availableFuel < fuelCost)
 							{
-								label += "\n" + "TeleportBehavior_Global_NotEnoughFuel".Translate();
+								label += "\n" + "Teleporting_TeleportBehavior_Global_NotEnoughFuel".Translate();
 							}
 						}
 					}
@@ -425,7 +425,7 @@ namespace alaestor_teleporting
 						if (label.Length != 0)
 							label += "\n";
 
-						label += "TeleportBehavior_Global_OutofRange".Translate();
+						label += "Teleporting_TeleportBehavior_Global_OutofRange".Translate();
 					}
 					else if (fuelDistanceMatters)
 					{
@@ -435,10 +435,10 @@ namespace alaestor_teleporting
 							if (label.Length != 0)
 								label += "\n";
 
-							label += String.Format("Cost: {0} of {1}", fuelCost, availableFuel); // TODO translate
+							label += String.Format("Teleporting_TeleportBehavior_Global_FuelCost_FMT".Translate(), fuelCost, availableFuel);
 							if (availableFuel < fuelCost)
 							{
-								label += "\n" + "TeleportBehavior_Global_NotEnoughFuel".Translate();
+								label += "\n" + "Teleporting_TeleportBehavior_Global_NotEnoughFuel".Translate();
 							}
 						}
 					}

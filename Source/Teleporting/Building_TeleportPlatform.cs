@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -165,11 +165,11 @@ namespace alaestor_teleporting
 				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving))
 					return new FloatMenuOption("CannotUseReason".Translate("IncapableOfCapacity".Translate(PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), null);
 				else if (UseCooldown && HasCooldownComp && cooldownComp.IsOnCooldown)
-					return new FloatMenuOption(string.Format("On cooldown for {0} more second(s)", cooldownComp.SecondsRemaining), null); // TODO translate
+					return new FloatMenuOption(string.Format("Teleporting_TeleportPlatform_OnCooldown_FMT".Translate(), cooldownComp.SecondsRemaining), null);
 				else if (UseFuel && HasRefuelableComp && !HasEnoughFuel)
-					return new FloatMenuOption("out of fuel".Translate(), null); // TODO translate
+					return new FloatMenuOption("Teleporting_TeleportPlatform_NotEnoughFuel".Translate(), null);
 				else if (nameLinkableComp.IsLinkedToSomething && nameLinkableComp.HasInvalidLinkedThing)
-					return new FloatMenuOption("Link broken: cannot find target", null);
+					return new FloatMenuOption("Teleporting_TeleportPlatform_BrokenLink".Translate(), null);
 				else if (CanUseNow)
 					return null; // allow use
 				Logger.Warning(myPawn.ToString() + "Could not use teleport pad for unknown reason.");
@@ -183,7 +183,7 @@ namespace alaestor_teleporting
 			else if (nameLinkableComp.HasValidLinkedThing)
 			{
 
-				string use_Label = "UseTeleportPlatform_Label".Translate();
+				string use_Label = "Teleporting_TeleportPlatform_UseTeleportPlatform_Label".Translate();
 				Action use_Action = () =>
 				{
 					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_TeleportToLink, this);
@@ -195,7 +195,7 @@ namespace alaestor_teleporting
 			}
 			else if (!nameLinkableComp.IsLinkedToSomething && nameLinkableComp.CanBeLinked)
 			{
-				string makeLink_Label = "LinkTeleportPlatform_Label".Translate();
+				string makeLink_Label = "Teleporting_TeleportPlatform_LinkTeleportPlatform_Label".Translate();
 				Action makeLink_Action = () =>
 				{
 					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_MakeLink, this);

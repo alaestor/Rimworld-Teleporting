@@ -77,7 +77,7 @@ namespace alaestor_teleporting
 				else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving))
 					return new FloatMenuOption("CannotUseReason".Translate("IncapableOfCapacity".Translate(PawnCapacityDefOf.Moving.label, myPawn.Named("PAWN"))), null);
 				else if (TeleportingMod.settings.enableCooldown && cooldownComp != null && cooldownComp.IsOnCooldown)
-					return new FloatMenuOption("IsOnCooldown".Translate(), null);
+					return new FloatMenuOption("Teleporting_IsOnCooldown".Translate(), null);
 				else if (CanUseNow)
 					return null; // allow use
 				Logger.Warning(myPawn.ToString() + "Could not use teleport console for unknown reason.");
@@ -90,21 +90,20 @@ namespace alaestor_teleporting
 			}
 			else
 			{
-				string short_Label = "ShortRangeTeleport_Label".Translate();
+				string short_Label = "Teleporting_ShortRangeTeleport_Label".Translate();
 				Action short_Action = () =>
 				{
 					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_ShortRange, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
 				};
 
-				string long_Label = "LongRangeTeleport_Label".Translate();
+				string long_Label = "Teleporting_LongRangeTeleport_Label".Translate();
 				Action long_Action = () =>
 				{
 					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_LongRange, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
 				};
 
-				// TODO move these to failure reasons
 				if (UseFuel)
 				{
 					if (refuelableComp != null)
@@ -115,7 +114,7 @@ namespace alaestor_teleporting
 							{
 								yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(short_Label, short_Action, MenuOptionPriority.Default), myPawn, this);
 							}
-							else yield return new FloatMenuOption("shortRange_NotEnoughFuel".Translate(), null); // restring
+							else yield return new FloatMenuOption("Teleporting_shortRange_NotEnoughFuel".Translate(), null); // restring
 						}
 
 						if (HasResearchFor_Teleport_LongRange)
@@ -124,7 +123,7 @@ namespace alaestor_teleporting
 							{
 								yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(long_Label, long_Action, MenuOptionPriority.Default), myPawn, this);
 							}
-							else yield return new FloatMenuOption("longRange_NotEnoughFuel".Translate(), null); // restring
+							else yield return new FloatMenuOption("Teleporting_longRange_NotEnoughFuel".Translate(), null); // restring
 						}
 					}
 					else Logger.Error("Teleporting: fuel is enabled but refuelableComp is null", refuelableComp.ToString());

@@ -190,7 +190,7 @@ namespace alaestor_teleporting
 			ls.NewColumn();
 			AddSettings_DebugAndCheats_Options();
 			ls.Gap(100);
-			if (ls.ButtonTextLabeled("", "resetTheseSettings".Translate()))
+			if (ls.ButtonTextLabeled("", "Teleporting_resetTheseSettings".Translate()))
 			{
 				settings.ResetToDefaults();
 			}
@@ -201,21 +201,22 @@ namespace alaestor_teleporting
 			void AddSettings_Cooldown_Options()
 			{
 				ls.GapLine();
-				ls.CheckboxLabeled("enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "enableCooldown_tooltip".Translate()); // Note: there are 60 ticks in a second
+				ls.CheckboxLabeled("Teleporting_enableCooldown".Translate(), ref settings.enableCooldown, tooltip: "Teleporting_enableCooldown_tooltip".Translate()); // Note: there are 60 ticks in a second
 				if (settings.enableCooldown)
 				{
-					ls.CheckboxLabeled("enableCooldown_Console".Translate(), ref settings.enableCooldown_Console, tooltip: "enableCooldown_Console_tooltip".Translate());
-					ls.CheckboxLabeled("enableCooldown_ApparelComp".Translate(), ref settings.enableCooldown_ApparelComp, tooltip: "enableCooldown_ApparelComp_tooltip".Translate());
-					ls.CheckboxLabeled("enableCooldown_Platform".Translate(), ref settings.enableCooldown_Platform, tooltip: "enableCooldown_Platform_tooltip".Translate());
+					ls.CheckboxLabeled("Teleporting_enableCooldown_Console".Translate(), ref settings.enableCooldown_Console, tooltip: "Teleporting_enableCooldown_Console_tooltip".Translate());
+					ls.CheckboxLabeled("Teleporting_enableCooldown_ApparelComp".Translate(), ref settings.enableCooldown_ApparelComp, tooltip: "Teleporting_enableCooldown_ApparelComp_tooltip".Translate());
+					ls.CheckboxLabeled("Teleporting_enableCooldown_Platform".Translate(), ref settings.enableCooldown_Platform, tooltip: "Teleporting_enableCooldown_Platform_tooltip".Translate());
 					ls.Gap();
-					ls.TextFieldNumericLabeled<int>("nameLinkable_CooldownDuration ".Translate(), ref settings.nameLinkable_CooldownDuration, ref settings.nameLinkable_CooldownDuration_Buffer);
-					ls.TextFieldNumericLabeled<int>("shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
-					ls.TextFieldNumericLabeled<int>("longRange_CooldownDuration".Translate(), ref settings.longRange_CooldownDuration, ref settings.longRange_CooldownDuration_Buffer);
+					ls.Label("Teleporting_cooldownDurationsSection".Translate());
+					ls.TextFieldNumericLabeled<int>("Teleporting_nameLinkable_CooldownDuration".Translate(), ref settings.nameLinkable_CooldownDuration, ref settings.nameLinkable_CooldownDuration_Buffer);
+					ls.TextFieldNumericLabeled<int>("Teleporting_shortRange_CooldownDuration".Translate(), ref settings.shortRange_CooldownDuration, ref settings.shortRange_CooldownDuration_Buffer);
+					ls.TextFieldNumericLabeled<int>("Teleporting_longRange_CooldownDuration".Translate(), ref settings.longRange_CooldownDuration, ref settings.longRange_CooldownDuration_Buffer);
 					ls.Gap();
-					ls.CheckboxLabeled("enableConsoleIntelectDivisor".Translate(), ref settings.enableConsoleIntelectDivisor, tooltip: "consoleIntelectDivisor_tooltip".Translate());
+					ls.CheckboxLabeled("Teleporting_enableConsoleIntelectDivisor".Translate(), ref settings.enableConsoleIntelectDivisor, tooltip: "Teleporting_enableConsoleIntelectDivisor_tooltip".Translate());
 					if (settings.enableConsoleIntelectDivisor)
 					{
-						ls.TextFieldNumericLabeled<int>("consoleIntelectDivisor".Translate(), ref settings.consoleIntelectDivisor, ref settings.consoleIntelectDivisor_Buffer, min: 1, max: 100);
+						ls.TextFieldNumericLabeled<int>("Teleporting_consoleIntelectDivisor".Translate(), ref settings.consoleIntelectDivisor, ref settings.consoleIntelectDivisor_Buffer, min: 1, max: 100);
 						ls.Gap();
 					}
 				}
@@ -224,21 +225,21 @@ namespace alaestor_teleporting
 			void AddSettings_Fuel_Options()
 			{
 				ls.GapLine();
-				ls.CheckboxLabeled("enableFuel".Translate(), ref settings.enableFuel, tooltip: "enableFuel_tooltip".Translate());
+				ls.CheckboxLabeled("Teleporting_enableFuel".Translate(), ref settings.enableFuel, tooltip: "Teleporting_enableFuel_tooltip".Translate());
 				if (settings.enableFuel)
 				{
 					ls.Gap(10);
-					ls.CheckboxLabeled("enableApparelFuel".Translate(), ref settings.enableApparelFuel, tooltip: "enableApparelFuel_tooltip".Translate());
-					ls.CheckboxLabeled("enablePlatformUnlinkFuelCost".Translate(), ref settings.enablePlatformUnlinkFuelCost, tooltip: "enablePlatformUnlinkFuelCost_tooltip".Translate());
+					ls.CheckboxLabeled("Teleporting_enableApparelFuel".Translate(), ref settings.enableApparelFuel, tooltip: "Teleporting_enableApparelFuel_tooltip".Translate());
+					ls.CheckboxLabeled("Teleporting_enablePlatformUnlinkFuelCost".Translate(), ref settings.enablePlatformUnlinkFuelCost, tooltip: "Teleporting_enablePlatformUnlinkFuelCost_tooltip".Translate());
 					ls.Gap(10);
-					ls.TextFieldNumericLabeled<int>("shortRange_FuelCost".Translate(), ref settings.shortRange_FuelCost, ref settings.shortRange_FuelCost_Buffer);
-					ls.TextFieldNumericLabeled<int>("longRange_FuelCost".Translate(), ref settings.longRange_FuelCost, ref settings.longRange_FuelCost_Buffer);
-					ls.TextFieldNumericLabeled<int>("longRange_FuelDistance".Translate(), ref settings.longRange_FuelDistance, ref settings.longRange_FuelDistance_Buffer);
+					ls.TextFieldNumericLabeled<int>("Teleporting_shortRange_FuelCost".Translate(), ref settings.shortRange_FuelCost, ref settings.shortRange_FuelCost_Buffer);
+					ls.TextFieldNumericLabeled<int>("Teleporting_longRange_FuelCost".Translate(), ref settings.longRange_FuelCost, ref settings.longRange_FuelCost_Buffer);
+					ls.TextFieldNumericLabeled<int>("Teleporting_longRange_FuelDistance".Translate(), ref settings.longRange_FuelDistance, ref settings.longRange_FuelDistance_Buffer);
 					ls.LabelDouble(
 						leftLabel: (""),
 						rightLabel: settings.longRange_FuelDistance == 0 ?
-							String.Format("always consume {0} fuel"/*"longRange_FuelDistance_FixedMsg".Translate()*/, settings.longRange_FuelCost)
-							: String.Format("Consumes {0} cartridges\nfor every {1} tiles"/*"longRange_FuelDistance_ScalesMsg".Translate()*/, settings.longRange_FuelCost, settings.longRange_FuelDistance),
+							String.Format("teleporting_longRange_FuelDistance_FixedMsg_FMT".Translate(), settings.longRange_FuelCost)
+							: String.Format("teleporting_longRange_FuelDistance_ScalesMsg_FMT".Translate(), settings.longRange_FuelCost, settings.longRange_FuelDistance),
 						tip: null);
 					ls.Gap(10);
 				}
@@ -247,11 +248,11 @@ namespace alaestor_teleporting
 			void AddSettings_RangeLimit_Options()
 			{
 				ls.GapLine();
-				ls.CheckboxLabeled("enableGlobalRangeLimit".Translate(), ref settings.enableGlobalRangeLimit, tooltip: "enableGlobalRangeLimit_tooltip".Translate());
+				ls.CheckboxLabeled("Teleporting_enableGlobalRangeLimit".Translate(), ref settings.enableGlobalRangeLimit, tooltip: "Teleporting_enableGlobalRangeLimit_tooltip".Translate());
 				if (settings.enableFuel)
 				{
 					ls.Gap(10);
-					ls.TextFieldNumericLabeled<int>("globalRangeLimit".Translate(), ref settings.globalRangeLimit, ref settings.globalRangeLimit_Buffer);
+					ls.TextFieldNumericLabeled<int>("Teleporting_globalRangeLimit".Translate(), ref settings.globalRangeLimit, ref settings.globalRangeLimit_Buffer);
 					ls.Gap(10);
 				}
 			}
@@ -259,12 +260,12 @@ namespace alaestor_teleporting
 			void AddSettings_DebugAndCheats_Options()
 			{
 				ls.GapLine();
-				ls.CheckboxLabeled("enableDebugGizmosInGodmode".Translate(), ref settings.enableDebugGizmosInGodmode, tooltip: "enableDebugGizmosInGodmode_tooltip".Translate());
-				ls.CheckboxLabeled("enableDebugLogging".Translate(), ref settings.enableDebugLogging, tooltip: "enableDebugLogging_tooltip".Translate());
+				ls.CheckboxLabeled("Teleporting_enableDebugGizmosInGodmode".Translate(), ref settings.enableDebugGizmosInGodmode, tooltip: "Teleporting_enableDebugGizmosInGodmode_tooltip".Translate());
+				ls.CheckboxLabeled("Teleporting_enableDebugLogging".Translate(), ref settings.enableDebugLogging, tooltip: "Teleporting_enableDebugLogging_tooltip".Translate());
 				if (settings.enableDebugLogging)
 				{
-					ls.CheckboxLabeled("enableDebugLoggingVerbose".Translate(), ref settings.enableDebugLoggingVerbose, tooltip: "enableDebugLoggingVerbose_tooltip".Translate());
-					if (ls.ButtonTextLabeled("", "testDebugLogging".Translate()))
+					ls.CheckboxLabeled("Teleporting_enableDebugLoggingVerbose".Translate(), ref settings.enableDebugLoggingVerbose, tooltip: "Teleporting_enableDebugLoggingVerbose_tooltip".Translate());
+					if (ls.ButtonTextLabeled("", "Teleporting_testDebugLogging".Translate()))
 					{
 						Logger.TestLogger();
 					}

@@ -308,14 +308,18 @@ namespace alaestor_teleporting
 				{
 					isOnCooldown = true;
 					cooldownRemainingString = string.Format(
-						"On cooldown for {0} more second(s)", // TODO translated version
-						CooldownComp.SecondsRemaining);
+						"Teleporting_CompTeleportApparel_CooldownRemaining_FMT".Translate(),
+						CooldownComp.SecondsRemaining
+					);
 				}
 
 				string fuelRemainingDesc = null;
 				if (IsConsumable)
 				{
-					fuelRemainingDesc = string.Format("{0} fuel remaining", fuelRemaining);
+					fuelRemainingDesc = string.Format(
+						"Teleporting_CompTeleportApparel_FuelRemaining_FMT".Translate(),
+						fuelRemaining
+					);
 				}
 
 				// gizmos
@@ -416,7 +420,7 @@ namespace alaestor_teleporting
 					if (IsConsumable)
 					{
 						yield return GizmoHelper.MakeCommandAction(
-							"TeleportApparel_RefillFuel",
+							"TeleportApparel_FillFuel_Debug",
 							delegate
 							{
 								Logger.Debug("CompTeleportApparel: called godmode Gizmo: refill fuel");
