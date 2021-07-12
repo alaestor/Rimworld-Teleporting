@@ -5,7 +5,7 @@
 		<defName>alaestor_teleporting_Apparel_TeleportBelt_Advanced</defName>
 		<label>> teleport belt (Adv.)</label>
 		<description>> An advanced, targetting, teleportation belt capable of short-range and long-range teleports</description>
-		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<graphicData><texPath>Things/Apparel/alaestor_teleporting_belt_teleport_Adv</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
 		<statBases>
 			<MarketValue>1902</MarketValue>
 		</statBases>

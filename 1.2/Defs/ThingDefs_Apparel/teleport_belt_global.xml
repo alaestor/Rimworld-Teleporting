@@ -5,7 +5,7 @@
 		<defName>alaestor_teleporting_Apparel_TeleportBelt_Global</defName>
 		<label>> teleport belt (LR)</label>
 		<description>> A personal teleportation belt, capable of long-range teleports</description>
-		<graphicData><texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<graphicData><texPath>Things/Apparel/alaestor_teleporting_belt_teleport_LR</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
 		<statBases>
 			<MarketValue>1270</MarketValue>
 		</statBases>
