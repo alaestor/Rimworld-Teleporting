@@ -60,6 +60,7 @@
     <Compile Include="CompUseEffect_Teleport.cs" />
     <Compile Include="GizmoHelper.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="MsgHelper.cs" />
     <Compile Include="MyDefs.cs" />
     <Compile Include="NameLinkableManager.cs" />
     <Compile Include="TeleportPlatformJobs.cs" />
