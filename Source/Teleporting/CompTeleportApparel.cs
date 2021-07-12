@@ -333,6 +333,7 @@ namespace alaestor_teleporting
 							Logger.Debug("CompTeleportApparel: called Gizmo: Short Range Teleport");
 							StartTeleport_ShortRange();
 						},
+						icon: MyTextures.Gizmo_Teleport_ShortRange,
 						disabled: isOnCooldown,
 						disabledReason: cooldownRemainingString,
 						description: fuelRemainingDesc
@@ -348,6 +349,7 @@ namespace alaestor_teleporting
 							Logger.Debug("CompTeleportApparel: called Gizmo: Long Range Teleport");
 							StartTeleport_LongRange();
 						},
+						icon: MyTextures.Gizmo_Teleport_LongRange,
 						disabled: isOnCooldown,
 						disabledReason: cooldownRemainingString,
 						description: fuelRemainingDesc
@@ -370,6 +372,7 @@ namespace alaestor_teleporting
 										Logger.Debug("CompTeleportApparel: called Gizmo: Teleport to Link");
 										StartTeleport_LinkedThing();
 									},
+									icon: MyTextures.Gizmo_Teleport_Link,
 									disabled: isOnCooldown,
 									disabledReason: cooldownRemainingString
 								);
@@ -378,6 +381,7 @@ namespace alaestor_teleporting
 							{
 								yield return GizmoHelper.MakeCommandAction(
 									"TeleportApparel_TeleportToLink",
+									icon: MyTextures.Gizmo_Link_Broken,
 									disabled: true,
 									disabledReason: "Teleporting_CompNameLinkable_NotLinked".Translate()
 								);
@@ -392,6 +396,7 @@ namespace alaestor_teleporting
 									ConsumeFuel(1);
 									nameLinkable.Unlink();
 								},
+								icon: MyTextures.Gizmo_Unlink,
 								description: fuelRemainingDesc
 							);
 						}
@@ -403,7 +408,8 @@ namespace alaestor_teleporting
 								{
 									Logger.Debug("CompTeleportApparel: called Gizmo: Make Link");
 									nameLinkable.BeginMakeLinkName();
-								}
+								},
+								icon: MyTextures.Gizmo_Link_Make_Name
 							);
 
 							yield return GizmoHelper.MakeCommandAction(
@@ -412,7 +418,8 @@ namespace alaestor_teleporting
 								{
 									Logger.Debug("CompTeleportApparel: called Gizmo: Make Link");
 									nameLinkable.BeginMakeLinkTarget();
-								}
+								},
+								icon: MyTextures.Gizmo_Link_Make_Target
 							);
 						}
 					}

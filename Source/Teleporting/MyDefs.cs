@@ -28,6 +28,16 @@ namespace alaestor_teleporting
 		public static readonly Texture2D MouseAttachment_SelectDestination = ContentFinder<Texture2D>.Get("UI/Overlays/alaestor_teleporting_select_destination", true);
 		public static readonly Texture2D MouseAttachment_SelectPawn = ContentFinder<Texture2D>.Get("UI/Overlays/alaestor_teleporting_select_pawn", true);
 		public static readonly Texture2D MouseAttachment_SelectPlatform = ContentFinder<Texture2D>.Get("UI/Overlays/alaestor_teleporting_select_platform", true);
+		
+		public static readonly Texture2D Gizmo_Rename = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_rename", true);
+		public static readonly Texture2D Gizmo_Unlink = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_unlink", true);
+		public static readonly Texture2D Gizmo_Link = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_link", true);
+		public static readonly Texture2D Gizmo_Link_Broken = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_linkbroken", true);
+		public static readonly Texture2D Gizmo_Link_Make_Target = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_link_target", true);
+		public static readonly Texture2D Gizmo_Link_Make_Name = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_link_name", true);
+		public static readonly Texture2D Gizmo_Teleport_ShortRange = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_tele_shortrange", true);
+		public static readonly Texture2D Gizmo_Teleport_LongRange = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_tele_longrange", true);
+		public static readonly Texture2D Gizmo_Teleport_Link = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_tele_link", true);
 	}
 
 	[DefOf]

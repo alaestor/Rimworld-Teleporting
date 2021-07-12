@@ -235,8 +235,8 @@ namespace alaestor_teleporting
 					{
 						Rename();
 						Logger.Debug("TeleportPlatform: called Gizmo: rename");
-					}
-				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+					},
+					icon: MyTextures.Gizmo_Rename
 				);
 			}
 
@@ -248,8 +248,8 @@ namespace alaestor_teleporting
 					{
 						Unlink();
 						Logger.Debug("TeleportPlatform: called Gizmo: unlink");
-					}
-				//icon: ContentFinder<Texture2D>.Get("UI/Commands/..."),
+					},
+					icon: MyTextures.Gizmo_Unlink
 				);
 			}
 		}
