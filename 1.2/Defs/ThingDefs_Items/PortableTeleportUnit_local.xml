@@ -44,6 +44,7 @@
 		<label>> Portable Teleport Unit (SR)</label>
 		<description>> Make a short range PTU</description>
 		<jobString>> Making a short range PTU</jobString>
+		<workAmount>8000</workAmount>
 		<products><alaestor_teleporting_PortableTeleportUnit_Local>1</alaestor_teleporting_PortableTeleportUnit_Local></products>
 		<ingredients>
 			<li><filter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></filter><count>1</count></li>

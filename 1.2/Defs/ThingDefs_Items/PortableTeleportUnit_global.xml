@@ -44,6 +44,7 @@
 		<label>> Portable Teleport Unit (LR)</label>
 		<description>> Make a long range PTU.</description>
 		<jobString>> Making a long range PTU</jobString>
+		<workAmount>8000</workAmount>
 		<products><alaestor_teleporting_PortableTeleportUnit_Global>1</alaestor_teleporting_PortableTeleportUnit_Global></products>
 		<ingredients>
 			<li><filter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></filter><count>1</count></li>

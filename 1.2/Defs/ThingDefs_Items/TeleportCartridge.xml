@@ -30,16 +30,14 @@
 		<description>> Make a teleport cartridge</description>
 		<jobString>> Making a teleport cartridge</jobString>
 		<products><alaestor_teleporting_TeleportCartridge>1</alaestor_teleporting_TeleportCartridge></products>
-		
 		<ingredients>
 			<li><filter><thingDefs><li>Silver</li></thingDefs></filter><count>2</count></li>
 			<li><filter><thingDefs><li>Gold</li></thingDefs></filter><count>2</count></li>
 			<li><filter><thingDefs><li>Uranium</li></thingDefs></filter><count>30</count></li>
 		</ingredients>
-
 		<researchPrerequisite>alaestor_teleporting_Research_tier_1_0</researchPrerequisite>
 		<skillRequirements>
-			<Crafting>15</Crafting>
+			<Crafting>10</Crafting>
 			<Intellectual>10</Intellectual>
 		</skillRequirements>
 	</RecipeDef>

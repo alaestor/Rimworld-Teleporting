@@ -22,11 +22,12 @@
 		</comps>
 	</ThingDef>
 	
-	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
+	<RecipeDef ParentName="alaestor_teleporting_recipe_belt">
 		<defName>alaestor_teleporting_recipe_Apparel_TeleportBelt_Local</defName>
 		<label>> Teleport Belt (SR)</label>
 		<description>> Make a short range teleport belt</description>
 		<jobString>> Making a teleport belt (SR).</jobString>
+		<workAmount>10000</workAmount>
 		<products><alaestor_teleporting_Apparel_TeleportBelt_Local>1</alaestor_teleporting_Apparel_TeleportBelt_Local></products>
 		<ingredients>
 			<li><filter><thingDefs><li>alaestor_teleporting_PortableTeleportUnit_Local</li></thingDefs></filter><count>1</count></li>

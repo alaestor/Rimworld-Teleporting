@@ -34,7 +34,7 @@
 		<statBases>
 			<MarketValue>533</MarketValue>
 			<MaxHitPoints>250</MaxHitPoints>
-			<WorkToBuild>15000</WorkToBuild>
+			<WorkToBuild>8000</WorkToBuild>
 			<Flammability>1.0</Flammability>
 			<Mass>150</Mass>
 		</statBases>

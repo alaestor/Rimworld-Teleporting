@@ -22,7 +22,7 @@
 		</comps>
 	</ThingDef>
 	
-	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
+	<RecipeDef ParentName="alaestor_teleporting_recipe_belt">
 		<defName>alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced</defName>
 		<label>> Teleport Belt (Adv.)</label>
 		<description>> Make an advanced teleport belt</description>

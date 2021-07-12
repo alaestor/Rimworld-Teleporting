@@ -6,7 +6,15 @@
 		<workSkill>Crafting</workSkill>
 		<effectWorking>Cook</effectWorking>
 		<soundWorking>Recipe_Machining</soundWorking>
-		<workAmount>10000</workAmount>
+		<workAmount>2000</workAmount>
+	</RecipeDef>
+	
+	<RecipeDef Abstract="True" Name="alaestor_teleporting_recipe_belt">
+		<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+		<workSkill>Crafting</workSkill>
+		<effectWorking>Cook</effectWorking>
+		<soundWorking>Recipe_Machining</soundWorking>
+		<workAmount>14000</workAmount>
 	</RecipeDef>
 	
 </Defs>
