@@ -63,14 +63,13 @@
 				<basePowerConsumption>200</basePowerConsumption>
 			</li>
 			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
-			<li Class="CompProperties_Refuelable">
+			<li Class="alaestor_teleporting.CompProperties_RefuelableAtHome">
 				<fuelConsumptionRate>0</fuelConsumptionRate>
 				<fuelCapacity>75.0</fuelCapacity>
 				<fuelFilter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></fuelFilter>
 				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
 				<showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
 				<fuelLabel>Teleport Cartridges</fuelLabel>
-				<!--fuelGizmoLabel>Test2</fuelGizmoLabel-->
 			</li>
 			<li Class="CompProperties_Flickable"/>
 			<li Class="CompProperties_Breakdownable"/>

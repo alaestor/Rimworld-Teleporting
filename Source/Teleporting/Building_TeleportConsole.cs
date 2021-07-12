@@ -13,7 +13,7 @@ namespace alaestor_teleporting
 	public class Building_TeleportConsole : Building_WorkTable
 	{
 		private CompPowerTrader powerComp;
-		private CompRefuelable refuelableComp;
+		private CompRefuelableAtHome refuelableComp;
 		private CompCooldown cooldownComp;
 
 		private bool UseCooldown => TeleportingMod.settings.enableCooldown && TeleportingMod.settings.enableCooldown_Console;
@@ -31,7 +31,7 @@ namespace alaestor_teleporting
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
 			powerComp = GetComp<CompPowerTrader>();
-			refuelableComp = GetComp<CompRefuelable>();
+			refuelableComp = GetComp<CompRefuelableAtHome>();
 			cooldownComp = GetComp<CompCooldown>();
 		}
 

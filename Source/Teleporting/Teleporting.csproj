@@ -56,6 +56,7 @@
     <Compile Include="Building_TeleportPlatform.cs" />
     <Compile Include="CompCooldown.cs" />
     <Compile Include="CompNameLinkable.cs" />
+    <Compile Include="CompRefuelableAtHome.cs" />
     <Compile Include="CompTeleportApparel.cs" />
     <Compile Include="CompUseEffect_Teleport.cs" />
     <Compile Include="GizmoHelper.cs" />
