@@ -206,7 +206,7 @@ namespace alaestor_teleporting
 										Wearer,
 										DoTeleport,
 										TeleportBehavior.targetTeleportSubjects,
-										mouseAttachment: TeleportBehavior.localTeleportMouseAttachment);
+										mouseAttachment: MyTextures.MouseAttachment_SelectPawn);
 								}
 								else
 								{

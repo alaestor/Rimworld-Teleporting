@@ -225,7 +225,8 @@ namespace alaestor_teleporting
 					startingFrom: parent,
 					MakeLink_Callback,
 					targetParams: new RimWorld.TargetingParameters { canTargetBuildings = true, canTargetItems = true },
-					canTargetValidator: TargetValidator
+					canTargetValidator: TargetValidator,
+					mouseAttachment: MyTextures.MouseAttachment_SelectPlatform
 				);
 
 				void MakeLink_Callback(LocalTargetInfo target)//string linkableName)

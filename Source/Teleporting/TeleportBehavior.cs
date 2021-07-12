@@ -24,10 +24,6 @@ namespace alaestor_teleporting
 	[StaticConstructorOnStartup]
 	class TeleportBehavior
 	{
-		public static readonly Texture2D localTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
-
-		public static readonly Texture2D globalTeleportMouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/LaunchableMouseAttachment", true); // TODO
-
 		public static readonly TargetingParameters targetTeleportSubjects = new TargetingParameters
 		{
 			canTargetPawns = true,
@@ -55,7 +51,6 @@ namespace alaestor_teleporting
 						return
 							((int)Math.Ceiling(((double)distance) / TeleportingMod.settings.longRange_FuelDistance))
 							* TeleportingMod.settings.longRange_FuelCost;
-
 					}
 					else
 					{
@@ -164,6 +159,9 @@ namespace alaestor_teleporting
 			bool fuelMatters = TeleportingMod.settings.enableFuel && availableFuel > 0;
 			bool fuelDistanceMatters = fuelMatters && TeleportingMod.settings.longRange_FuelDistance > 0;
 
+			var localMouseAttach = MyTextures.MouseAttachment_SelectPawn;
+			var globalMouseAttach = MyTextures.MouseAttachment_SelectDestination;
+
 			string ExtraLabelGetter(GlobalTargetInfo target)
 			{
 				if (!target.IsValid)
@@ -250,11 +248,11 @@ namespace alaestor_teleporting
 			TeleportTargeter.StartChoosingGlobalThenLocal(
 				startingFrom: startingHere,
 				result_Callback: GotFrom_Callback,
-				localTargetParams: TeleportBehavior.targetTeleportSubjects,
-				localMouseAttachment: TeleportBehavior.localTeleportMouseAttachment,
+				localTargetParams: targetTeleportSubjects,
+				localMouseAttachment: localMouseAttach,
 				//localTargetValidator: null,
 				//globalCanTargetTiles: true,
-				globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
+				globalMouseAttachment: localMouseAttach,
 				//globalCloseWorldTabWhenFinished: true,
 				globalOnUpdate: OnUpdate,
 				globalExtraLabelGetter: ExtraLabelGetter,
@@ -274,11 +272,11 @@ namespace alaestor_teleporting
 				TeleportTargeter.StartChoosingGlobalThenLocal(
 					startingFrom: startingHere,
 					result_Callback: FinishedChoosing_To,
-					localTargetParams: TeleportBehavior.targetTeleportDestination,
-					localMouseAttachment: TeleportBehavior.localTeleportMouseAttachment,
+					localTargetParams: targetTeleportDestination,
+					localMouseAttachment: globalMouseAttach,
 					//localTargetValidator: null,
 					//globalCanTargetTiles: true,
-					globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
+					globalMouseAttachment: globalMouseAttach,
 					//globalCloseWorldTabWhenFinished: true,
 					globalOnUpdate: OnUpdate,
 					globalExtraLabelGetter: ExtraLabelGetter,
@@ -317,7 +315,12 @@ namespace alaestor_teleporting
 				"onSuccess_Callback: " + (onSuccess_Callback != null ? onSuccess_Callback.Method.Name : "null")
 			);
 
-			TeleportTargeter.StartChoosingLocal(globalTarget, FinishedChoosing_From, targetTeleportSubjects);
+			TeleportTargeter.StartChoosingLocal(
+				globalTarget,
+				FinishedChoosing_From,
+				targetTeleportSubjects,
+				mouseAttachment: MyTextures.MouseAttachment_SelectPawn
+			);
 
 			void FinishedChoosing_From(LocalTargetInfo fromTarget)
 			{
@@ -327,7 +330,12 @@ namespace alaestor_teleporting
 					"Cell: " + fromTarget.Cell.ToString()
 				);
 
-				TeleportTargeter.StartChoosingLocal(globalTarget, FinishedChoosing_To, targetTeleportDestination);
+				TeleportTargeter.StartChoosingLocal(
+					globalTarget,
+					FinishedChoosing_To,
+					targetTeleportDestination,
+					mouseAttachment: MyTextures.MouseAttachment_SelectDestination
+				);
 
 				void FinishedChoosing_To(LocalTargetInfo toTarget)
 				{
@@ -365,7 +373,7 @@ namespace alaestor_teleporting
 					startingFrom: pawn,
 					result_Callback: FinishedChoosing_To,
 					targetParams: targetTeleportDestination,
-					mouseAttachment: localTeleportMouseAttachment);
+					mouseAttachment: MyTextures.MouseAttachment_SelectDestination);
 
 				void FinishedChoosing_To(LocalTargetInfo destination)
 				{
@@ -403,8 +411,8 @@ namespace alaestor_teleporting
 			);
 
 			bool fuelDistanceMatters =
-							TeleportingMod.settings.enableFuel
-							&& TeleportingMod.settings.longRange_FuelDistance > 0;
+				TeleportingMod.settings.enableFuel
+				&& TeleportingMod.settings.longRange_FuelDistance > 0;
 
 			GlobalTargetInfo startingHere = CameraJumper.GetWorldTarget(pawn);
 
@@ -487,9 +495,9 @@ namespace alaestor_teleporting
 			TeleportTargeter.StartChoosingGlobalThenLocal(
 				startingFrom: startingHere,
 				result_Callback: FinishedChoosing_To,
-				localTargetParams: TeleportBehavior.targetTeleportDestination,
-				localMouseAttachment: TeleportBehavior.localTeleportMouseAttachment,
-				globalMouseAttachment: TeleportBehavior.globalTeleportMouseAttachment,
+				localTargetParams: targetTeleportDestination,
+				localMouseAttachment: MyTextures.MouseAttachment_SelectDestination,
+				globalMouseAttachment: MyTextures.MouseAttachment_SelectDestination,
 				globalOnUpdate: OnUpdate,
 				globalExtraLabelGetter: ExtraLabelGetter,
 				globalTargetValidator: CanTargetTile
