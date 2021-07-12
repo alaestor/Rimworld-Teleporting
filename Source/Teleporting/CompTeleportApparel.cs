@@ -398,11 +398,20 @@ namespace alaestor_teleporting
 						else
 						{
 							yield return GizmoHelper.MakeCommandAction(
-								"TeleportApparel_MakeLink",
+								"TeleportApparel_MakeLink_Name",
 								delegate
 								{
 									Logger.Debug("CompTeleportApparel: called Gizmo: Make Link");
-									nameLinkable.BeginMakeLink();
+									nameLinkable.BeginMakeLinkName();
+								}
+							);
+
+							yield return GizmoHelper.MakeCommandAction(
+								"TeleportApparel_MakeLink_Target",
+								delegate
+								{
+									Logger.Debug("CompTeleportApparel: called Gizmo: Make Link");
+									nameLinkable.BeginMakeLinkTarget();
 								}
 							);
 						}

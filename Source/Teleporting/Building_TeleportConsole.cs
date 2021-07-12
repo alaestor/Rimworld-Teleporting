@@ -93,14 +93,14 @@ namespace alaestor_teleporting
 				string short_Label = "Teleporting_ShortRangeTeleport_Label".Translate();
 				Action short_Action = () =>
 				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_ShortRange, this);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.alaestor_teleporting_UseTeleportConsole_ShortRange, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
 				};
 
 				string long_Label = "Teleporting_LongRangeTeleport_Label".Translate();
 				Action long_Action = () =>
 				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportConsole_LongRange, this);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.alaestor_teleporting_UseTeleportConsole_LongRange, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
 				};
 

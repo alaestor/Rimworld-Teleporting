@@ -103,8 +103,8 @@ namespace alaestor_teleporting
 						if (pawn.IsColonist)
 						{
 							var curJobDef = pawn.CurJobDef;
-							if (curJobDef == TeleporterDefOf.UseTeleportConsole_LongRange
-								|| curJobDef == TeleporterDefOf.UseTeleportConsole_ShortRange)
+							if (curJobDef == TeleporterDefOf.alaestor_teleporting_UseTeleportConsole_LongRange
+								|| curJobDef == TeleporterDefOf.alaestor_teleporting_UseTeleportConsole_ShortRange)
 							{
 								if (pawn.jobs.curJob?.targetA.Thing is Building_TeleportConsole console)
 								{

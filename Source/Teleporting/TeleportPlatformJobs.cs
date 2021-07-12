@@ -55,12 +55,12 @@ namespace alaestor_teleporting
 		}
 	}
 
-	public class JobDriver_UseTeleportPlatform_MakeLink : JobDriver_UseTeleportPlatform_Generic
+	public class JobDriver_UseTeleportPlatform_MakeLinkName : JobDriver_UseTeleportPlatform_Generic
 	{
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			this.FailOnDespawnedOrNull<JobDriver_UseTeleportPlatform_MakeLink>(TargetIndex.A);
-			this.FailOnBurningImmobile<JobDriver_UseTeleportPlatform_MakeLink>(TargetIndex.A);
+			this.FailOnDespawnedOrNull<JobDriver_UseTeleportPlatform_MakeLinkName>(TargetIndex.A);
+			this.FailOnBurningImmobile<JobDriver_UseTeleportPlatform_MakeLinkName>(TargetIndex.A);
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn(
 				to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow);
 
@@ -73,11 +73,37 @@ namespace alaestor_teleporting
 				if (!platform.CanUseNow)
 					return;
 
-				platform.MakeLink();
+				platform.MakeLinkName();
 				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportPlatform_Unlink at ThindID " + platform.ThingID.ToString());
 			};
 			//useTeleporterToil.AddEndCondition(IsToilDone);
 			yield return useTeleporterToil;
 		}
 	}
-}// namespace alaestor_teleporting
+
+	public class JobDriver_UseTeleportPlatform_MakeLinkTarget : JobDriver_UseTeleportPlatform_Generic
+	{
+		protected override IEnumerable<Toil> MakeNewToils()
+		{
+			this.FailOnDespawnedOrNull<JobDriver_UseTeleportPlatform_MakeLinkTarget>(TargetIndex.A);
+			this.FailOnBurningImmobile<JobDriver_UseTeleportPlatform_MakeLinkTarget>(TargetIndex.A);
+			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell).FailOn(
+				to => !((Building_TeleportPlatform)to.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing).CanUseNow);
+
+			Toil useTeleporterToil = new Toil();
+			useTeleporterToil.defaultCompleteMode = ToilCompleteMode.Instant; //ToilCompleteMode.Never;
+			useTeleporterToil.initAction = () =>
+			{
+				Pawn actor = useTeleporterToil.actor;
+				Building_TeleportPlatform platform = (Building_TeleportPlatform)actor.jobs.curJob.GetTarget(TargetIndex.A).Thing;
+				if (!platform.CanUseNow)
+					return;
+
+				platform.MakeLinkTarget();
+				Logger.DebugVerbose("Pawn " + actor.Label + " began JobDriver_UseTeleportPlatform_Unlink at ThindID " + platform.ThingID.ToString());
+			};
+			//useTeleporterToil.AddEndCondition(IsToilDone);
+			yield return useTeleporterToil;
+		}// namespace alaestor_teleporting
+	}
+}

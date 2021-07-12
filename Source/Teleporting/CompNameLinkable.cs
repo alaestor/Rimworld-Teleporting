@@ -176,7 +176,7 @@ namespace alaestor_teleporting
 			return false;
 		}
 
-		public void BeginMakeLink()
+		public void BeginMakeLinkName()
 		{
 			if (CanBeLinked)
 			{
@@ -198,6 +198,50 @@ namespace alaestor_teleporting
 				}
 			}
 			else Logger.Error("CompNameLinkable::BeginMakeLink: called but CanBeLinked is false!");
+		}
+
+		public void BeginMakeLinkTarget()
+		{
+			if (CanBeLinked)
+			{
+				bool TargetValidator(LocalTargetInfo target)
+				{
+					if (target.HasThing
+						&& target.Thing is ThingWithComps thing
+						&& thing.GetComp<CompNameLinkable>() is CompNameLinkable nameLinkable)
+					{
+						if ( nameLinkable.IsNamed)
+						{
+							return true;
+						}
+						else MsgHelper.Reject("CompNameLinkable_MakeLinkTarget_Unnamed");
+					}
+					else MsgHelper.Reject("CompNameLinkable_MakeLinkTarget_NotLinkable");
+
+					return false;
+				}
+
+				TeleportTargeter.StartChoosingLocal(
+					startingFrom: parent,
+					MakeLink_Callback,
+					targetParams: new RimWorld.TargetingParameters { canTargetBuildings = true, canTargetItems = true },
+					canTargetValidator: TargetValidator
+				);
+
+				void MakeLink_Callback(LocalTargetInfo target)//string linkableName)
+				{
+					if (target.HasThing && target.Thing is Building_TeleportPlatform platform)
+					{
+						var nameLinkable = platform.GetComp<CompNameLinkable>();
+						if (nameLinkable.IsNamed)
+						{
+							TryLinkTo(nameLinkable.name);
+						}
+						else Logger.Error("CompNameLinkable::BeginMakeLinkTarget: tried to select unnamed thing, error");
+					}
+				}
+			}
+			else Logger.Error("CompNameLinkable::BeginMakeLinkTarget: called but CanBeLinked is false!");
 		}
 
 		//
@@ -368,7 +412,16 @@ namespace alaestor_teleporting
 								delegate
 								{
 									Logger.DebugVerbose("CompNameLinkable: called debug Gizmo: make link");
-									BeginMakeLink();
+									BeginMakeLinkName();
+								}
+							);
+
+							yield return GizmoHelper.MakeCommandAction(
+								"CompNameLinkable_MakeLinkTarget_Debug",
+								delegate
+								{
+									Logger.DebugVerbose("CompNameLinkable: called debug Gizmo: make link targeting");
+									BeginMakeLinkTarget();
 								}
 							);
 						}

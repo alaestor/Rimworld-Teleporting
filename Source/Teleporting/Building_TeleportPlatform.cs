@@ -50,9 +50,14 @@ namespace alaestor_teleporting
 			nameLinkableComp.BeginRename();
 		}
 
-		public void MakeLink()
+		public void MakeLinkName()
 		{
-			nameLinkableComp.BeginMakeLink();
+			nameLinkableComp.BeginMakeLinkName();
+		}
+
+		public void MakeLinkTarget()
+		{
+			nameLinkableComp.BeginMakeLinkTarget();
 		}
 
 		public bool Unlink()
@@ -186,7 +191,7 @@ namespace alaestor_teleporting
 				string use_Label = "Teleporting_TeleportPlatform_UseTeleportPlatform_Label".Translate();
 				Action use_Action = () =>
 				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_TeleportToLink, this);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.alaestor_teleporting_UseTeleportPlatform_TeleportToLink, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
 				};
 
@@ -195,15 +200,25 @@ namespace alaestor_teleporting
 			}
 			else if (!nameLinkableComp.IsLinkedToSomething && nameLinkableComp.CanBeLinked)
 			{
-				string makeLink_Label = "Teleporting_TeleportPlatform_LinkTeleportPlatform_Label".Translate();
-				Action makeLink_Action = () =>
+				string makeLinkName_Label = "Teleporting_TeleportPlatform_LinkTeleportPlatform_ByName_Label".Translate();
+				Action makeLinkName_Action = () =>
 				{
-					Job job = JobMaker.MakeJob(TeleporterDefOf.UseTeleportPlatform_MakeLink, this);
+					Job job = JobMaker.MakeJob(TeleporterDefOf.alaestor_teleporting_UseTeleportPlatform_MakeLinkName, this);
 					myPawn.jobs.TryTakeOrderedJob(job);
 				};
 
 				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(
-					makeLink_Label, makeLink_Action, MenuOptionPriority.Default), myPawn, this);
+					makeLinkName_Label, makeLinkName_Action, MenuOptionPriority.Default), myPawn, this);
+
+				string makeLinkTarget_Label = "Teleporting_TeleportPlatform_LinkTeleportPlatform_ByTarget_Label".Translate();
+				Action makeLinkTarget_Action = () =>
+				{
+					Job job = JobMaker.MakeJob(TeleporterDefOf.alaestor_teleporting_UseTeleportPlatform_MakeLinkTarget, this);
+					myPawn.jobs.TryTakeOrderedJob(job);
+				};
+
+				yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(
+					makeLinkTarget_Label, makeLinkTarget_Action, MenuOptionPriority.Default), myPawn, this);
 			}
 		}
 
