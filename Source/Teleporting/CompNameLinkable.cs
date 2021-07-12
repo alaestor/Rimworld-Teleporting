@@ -248,31 +248,31 @@ namespace alaestor_teleporting
 		// OBJECT stuff
 		//
 
-		// TODO either use or delete this
-		public override void CompTickRare()
-		{
-			base.CompTickRare();
-			// if 
-		}
-
+		/* TODO 
 		public override void PostDraw()
 		{
-			if (!IsLinkedToSomething) // unlinked
+			if (DrawLinkStatusOverlay)
 			{
-
-			}
-			if (HasInvalidLinkedThing) // link broken
-			{
-				/*
 				Thing thing = this.parent;
 				float vanillaPulse = (float)(0.300000011920929 + (Math.Sin(((double)Time.realtimeSinceStartup + 397.0 * (double)(thing.thingIDNumber % 571)) * 4.0) + 1.0) * 0.5 * 0.699999988079071);
-				Material material = FadedMaterialPool.FadedVersionOf(MaterialPool.MatFrom("Overlay/Cooldown", ShaderDatabase.MetaOverlay), vanillaPulse);
+
+				Material material = null;
+
+				if (!IsLinkedToSomething) // unlinked
+				{
+					material = FadedMaterialPool.FadedVersionOf(MaterialPool.MatFrom("Overlay/Unlinked", ShaderDatabase.MetaOverlay), vanillaPulse);
+				}
+				else if (HasInvalidLinkedThing) // link broken
+				{
+					material = FadedMaterialPool.FadedVersionOf(MaterialPool.MatFrom("Overlay/BrokenLink", ShaderDatabase.MetaOverlay), vanillaPulse);
+				}
+
 				Matrix4x4 matrix = new Matrix4x4();
 				matrix.SetTRS(thing.DrawPos, Quaternion.AngleAxis(0.0f, Vector3.up), new Vector3(0.6f, 1f, 0.6f));
 				Graphics.DrawMesh(MeshPool.plane14, matrix, material, 0);
-				*/
 			}
 		}
+		*/
 
 		public override string CompInspectStringExtra()
 		{
@@ -324,12 +324,6 @@ namespace alaestor_teleporting
 			{
 				//? TODO either use or delete this
 			}
-		}
-
-		public override void Initialize(CompProperties props)
-		{
-			// TODO use or delete this
-			base.Initialize(props);
 		}
 
 		public override void PostDeSpawn(Map map)
