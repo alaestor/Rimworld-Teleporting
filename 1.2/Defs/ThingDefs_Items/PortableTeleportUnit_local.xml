@@ -8,7 +8,7 @@
 		<thingClass>ThingWithComps</thingClass>
 		<resourceReadoutPriority>Middle</resourceReadoutPriority>
 		<graphicData>
-			<texPath>Things/Item/Special/MechSerumHealer</texPath>
+			<texPath>Things/Item/alaestor_teleporting_PTU_SR</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<stackLimit>10</stackLimit>

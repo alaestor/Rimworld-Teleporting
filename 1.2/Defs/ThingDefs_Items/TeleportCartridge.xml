@@ -7,7 +7,7 @@
 		<description>> A one-time use teleport cartridge which contains unique intraversal membrane entanglement equations and time-relative spatial waveform catalysts necessary to facilitate complex hyperdimensional space-time folding matricies.\n\nAs one of the lead scientists on the project explained: "it makey the thingy go brrr"</description>
 		<tickerType>Rare</tickerType>
 		<graphicData>
-			<texPath>Things/Item/Resource/Chemfuel</texPath>
+			<texPath>Things/Item/alaestor_teleporting_TeleportCartridge</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 			<drawSize>0.85</drawSize>
 		</graphicData>
