@@ -1,6 +1,6 @@
 ﻿using RimWorld;
-using Verse;
 using UnityEngine;
+using Verse;
 
 namespace alaestor_teleporting
 {
@@ -25,10 +25,12 @@ namespace alaestor_teleporting
 	[StaticConstructorOnStartup]
 	class MyTextures
 	{
+		// Mouse Attachments
 		public static readonly Texture2D MouseAttachment_SelectDestination = ContentFinder<Texture2D>.Get("UI/Overlays/alaestor_teleporting_select_destination", true);
 		public static readonly Texture2D MouseAttachment_SelectPawn = ContentFinder<Texture2D>.Get("UI/Overlays/alaestor_teleporting_select_pawn", true);
 		public static readonly Texture2D MouseAttachment_SelectPlatform = ContentFinder<Texture2D>.Get("UI/Overlays/alaestor_teleporting_select_platform", true);
-		
+
+		// Gizmo button icons
 		public static readonly Texture2D Gizmo_Rename = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_rename", true);
 		public static readonly Texture2D Gizmo_Unlink = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_unlink", true);
 		public static readonly Texture2D Gizmo_Link = ContentFinder<Texture2D>.Get("UI/Gizmos/alaestor_teleporting_link", true);

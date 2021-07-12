@@ -162,7 +162,7 @@ namespace alaestor_teleporting
 				}
 			}
 
-			if ((longRangeFlag && !HasResearchFor_Teleport_LongRange) 
+			if ((longRangeFlag && !HasResearchFor_Teleport_LongRange)
 				|| (!longRangeFlag && !HasResearchFor_Teleport_ShortRange))
 			{
 				Logger.Error(

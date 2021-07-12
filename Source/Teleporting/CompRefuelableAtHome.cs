@@ -224,38 +224,38 @@ namespace alaestor_teleporting
 		public string fuelIconPath;
 		private Texture2D fuelIcon;
 
-		public string FuelLabel => this.fuelLabel.NullOrEmpty() ? "Fuel".TranslateSimple() : this.fuelLabel;
+		public string FuelLabel => fuelLabel.NullOrEmpty() ? "Fuel".TranslateSimple() : fuelLabel;
 
-		public string FuelGizmoLabel => this.fuelGizmoLabel.NullOrEmpty() ? "Fuel".TranslateSimple() : this.fuelGizmoLabel;
+		public string FuelGizmoLabel => fuelGizmoLabel.NullOrEmpty() ? "Fuel".TranslateSimple() : fuelGizmoLabel;
 
 		public Texture2D FuelIcon
 		{
 			get
 			{
-				if ((Object)this.fuelIcon == (Object)null)
-					this.fuelIcon = this.fuelIconPath.NullOrEmpty() ? (this.fuelFilter.AnyAllowedDef == null ? (BuildableDef)ThingDefOf.Chemfuel : (BuildableDef)this.fuelFilter.AnyAllowedDef).uiIcon : ContentFinder<Texture2D>.Get(this.fuelIconPath);
-				return this.fuelIcon;
+				if (fuelIcon == null)
+					fuelIcon = fuelIconPath.NullOrEmpty() ? (fuelFilter.AnyAllowedDef == null ? ThingDefOf.Chemfuel : fuelFilter.AnyAllowedDef).uiIcon : ContentFinder<Texture2D>.Get(fuelIconPath);
+				return fuelIcon;
 			}
 		}
 
-		public float FuelMultiplierCurrentDifficulty => this.factorByDifficulty ? this.fuelMultiplier / Find.Storyteller.difficultyValues.maintenanceCostFactor : this.fuelMultiplier;
+		public float FuelMultiplierCurrentDifficulty => factorByDifficulty ? fuelMultiplier / Find.Storyteller.difficultyValues.maintenanceCostFactor : fuelMultiplier;
 
-		public CompProperties_RefuelableAtHome() => this.compClass = typeof(CompRefuelableAtHome);
+		public CompProperties_RefuelableAtHome() => compClass = typeof(CompRefuelableAtHome);
 
 		public override void ResolveReferences(ThingDef parentDef)
 		{
 			base.ResolveReferences(parentDef);
-			this.fuelFilter.ResolveReferences();
+			fuelFilter.ResolveReferences();
 		}
 
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
 		{
 			foreach (string configError in base.ConfigErrors(parentDef))
 				yield return configError;
-			if (this.destroyOnNoFuel && (double)this.initialFuelPercent <= 0.0)
+			if (destroyOnNoFuel && initialFuelPercent <= 0.0)
 				yield return "Refuelable component has destroyOnNoFuel, but initialFuelPercent <= 0";
-			if ((!this.consumeFuelOnlyWhenUsed || (double)this.fuelConsumptionPerTickInRain > 0.0) && parentDef.tickerType != TickerType.Normal)
-				yield return string.Format("Refuelable component set to consume fuel per tick, but parent tickertype is {0} instead of {1}", (object)parentDef.tickerType, (object)TickerType.Normal);
+			if ((!consumeFuelOnlyWhenUsed || fuelConsumptionPerTickInRain > 0.0) && parentDef.tickerType != TickerType.Normal)
+				yield return string.Format("Refuelable component set to consume fuel per tick, but parent tickertype is {0} instead of {1}", parentDef.tickerType, TickerType.Normal);
 		}
 
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(
@@ -265,8 +265,8 @@ namespace alaestor_teleporting
 				yield return specialDisplayStat;
 			if (((ThingDef)req.Def).building.IsTurret)
 			{
-				yield return new StatDrawEntry(StatCategoryDefOf.Building, (string)"RearmCost".Translate(), GenLabel.ThingLabel((BuildableDef)this.fuelFilter.AnyAllowedDef, (ThingDef)null, (int)((double)this.fuelCapacity / (double)this.FuelMultiplierCurrentDifficulty)).CapitalizeFirst(), (string)"RearmCostExplanation".Translate(), 3171);
-				yield return new StatDrawEntry(StatCategoryDefOf.Building, (string)"ShotsBeforeRearm".Translate(), ((int)this.fuelCapacity).ToString(), (string)"ShotsBeforeRearmExplanation".Translate(), 3171);
+				yield return new StatDrawEntry(StatCategoryDefOf.Building, "RearmCost".Translate(), GenLabel.ThingLabel(fuelFilter.AnyAllowedDef, null, (int)(fuelCapacity / (double)FuelMultiplierCurrentDifficulty)).CapitalizeFirst(), "RearmCostExplanation".Translate(), 3171);
+				yield return new StatDrawEntry(StatCategoryDefOf.Building, "ShotsBeforeRearm".Translate(), ((int)fuelCapacity).ToString(), "ShotsBeforeRearmExplanation".Translate(), 3171);
 			}
 		}
 	}

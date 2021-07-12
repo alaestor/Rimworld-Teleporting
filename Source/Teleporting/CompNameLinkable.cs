@@ -210,7 +210,7 @@ namespace alaestor_teleporting
 						&& target.Thing is ThingWithComps thing
 						&& thing.GetComp<CompNameLinkable>() is CompNameLinkable nameLinkable)
 					{
-						if ( nameLinkable.IsNamed)
+						if (nameLinkable.IsNamed)
 						{
 							return true;
 						}
@@ -283,7 +283,7 @@ namespace alaestor_teleporting
 			{
 				if (IsNamed)
 				{
-					s += string.Format("Teleporting_CompNameLinkable_Inspect_IsNamed_FMT".Translate(), Name); 
+					s += string.Format("Teleporting_CompNameLinkable_Inspect_IsNamed_FMT".Translate(), Name);
 				}
 				else
 				{
