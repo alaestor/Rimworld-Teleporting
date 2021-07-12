@@ -15,6 +15,7 @@
 		<effectWorking>Cook</effectWorking>
 		<soundWorking>Recipe_Machining</soundWorking>
 		<workAmount>14000</workAmount>
+		<unfinishedThingDef>UnfinishedBelt</unfinishedThingDef>
 	</RecipeDef>
 	
 </Defs>
