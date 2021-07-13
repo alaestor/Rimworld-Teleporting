@@ -70,6 +70,7 @@
 				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
 				<showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
 				<fuelLabel>Teleport Cartridges</fuelLabel>
+				<drawOutOfFuelOverlay>false</drawOutOfFuelOverlay>
 			</li>
 			<li Class="CompProperties_Flickable"/>
 			<li Class="CompProperties_Breakdownable"/>
