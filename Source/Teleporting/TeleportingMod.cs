@@ -7,7 +7,7 @@ namespace alaestor_teleporting
 	{
 		public static TeleportingModSettings settings;
 		public static readonly string modname = "Teleporting";
-		public static readonly string version = "version 0.0.0\t( pre-alpha, in development )";
+		public static readonly string version = "version 0.1.0\t( \"minimal effort\" )";
 
 		public TeleportingMod(ModContentPack content) : base(content)
 		{

@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
 <name>Teleporting</name>
-<author>Alaestor</author>
+<author>Alaestor, MrKociak</author>
 <packageId>Alaestor.Teleporting</packageId>
+<url>https://github.com/alaestor/Rimworld-Teleporting</url>
 <supportedVersions><li>1.2</li></supportedVersions>
 <modDependencies>
     <!--li>
@@ -12,6 +13,15 @@
         <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
     </li-->
 </modDependencies>
-<description>	Mod Version: 0.0.1
+<description>	Mod Version: 0.1.0 "Minimal Effort"
+
+
+Credit to MrKociak for their beautiful Console, Platform, and Receiver textures!
+
+Their Steam Page:
+https://steamcommunity.com/id/TomekMalinaKot
+
+Their Workshop:
+https://steamcommunity.com/id/TomekMalinaKot/myworkshopfiles/?appid=294100
 </description>
 </ModMetaData>
