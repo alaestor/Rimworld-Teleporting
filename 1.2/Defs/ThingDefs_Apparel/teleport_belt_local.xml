@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
+		<defName>alaestor_teleporting_Apparel_TeleportBelt_Local</defName>
+		<label>> teleport belt (SR)</label>
+		<description>> A personal teleportation belt, capable of short-range teleports</description>
+		<graphicData><texPath>Things/Apparel/alaestor_teleporting_belt_teleport_SR</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<statBases>
+			<MarketValue>934</MarketValue>
+		</statBases>
+		<comps>
+			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
+				<shortRange>true</shortRange>
+				<longRange>false</longRange>
+				<useNameLinkable>false</useNameLinkable>
+				<useCooldown>true</useCooldown>
+				<canTeleportOthers>false</canTeleportOthers>
+				<limitedUses>4</limitedUses>
+			</li>
+		</comps>
+	</ThingDef>
+	
+	<RecipeDef ParentName="alaestor_teleporting_recipe_belt">
+		<defName>alaestor_teleporting_recipe_Apparel_TeleportBelt_Local</defName>
+		<label>> Teleport Belt (SR)</label>
+		<description>> Make a short range teleport belt</description>
+		<jobString>> Making a teleport belt (SR).</jobString>
+		<workAmount>10000</workAmount>
+		<products><alaestor_teleporting_Apparel_TeleportBelt_Local>1</alaestor_teleporting_Apparel_TeleportBelt_Local></products>
+		<ingredients>
+			<li><filter><thingDefs><li>alaestor_teleporting_PortableTeleportUnit_Local</li></thingDefs></filter><count>1</count></li>
+			<li><filter><thingDefs><li>Plasteel</li></thingDefs></filter><count>30</count></li>
+			<li><filter><thingDefs><li>Silver</li></thingDefs></filter><count>20</count></li>
+			<li><filter><thingDefs><li>ComponentIndustrial</li></thingDefs></filter><count>1</count></li>
+		</ingredients>
+		<researchPrerequisite>alaestor_teleporting_Research_tier_3_0</researchPrerequisite>
+		<skillRequirements>
+			<Crafting>15</Crafting>
+			<Intellectual>15</Intellectual>
+		</skillRequirements>
+	</RecipeDef>
+	
+</Defs>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+	<!-- Defs/ThingDefs_Apparel/teleport_belt_local.xml -->
+	<alaestor_teleporting_Apparel_TeleportBelt_Local.label>teleport belt (SR)</alaestor_teleporting_Apparel_TeleportBelt_Local.label>
+	<alaestor_teleporting_Apparel_TeleportBelt_Local.description>A personal teleportation belt, capable of short-range teleports</alaestor_teleporting_Apparel_TeleportBelt_Local.description>
+
+	<!-- Defs/ThingDefs_Apparel/teleport_belt_global.xml -->
+	<alaestor_teleporting_Apparel_TeleportBelt_Global.label>teleport belt (LR)</alaestor_teleporting_Apparel_TeleportBelt_Global.label>
+	<alaestor_teleporting_Apparel_TeleportBelt_Global.description>A personal teleportation belt, capable of long-range teleports</alaestor_teleporting_Apparel_TeleportBelt_Global.description>
+
+	<!-- Defs/ThingDefs_Apparel/teleport_belt_advanced.xml -->
+	<alaestor_teleporting_Apparel_TeleportBelt_Advanced.label>teleport belt (Adv.)</alaestor_teleporting_Apparel_TeleportBelt_Advanced.label>
+	<alaestor_teleporting_Apparel_TeleportBelt_Advanced.description>An advanced, targetting, teleportation belt capable of short-range and long-range teleports</alaestor_teleporting_Apparel_TeleportBelt_Advanced.description>
+
+	<!-- Defs/ThingDefs_Apparel/teleport_belt_link.xml -->
+	<alaestor_teleporting_Apparel_TeleportBelt_Link.label>teleport belt (Link.)</alaestor_teleporting_Apparel_TeleportBelt_Link.label>
+	<alaestor_teleporting_Apparel_TeleportBelt_Link.description>A personal teleportation belt capable of teleporting to named teleport targets</alaestor_teleporting_Apparel_TeleportBelt_Link.description>
+
+	<!-- Defs/ThingDefs_Items/TeleportCartridge.xml -->
+	<alaestor_teleporting_TeleportCartridge.label>teleport cartridge</alaestor_teleporting_TeleportCartridge.label>
+	<alaestor_teleporting_TeleportCartridge.description>A one-time use teleport cartridge which contains unique intraversal membrane entanglement equations and time-relative spatial waveform catalysts necessary to facilitate complex hyperdimensional space-time folding matricies.\n\nAs one of the lead scientists on the project explained: "it makey the thingy go brrr"</alaestor_teleporting_TeleportCartridge.description>
+
+	<!-- Defs/ThingDefs_Items/PortableTeleportUnit_local.xml -->
+	<alaestor_teleporting_PortableTeleportUnit_Local.label>portable teleport unit (SR)</alaestor_teleporting_PortableTeleportUnit_Local.label>
+	<alaestor_teleporting_PortableTeleportUnit_Local.description>A portable short-range teleport unit</alaestor_teleporting_PortableTeleportUnit_Local.description>
+
+	<!-- Defs/ThingDefs_Items/PortableTeleportUnit_global.xml -->
+	<alaestor_teleporting_PortableTeleportUnit_Global.label>portable teleport unit (LR)</alaestor_teleporting_PortableTeleportUnit_Global.label>
+	<alaestor_teleporting_PortableTeleportUnit_Global.description>A portable long-range teleport unit</alaestor_teleporting_PortableTeleportUnit_Global.description>
+
+	<!-- Defs/ThingDefs_Buildings/TeleportConsole.xml -->
+	<alaestor_teleporting_TeleportConsole.label>Teleport Console</alaestor_teleporting_TeleportConsole.label>
+	<alaestor_teleporting_TeleportConsole.description>A console thats used for creating teleport-related items, as well as advanced site-to-site teleportation which is unlocked with research</alaestor_teleporting_TeleportConsole.description>
+
+	<!-- Defs/ThingDefs_Buildings/TeleportPlatform.xml -->
+	<alaestor_teleporting_TeleportPlatform.label>Teleport Platform</alaestor_teleporting_TeleportPlatform.label>
+	<alaestor_teleporting_TeleportPlatform.description>A platform capable of opening static spatial conduits for teleportation</alaestor_teleporting_TeleportPlatform.description>
+
+	<!-- Defs/ThingDefs_Buildings/TeleportReceiverxml -->
+	<alaestor_teleporting_TeleportReceiver.label>Teleport Receiver</alaestor_teleporting_TeleportReceiver.label>
+	<alaestor_teleporting_TeleportReceiver.description>A platform capable of being targetted by static spatial conduits. It can't create conduits, so it can only receive and not send.</alaestor_teleporting_TeleportReceiver.description>
+
+</LanguageData>

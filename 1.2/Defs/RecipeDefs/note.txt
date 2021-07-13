@@ -1,0 +1,1 @@
+I've decided to put recipes with the thingdefs they're associated with

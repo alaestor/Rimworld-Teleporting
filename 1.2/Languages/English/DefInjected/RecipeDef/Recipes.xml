@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+	<!-- Defs/ThingDefs_Apparel/teleport_belt_local.xml -->
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.label>Teleport Belt (SR)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.label>
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.description>Make a short range teleport belt</alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.description>
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.jobString>Making a teleport belt (SR)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.jobString>
+	
+	<!-- Defs/ThingDefs_Apparel/teleport_belt_global.xml -->
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.label>Teleport Belt (LR)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.label>
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.description>Make a long range teleport belt</alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.description>
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.jobString>Making a teleport belt (LR)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.jobString>
+
+	<!-- Defs/ThingDefs_Apparel/teleport_belt_advanced.xml -->
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced.label>Teleport Belt (Adv.)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced.label>
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced.description>Make an advanced teleport belt</alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced.description>
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced.jobString>Making a teleport belt (Adv.)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced.jobString>
+
+	<!-- Defs/ThingDefs_Apparel/teleport_belt_link.xml -->
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Link.label>Teleport Belt (Link.)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Link.label>
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Link.description>Make a linkable teleport belt</alaestor_teleporting_recipe_Apparel_TeleportBelt_Link.description>
+	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Link.jobString>Making a teleport belt (Link.)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Link.jobString>
+
+	<!-- Defs/ThingDefs_Items/TeleportCartridge.xml -->
+	<alaestor_teleporting_recipe_TeleportCartridge.label>Teleport Cartridge</alaestor_teleporting_recipe_TeleportCartridge.label>
+	<alaestor_teleporting_recipe_TeleportCartridge.description>Make a teleport cartridge</alaestor_teleporting_recipe_TeleportCartridge.description>
+	<alaestor_teleporting_recipe_TeleportCartridge.jobString>Making a teleport cartridge</alaestor_teleporting_recipe_TeleportCartridge.jobString>
+
+	<!-- Defs/ThingDefs_Items/PortableTeleportUnit_local.xml -->
+	<alaestor_teleporting_recipe_PortableTeleportUnit_Local.label>Portable Teleport Unit (SR)</alaestor_teleporting_recipe_PortableTeleportUnit_Local.label>
+	<alaestor_teleporting_recipe_PortableTeleportUnit_Local.description>Make a short range PTU</alaestor_teleporting_recipe_PortableTeleportUnit_Local.description>
+	<alaestor_teleporting_recipe_PortableTeleportUnit_Local.jobString>Making a short range PTU</alaestor_teleporting_recipe_PortableTeleportUnit_Local.jobString>
+
+	<!-- Defs/ThingDefs_Items/PortableTeleportUnit_global.xml -->
+	<alaestor_teleporting_recipe_PortableTeleportUnit_Global.label>Portable Teleport Unit (LR)</alaestor_teleporting_recipe_PortableTeleportUnit_Global.label>
+	<alaestor_teleporting_recipe_PortableTeleportUnit_Global.description>Make a long range PTU</alaestor_teleporting_recipe_PortableTeleportUnit_Global.description>
+	<alaestor_teleporting_recipe_PortableTeleportUnit_Global.jobString>Making a long range PTU</alaestor_teleporting_recipe_PortableTeleportUnit_Global.jobString>
+
+
+</LanguageData>
