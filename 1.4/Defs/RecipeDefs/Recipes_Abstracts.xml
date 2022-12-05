@@ -8,7 +8,7 @@
 		<soundWorking>Recipe_Machining</soundWorking>
 		<workAmount>2000</workAmount>
 	</RecipeDef>
-	
+
 	<RecipeDef Abstract="True" Name="alaestor_teleporting_recipe_belt">
 		<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
 		<workSkill>Crafting</workSkill>
@@ -17,5 +17,5 @@
 		<workAmount>14000</workAmount>
 		<unfinishedThingDef>UnfinishedBelt</unfinishedThingDef>
 	</RecipeDef>
-	
+
 </Defs>

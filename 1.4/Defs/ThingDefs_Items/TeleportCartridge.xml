@@ -23,7 +23,7 @@
 		<thingCategories><li>Manufactured</li></thingCategories>
 		<!--comps></comps-->
 	</ThingDef>
-	
+
 	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
 		<defName>alaestor_teleporting_recipe_TeleportCartridge</defName>
 		<label>> Teleport Cartridge</label>

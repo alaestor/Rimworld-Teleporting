@@ -14,7 +14,7 @@
 		<reportString>> Linking teleport platform.</reportString>
 		<allowOpportunisticPrefix>true</allowOpportunisticPrefix>
 	</JobDef>
-	
+
 	<JobDef>
 		<defName>alaestor_teleporting_UseTeleportPlatform_MakeLinkTarget</defName>
 		<driverClass>alaestor_teleporting.JobDriver_UseTeleportPlatform_MakeLinkTarget</driverClass>

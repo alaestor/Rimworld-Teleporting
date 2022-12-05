@@ -38,7 +38,7 @@
 		</comps>
 		<thingSetMakerTags><li>RewardStandardHighFreq</li></thingSetMakerTags>
 	</ThingDef>
-	
+
 	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
 		<defName>alaestor_teleporting_recipe_PortableTeleportUnit_Local</defName>
 		<label>> Portable Teleport Unit (SR)</label>
@@ -56,5 +56,5 @@
 			<Intellectual>10</Intellectual>
 		</skillRequirements>
 	</RecipeDef>
-  
+
 </Defs>

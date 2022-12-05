@@ -27,7 +27,7 @@
 		<researchViewX>2.00</researchViewX>
 		<researchViewY>1.00</researchViewY>
 	</ResearchProjectDef>
-	
+
 	<ResearchProjectDef ParentName="alaestor_teleporting_ResearchProjectBase">
 		<defName>alaestor_teleporting_Research_tier_3_0</defName>
 		<label>> Spatial Folding</label>
@@ -37,7 +37,7 @@
 		<researchViewX>3.00</researchViewX>
 		<researchViewY>1.00</researchViewY>
 	</ResearchProjectDef>
-	
+
 	<ResearchProjectDef ParentName="alaestor_teleporting_ResearchProjectBase">
 		<defName>alaestor_teleporting_Research_tier_4_0</defName>
 		<label>> Mastery of Teleportation</label>
@@ -47,5 +47,5 @@
 		<researchViewX>4.00</researchViewX>
 		<researchViewY>1.00</researchViewY>
 	</ResearchProjectDef>
-	
+
 </Defs>

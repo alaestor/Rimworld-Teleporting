@@ -2,7 +2,7 @@
 <LanguageData>
 
 	<Teleporting_IsOnCooldown>Cooling down</Teleporting_IsOnCooldown>
-	
+
 	<!-- Building_TeleportConsole.cs -->
 	<Teleporting_ShortRangeTeleport_Label>Short-range teleport</Teleporting_ShortRangeTeleport_Label>
 	<Teleporting_LongRangeTeleport_Label>Long-range teleport</Teleporting_LongRangeTeleport_Label>
@@ -12,7 +12,7 @@
 	<Teleporting_Gizmo_TeleportConsole_Local_Debug_Desc>(Godmode)\nShort range teleport; ignores fuel and cooldown</Teleporting_Gizmo_TeleportConsole_Local_Debug_Desc>
 	<Teleporting_Gizmo_TeleportConsole_Global_Debug_Label>(Godmode)\nTele (LR)</Teleporting_Gizmo_TeleportConsole_Global_Debug_Label>
 	<Teleporting_Gizmo_TeleportConsole_Global_Debug_Desc>(Godmode)\nLong range teleport; ignores fuel and cooldown</Teleporting_Gizmo_TeleportConsole_Global_Debug_Desc>
-	
+
 	<!-- Building_TeleportPlatform.cs -->
 	<Teleporting_TeleportPlatform_OnCooldown_FMT>On cooldown for {0} more second(s)</Teleporting_TeleportPlatform_OnCooldown_FMT>
 	<Teleporting_TeleportPlatform_NotEnoughFuel>Missing teleport cartridge</Teleporting_TeleportPlatform_NotEnoughFuel>
@@ -24,12 +24,12 @@
 	<Teleporting_Gizmo_TeleportPlatform_Rename_Desc>Assign a new unique name</Teleporting_Gizmo_TeleportPlatform_Rename_Desc>
 	<Teleporting_Gizmo_TeleportPlatform_Unlink_Label>Unlink</Teleporting_Gizmo_TeleportPlatform_Unlink_Label>
 	<Teleporting_Gizmo_TeleportPlatform_Unlink_Desc>Destroy the static conduit, freeing the link by consuming a teleport cartridge</Teleporting_Gizmo_TeleportPlatform_Unlink_Desc>
-	
+
 	<!-- CompCooldown.cs -->
 	<Teleporting_CooldownComp_Inspect_OnCooldown_FMT>Cooldown: {0} seconds remaining</Teleporting_CooldownComp_Inspect_OnCooldown_FMT>
 	<Teleporting_Gizmo_CompCooldown_SetCool_Debug_Label>(Godmode)\nCooldown</Teleporting_Gizmo_CompCooldown_SetCool_Debug_Label>
 	<Teleporting_Gizmo_CompCooldown_SetCool_Debug_Desc>(Godmode)\nForce cooldown to end</Teleporting_Gizmo_CompCooldown_SetCool_Debug_Desc>
-	
+
 	<!-- CompNameLinkable.cs -->
 	<Teleporting_CompNameLinkable_Unnamed>(unnamed)</Teleporting_CompNameLinkable_Unnamed>
 	<Teleporting_CompNameLinkable_Unlinked>(unlinked)</Teleporting_CompNameLinkable_Unlinked>
@@ -51,7 +51,7 @@
 	<Teleporting_Gizmo_CompNameLinkable_MakeLink_Debug_Desc>(Godmode)\nMake link to named thing by entering the name</Teleporting_Gizmo_CompNameLinkable_MakeLink_Debug_Desc>
 	<Teleporting_Gizmo_CompNameLinkable_MakeLinkTarget_Debug_Label>(Godmode)\nLink Target</Teleporting_Gizmo_CompNameLinkable_MakeLinkTarget_Debug_Label>
 	<Teleporting_Gizmo_CompNameLinkable_MakeLinkTarget_Debug_Desc>(Godmode)\nMake link to named thing by targetting it</Teleporting_Gizmo_CompNameLinkable_MakeLinkTarget_Debug_Desc>
-	
+
 	<!-- CompTeleportApparel.cs -->
 	<Teleporting_Message_CompNameLinkable_MakeLinkTarget_Unnamed>Link target has no name</Teleporting_Message_CompNameLinkable_MakeLinkTarget_Unnamed>
 	<Teleporting_Message_CompNameLinkable_MakeLinkTarget_NotLinkable>Not a linkable thing</Teleporting_Message_CompNameLinkable_MakeLinkTarget_NotLinkable>
@@ -70,12 +70,12 @@
 	<Teleporting_Gizmo_TeleportApparel_MakeLink_Target_Desc>Make link to named thing by targetting it</Teleporting_Gizmo_TeleportApparel_MakeLink_Target_Desc>
 	<Teleporting_Gizmo_TeleportApparel_FillFuel_Debug_Label>(Godmode)\nReset Uses</Teleporting_Gizmo_TeleportApparel_FillFuel_Debug_Label>
 	<Teleporting_Gizmo_TeleportApparel_FillFuel_Debug_Desc>(Godmode)\nRefill Fuel to initial quantuty / reset uses</Teleporting_Gizmo_TeleportApparel_FillFuel_Debug_Desc>
-	
+
 	<!-- TeleportBehavior.cs -->
 	<Teleporting_TeleportBehavior_Global_OutofRange>Outside of range limit</Teleporting_TeleportBehavior_Global_OutofRange>
 	<Teleporting_TeleportBehavior_Global_FuelCost_FMT>Fuel cost: {0} of {1}</Teleporting_TeleportBehavior_Global_FuelCost_FMT>
 	<Teleporting_TeleportBehavior_Global_NotEnoughFuel>Not enough fuel</Teleporting_TeleportBehavior_Global_NotEnoughFuel>
-	
+
 	<!-- TeleportingModSettings.cs -->
 	<Teleporting_resetTheseSettings>Reset Settings</Teleporting_resetTheseSettings>
 	<Teleporting_enableCooldown>Enable Cooldowns</Teleporting_enableCooldown>
@@ -114,5 +114,5 @@
 	<Teleporting_enableDebugLoggingVerbose>Enable Verbose Logging</Teleporting_enableDebugLoggingVerbose>
 	<Teleporting_enableDebugLoggingVerbose_tooltip>When enabled, extensive debug messages and details will be logged. This is extremely noisy and laggy.\n\nRecommended: Disabled.</Teleporting_enableDebugLoggingVerbose_tooltip>
 	<Teleporting_testDebugLogging>Test Log Messages</Teleporting_testDebugLogging>
-	
+
 </LanguageData>
