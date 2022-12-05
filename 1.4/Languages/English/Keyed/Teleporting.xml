@@ -94,9 +94,9 @@
 	<Teleporting_enableConsoleIntelectDivisor_tooltip>When enabled, the cooldown period of the teleport console's teleports will be affected by the operating pawn's intelectual stat.\n\nFormula:\n Cd = dur - (dur * (level / divisor))\n\nExample: level 20, divisor 21\n(20/21) = 0.95 = 95% reduction\n30s * 0.95 = 28.5s\nCooldown = 30s - 28.5s = 1.5s</Teleporting_enableConsoleIntelectDivisor_tooltip>
 	<Teleporting_consoleIntelectDivisor>Intelect Divisor  </Teleporting_consoleIntelectDivisor>
 	<Teleporting_enableFuel>Enable Fuel</Teleporting_enableFuel>
-	<Teleporting_enableFuel_tooltip>When enabled, some types of teleporting will consume fuel.</Teleporting_enableFuel_tooltip>
+	<Teleporting_enableFuel_tooltip>Most means of teleporting will consume fuel when this is enabled.</Teleporting_enableFuel_tooltip>
 	<Teleporting_enableApparelFuel>    Consumable Teleport Apparel</Teleporting_enableApparelFuel>
-	<Teleporting_enableApparelFuel_tooltip>When disabled, teleport apparel, such as belts, will have unlimited uses.</Teleporting_enableApparelFuel_tooltip>
+	<Teleporting_enableApparelFuel_tooltip>Teleport apparel, such as belts, will have unlimited uses when this is disabled.</Teleporting_enableApparelFuel_tooltip>
 	<Teleporting_enablePlatformUnlinkFuelCost>    Consume When Unlinking Platform</Teleporting_enablePlatformUnlinkFuelCost>
 	<Teleporting_enablePlatformUnlinkFuelCost_tooltip>When disabled, unlinking a teleport platform won't consume teleport cartridges.</Teleporting_enablePlatformUnlinkFuelCost_tooltip>
 	<Teleporting_shortRange_FuelCost>Short range fuel cost  </Teleporting_shortRange_FuelCost>
