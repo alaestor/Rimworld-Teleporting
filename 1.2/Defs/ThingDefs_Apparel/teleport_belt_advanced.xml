@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	
+	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
+		<defName>alaestor_teleporting_Apparel_TeleportBelt_Advanced</defName>
+		<label>> teleport belt (Adv.)</label>
+		<description>> An advanced, targetting, teleportation belt capable of short-range and long-range teleports</description>
+		<graphicData><texPath>Things/Apparel/alaestor_teleporting_belt_teleport_Adv</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<statBases>
+			<MarketValue>1902</MarketValue>
+		</statBases>
+		<comps>
+			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
+				<shortRange>true</shortRange>
+				<longRange>true</longRange>
+				<useNameLinkable>false</useNameLinkable>
+				<useCooldown>true</useCooldown>
+				<canTeleportOthers>true</canTeleportOthers>
+				<limitedUses>4</limitedUses>
+			</li>
+		</comps>
+	</ThingDef>
+	
+	<RecipeDef ParentName="alaestor_teleporting_recipe_belt">
+		<defName>alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced</defName>
+		<label>> Teleport Belt (Adv.)</label>
+		<description>> Make an advanced teleport belt</description>
+		<jobString>> Making a teleport belt (Adv.)</jobString>
+		<products><alaestor_teleporting_Apparel_TeleportBelt_Advanced>1</alaestor_teleporting_Apparel_TeleportBelt_Advanced></products>
+		<ingredients>
+			<li><filter><thingDefs><li>alaestor_teleporting_PortableTeleportUnit_Local</li></thingDefs></filter><count>1</count></li>
+			<li><filter><thingDefs><li>alaestor_teleporting_PortableTeleportUnit_Global</li></thingDefs></filter><count>1</count></li>
+			<li><filter><thingDefs><li>Plasteel</li></thingDefs></filter><count>30</count></li>
+			<li><filter><thingDefs><li>Silver</li></thingDefs></filter><count>20</count></li>
+			<li><filter><thingDefs><li>ComponentSpacer</li></thingDefs></filter><count>2</count></li>
+		</ingredients>
+		<researchPrerequisite>alaestor_teleporting_Research_tier_4_0</researchPrerequisite>
+		<skillRequirements>
+			<Crafting>18</Crafting>
+			<Intellectual>18</Intellectual>
+		</skillRequirements>
+	</RecipeDef>
+	
+</Defs>

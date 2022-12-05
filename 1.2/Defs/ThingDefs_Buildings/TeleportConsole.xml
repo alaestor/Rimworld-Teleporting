@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<ThingDef ParentName="BuildingBase">
+		<defName>alaestor_teleporting_TeleportConsole</defName>
+		<label>> Teleport Console</label>
+		<description>> A console thats used for creating teleport-related items, as well as advanced site-to-site teleportation which is unlocked with research.</description>
+		<thingClass>alaestor_teleporting.Building_TeleportConsole</thingClass>
+		<inspectorTabs><li>ITab_Bills</li></inspectorTabs>
+		<recipes>
+			<li>alaestor_teleporting_recipe_TeleportCartridge</li>
+			<li>alaestor_teleporting_recipe_PortableTeleportUnit_Local</li>
+			<li>alaestor_teleporting_recipe_PortableTeleportUnit_Global</li>
+			<li>alaestor_teleporting_recipe_Apparel_TeleportBelt_Link</li>
+			<li>alaestor_teleporting_recipe_Apparel_TeleportBelt_Local</li>
+			<li>alaestor_teleporting_recipe_Apparel_TeleportBelt_Global</li>
+			<li>alaestor_teleporting_recipe_Apparel_TeleportBelt_Advanced</li>
+		</recipes>
+		<graphicData>
+			<texPath>Things/Building/TeleportConsole/TeleportConsole</texPath>
+			<graphicClass>Graphic_Multi</graphicClass>
+			<drawSize>(3,1)</drawSize>
+			<damageData><rect>(0.3,0.3,2.7,0.5)</rect></damageData>
+			<shadowData><volume>(2.7,0.3,0.6)</volume></shadowData>
+		</graphicData>
+		<size>(3,1)</size>
+		<altitudeLayer>Building</altitudeLayer>
+		<passability>PassThroughOnly</passability>
+		<pathCost>50</pathCost>
+		<blockWind>true</blockWind>
+		<castEdgeShadows>true</castEdgeShadows>
+		<fillPercent>0.5</fillPercent>
+		<canOverlapZones>false</canOverlapZones>
+		<statBases>
+			<MarketValue>533</MarketValue>
+			<MaxHitPoints>250</MaxHitPoints>
+			<WorkToBuild>8000</WorkToBuild>
+			<Flammability>1.0</Flammability>
+			<Mass>150</Mass>
+		</statBases>
+		<costList>
+			<Uranium>20</Uranium>
+			<Plasteel>15</Plasteel>
+			<Steel>75</Steel>
+			<ComponentIndustrial>4</ComponentIndustrial>
+		</costList>
+		<researchPrerequisites><li>alaestor_teleporting_Research_tier_1_0</li></researchPrerequisites>
+		<constructionSkillPrerequisite>10</constructionSkillPrerequisite>
+		<building>
+			<destroySound>BuildingDestroyed_Metal_Big</destroySound>
+			<unpoweredWorkTableWorkSpeedFactor>0.0</unpoweredWorkTableWorkSpeedFactor>
+		</building>
+		<defaultPlacingRot>North</defaultPlacingRot>
+		<interactionCellOffset>(0,0,-1)</interactionCellOffset>
+		<hasInteractionCell>true</hasInteractionCell>
+		<terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+		<designationCategory>Misc</designationCategory>
+		<tickerType>Normal</tickerType>
+		<comps>
+			<li Class="CompProperties_Power">
+				<compClass>CompPowerTrader</compClass>
+				<shortCircuitInRain>true</shortCircuitInRain>
+				<basePowerConsumption>200</basePowerConsumption>
+			</li>
+			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+			<li Class="alaestor_teleporting.CompProperties_RefuelableAtHome">
+				<fuelConsumptionRate>0</fuelConsumptionRate>
+				<fuelCapacity>75.0</fuelCapacity>
+				<fuelFilter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></fuelFilter>
+				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+				<showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
+				<fuelLabel>Teleport Cartridges</fuelLabel>
+				<drawOutOfFuelOverlay>false</drawOutOfFuelOverlay>
+			</li>
+			<li Class="CompProperties_Flickable"/>
+			<li Class="CompProperties_Breakdownable"/>
+		</comps>
+		<designationHotKey>Misc3</designationHotKey>
+		<placeWorkers><li>PlaceWorker_PreventInteractionSpotOverlap</li></placeWorkers>
+	</ThingDef>
+
+</Defs>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<ThingDef Abstract="True" Name="alaestor_teleporting_Apparel_belts_Base" ParentName="ApparelNoQualityBase">
+		<thingClass>Apparel</thingClass>
+		<tickerType>Normal</tickerType>
+		<statBases>
+			<Mass>3</Mass>
+			<WorkToMake>14000</WorkToMake>
+			<Flammability>0.4</Flammability>
+			<EquipDelay>2</EquipDelay>
+			<MaxHitPoints>10</MaxHitPoints>
+		</statBases>
+		<thingCategories><li>ApparelUtility</li></thingCategories>
+		<apparel>
+			<careIfWornByCorpse>false</careIfWornByCorpse>
+			<careIfDamaged>false</careIfDamaged>
+			<wearPerDay>0</wearPerDay>
+			<bodyPartGroups><li>Waist</li></bodyPartGroups>
+			<layers><li>Belt</li></layers>
+		</apparel>
+	</ThingDef>
+	
+</Defs>

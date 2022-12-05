@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<ThingDef ParentName="ResourceBase">
+		<defName>alaestor_teleporting_TeleportCartridge</defName>
+		<label>> teleport cartridge</label>
+		<description>> A one-time use teleport cartridge which contains unique intraversal membrane entanglement equations and time-relative spatial waveform catalysts necessary to facilitate complex hyperdimensional space-time folding matricies.\n\nAs one of the lead scientists on the project explained: "it makey the thingy go brrr"</description>
+		<tickerType>Rare</tickerType>
+		<graphicData>
+			<texPath>Things/Item/alaestor_teleporting_TeleportCartridge</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>0.85</drawSize>
+		</graphicData>
+		<stackLimit>75</stackLimit>
+		<healthAffectsPrice>false</healthAffectsPrice>
+		<statBases>
+			<MaxHitPoints>10</MaxHitPoints>
+			<MarketValue>400</MarketValue>
+			<Mass>0.02</Mass>
+			<Flammability>1.5</Flammability>
+			<DeteriorationRate>1.0</DeteriorationRate>
+		</statBases>
+		<thingCategories><li>Manufactured</li></thingCategories>
+		<!--comps></comps-->
+	</ThingDef>
+	
+	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
+		<defName>alaestor_teleporting_recipe_TeleportCartridge</defName>
+		<label>> Teleport Cartridge</label>
+		<description>> Make a teleport cartridge</description>
+		<jobString>> Making a teleport cartridge</jobString>
+		<products><alaestor_teleporting_TeleportCartridge>1</alaestor_teleporting_TeleportCartridge></products>
+		<ingredients>
+			<li><filter><thingDefs><li>Silver</li></thingDefs></filter><count>2</count></li>
+			<li><filter><thingDefs><li>Gold</li></thingDefs></filter><count>2</count></li>
+			<li><filter><thingDefs><li>Uranium</li></thingDefs></filter><count>30</count></li>
+		</ingredients>
+		<researchPrerequisite>alaestor_teleporting_Research_tier_1_0</researchPrerequisite>
+		<skillRequirements>
+			<Crafting>10</Crafting>
+			<Intellectual>10</Intellectual>
+		</skillRequirements>
+	</RecipeDef>
+
+</Defs>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	
+	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
+		<defName>alaestor_teleporting_Apparel_TeleportBelt_Link</defName>
+		<label>> teleport belt (Link.)</label>
+		<description>> A personal teleportation belt capable of teleporting to named teleport targets</description>
+		<graphicData><texPath>Things/Apparel/alaestor_teleporting_belt_teleport_Link</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<statBases><MarketValue>509</MarketValue></statBases>
+		<comps>
+			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+			<li Class="alaestor_teleporting.CompProperties_NameLinkable">
+				<canBeNamed>false</canBeNamed>
+				<canBeLinked>true</canBeLinked>
+				<showGizmos>false</showGizmos>
+				<showDebugGizmos>false</showDebugGizmos>
+			</li>
+			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
+				<shortRange>false</shortRange>
+				<longRange>false</longRange>
+				<useNameLinkable>true</useNameLinkable>
+				<useCooldown>true</useCooldown>
+				<canTeleportOthers>false</canTeleportOthers>
+				<limitedUses>3</limitedUses>
+			</li>
+		</comps>
+	</ThingDef>
+	
+	<RecipeDef ParentName="alaestor_teleporting_recipe_belt">
+		<defName>alaestor_teleporting_recipe_Apparel_TeleportBelt_Link</defName>
+		<label>> Teleport Belt (Link.)</label>
+		<description>> Make a linkable teleport belt.</description>
+		<jobString>> Making a teleport belt (Link.)</jobString>
+		<products><alaestor_teleporting_Apparel_TeleportBelt_Link>1</alaestor_teleporting_Apparel_TeleportBelt_Link></products>
+		<ingredients>
+			<li><filter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></filter><count>1</count></li>
+			<li><filter><thingDefs><li>ComponentIndustrial</li></thingDefs></filter><count>2</count></li>
+			<li><filter><thingDefs><li>Plasteel</li></thingDefs></filter><count>5</count></li>
+		</ingredients>
+		<researchPrerequisite>alaestor_teleporting_Research_tier_1_0</researchPrerequisite>
+		<skillRequirements>
+			<Crafting>15</Crafting>
+			<Intellectual>10</Intellectual>
+		</skillRequirements>
+	</RecipeDef>
+
+</Defs>

@@ -1,0 +1,11 @@
+*.dll
+Assemblies/
+.vs/
+Source/Teleporting/.vs/
+Source/Teleporting/obj/
+Source/Teleporting/bin/
+
+*.zip
+*.log
+*.test
+*.old

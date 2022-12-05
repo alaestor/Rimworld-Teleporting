@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<ThingDef ParentName="ResourceBase">
+		<defName>alaestor_teleporting_PortableTeleportUnit_Global</defName>
+		<label>> portable teleport unit (LR)</label>
+		<description>> A portable long-range teleport unit</description>
+		<thingClass>ThingWithComps</thingClass>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<graphicData>
+			<texPath>Things/Item/alaestor_teleporting_PTU_LR</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<stackLimit>10</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<Mass>0.2</Mass>
+			<DeteriorationRate>2.0</DeteriorationRate>
+			<Flammability>0.2</Flammability>
+			<MarketValue>600</MarketValue>
+		</statBases>
+		<useHitPoints>true</useHitPoints>
+		<techLevel>Ultra</techLevel>
+		<thingCategories><li>Items</li></thingCategories>
+		<tradeability>Sellable</tradeability>
+		<comps>
+			<li Class="CompProperties_UseEffectPlaySound">
+				<soundOnUsed>MechSerumUsed</soundOnUsed>
+			</li>
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Long range teleport</useLabel>
+				<useDuration>100</useDuration>
+			</li>
+			<li Class="CompProperties_UseEffect">
+				<compClass>alaestor_teleporting.CompUseEffect_Teleport_Global</compClass>
+			</li>
+		</comps>
+		<thingSetMakerTags><li>RewardStandardHighFreq</li></thingSetMakerTags>
+	</ThingDef>
+  
+	<RecipeDef ParentName="alaestor_teleporting_recipe_resource">
+		<defName>alaestor_teleporting_recipe_PortableTeleportUnit_Global</defName>
+		<label>> Portable Teleport Unit (LR)</label>
+		<description>> Make a long range PTU.</description>
+		<jobString>> Making a long range PTU</jobString>
+		<workAmount>8000</workAmount>
+		<products><alaestor_teleporting_PortableTeleportUnit_Global>1</alaestor_teleporting_PortableTeleportUnit_Global></products>
+		<ingredients>
+			<li><filter><thingDefs><li>alaestor_teleporting_TeleportCartridge</li></thingDefs></filter><count>1</count></li>
+			<li><filter><thingDefs><li>ComponentSpacer</li></thingDefs></filter><count>1</count></li>
+		</ingredients>
+		<researchPrerequisite>alaestor_teleporting_Research_tier_2_0</researchPrerequisite>
+		<skillRequirements>
+			<Crafting>15</Crafting>
+			<Intellectual>10</Intellectual>
+		</skillRequirements>
+	</RecipeDef>
+  
+</Defs>

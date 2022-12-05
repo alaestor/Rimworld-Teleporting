@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+	<Teleporting_IsOnCooldown>Cooling down</Teleporting_IsOnCooldown>
+	
+	<!-- Building_TeleportConsole.cs -->
+	<Teleporting_ShortRangeTeleport_Label>Short-range teleport</Teleporting_ShortRangeTeleport_Label>
+	<Teleporting_LongRangeTeleport_Label>Long-range teleport</Teleporting_LongRangeTeleport_Label>
+	<Teleporting_shortRange_NotEnoughFuel>Not enough fuel for short-range teleport</Teleporting_shortRange_NotEnoughFuel>
+	<Teleporting_longRange_NotEnoughFuel>Not enough fuel for long-range teleport</Teleporting_longRange_NotEnoughFuel>
+	<Teleporting_Gizmo_TeleportConsole_Local_Debug_Label>(Godmode)\nTele (SR)</Teleporting_Gizmo_TeleportConsole_Local_Debug_Label>
+	<Teleporting_Gizmo_TeleportConsole_Local_Debug_Desc>(Godmode)\nShort range teleport; ignores fuel and cooldown</Teleporting_Gizmo_TeleportConsole_Local_Debug_Desc>
+	<Teleporting_Gizmo_TeleportConsole_Global_Debug_Label>(Godmode)\nTele (LR)</Teleporting_Gizmo_TeleportConsole_Global_Debug_Label>
+	<Teleporting_Gizmo_TeleportConsole_Global_Debug_Desc>(Godmode)\nLong range teleport; ignores fuel and cooldown</Teleporting_Gizmo_TeleportConsole_Global_Debug_Desc>
+	
+	<!-- Building_TeleportPlatform.cs -->
+	<Teleporting_TeleportPlatform_OnCooldown_FMT>On cooldown for {0} more second(s)</Teleporting_TeleportPlatform_OnCooldown_FMT>
+	<Teleporting_TeleportPlatform_NotEnoughFuel>Missing teleport cartridge</Teleporting_TeleportPlatform_NotEnoughFuel>
+	<Teleporting_TeleportPlatform_BrokenLink>Link broken: cannot find target</Teleporting_TeleportPlatform_BrokenLink>
+	<Teleporting_TeleportPlatform_UseTeleportPlatform_Label>Use teleport platform</Teleporting_TeleportPlatform_UseTeleportPlatform_Label>
+	<Teleporting_TeleportPlatform_LinkTeleportPlatform_ByName_Label>Link teleport platform by Name</Teleporting_TeleportPlatform_LinkTeleportPlatform_ByName_Label>
+	<Teleporting_TeleportPlatform_LinkTeleportPlatform_ByTarget_Label>Link teleport platform by Target</Teleporting_TeleportPlatform_LinkTeleportPlatform_ByTarget_Label>
+	<Teleporting_Gizmo_TeleportPlatform_Rename_Label>Rename</Teleporting_Gizmo_TeleportPlatform_Rename_Label>
+	<Teleporting_Gizmo_TeleportPlatform_Rename_Desc>Assign a new unique name</Teleporting_Gizmo_TeleportPlatform_Rename_Desc>
+	<Teleporting_Gizmo_TeleportPlatform_Unlink_Label>Unlink</Teleporting_Gizmo_TeleportPlatform_Unlink_Label>
+	<Teleporting_Gizmo_TeleportPlatform_Unlink_Desc>Destroy the static conduit, freeing the link by consuming a teleport cartridge</Teleporting_Gizmo_TeleportPlatform_Unlink_Desc>
+	
+	<!-- CompCooldown.cs -->
+	<Teleporting_CooldownComp_Inspect_OnCooldown_FMT>Cooldown: {0} seconds remaining</Teleporting_CooldownComp_Inspect_OnCooldown_FMT>
+	<Teleporting_Gizmo_CompCooldown_SetCool_Debug_Label>(Godmode)\nCooldown</Teleporting_Gizmo_CompCooldown_SetCool_Debug_Label>
+	<Teleporting_Gizmo_CompCooldown_SetCool_Debug_Desc>(Godmode)\nForce cooldown to end</Teleporting_Gizmo_CompCooldown_SetCool_Debug_Desc>
+	
+	<!-- CompNameLinkable.cs -->
+	<Teleporting_CompNameLinkable_Unnamed>(unnamed)</Teleporting_CompNameLinkable_Unnamed>
+	<Teleporting_CompNameLinkable_Unlinked>(unlinked)</Teleporting_CompNameLinkable_Unlinked>
+	<Teleporting_CompNameLinkable_NameIsInUse>Name is already in use</Teleporting_CompNameLinkable_NameIsInUse>
+	<Teleporting_CompNameLinkable_CouldntFindName_FMT>Couldn't find "{0}"</Teleporting_CompNameLinkable_CouldntFindName_FMT>
+	<Teleporting_CompNameLinkable_Inspect_IsNamed_FMT>Name: "{0}"</Teleporting_CompNameLinkable_Inspect_IsNamed_FMT>
+	<Teleporting_CompNameLinkable_Inspect_IsNotNamed>Not Named.</Teleporting_CompNameLinkable_Inspect_IsNotNamed>
+	<Teleporting_CompNameLinkable_Inspect_IsLinked_FMT>Linked to: "{0}"</Teleporting_CompNameLinkable_Inspect_IsLinked_FMT>
+	<Teleporting_CompNameLinkable_Inspect_IsNotLinked>Not linked.</Teleporting_CompNameLinkable_Inspect_IsNotLinked>
+	<Teleporting_Gizmo_CompNameLinkable_Rename_Label>Rename</Teleporting_Gizmo_CompNameLinkable_Rename_Label>
+	<Teleporting_Gizmo_CompNameLinkable_Rename_Desc>Assign a new unique name</Teleporting_Gizmo_CompNameLinkable_Rename_Desc>
+	<Teleporting_Gizmo_CompNameLinkable_Unlink_Label>Unlink</Teleporting_Gizmo_CompNameLinkable_Unlink_Label>
+	<Teleporting_Gizmo_CompNameLinkable_Unlink_Desc>Unlink from named thing</Teleporting_Gizmo_CompNameLinkable_Unlink_Desc>
+	<Teleporting_Gizmo_CompNameLinkable_Rename_Debug_Label>(Godmode)\nRename</Teleporting_Gizmo_CompNameLinkable_Rename_Debug_Label>
+	<Teleporting_Gizmo_CompNameLinkable_Rename_Debug_Desc>(Godmode)\nAssign a new unique name</Teleporting_Gizmo_CompNameLinkable_Rename_Debug_Desc>
+	<Teleporting_Gizmo_CompNameLinkable_Unlink_Debug_Label>(Godmode)\nUnlink</Teleporting_Gizmo_CompNameLinkable_Unlink_Debug_Label>
+	<Teleporting_Gizmo_CompNameLinkable_Unlink_Debug_Desc>(Godmode)\nUnlink from named thing</Teleporting_Gizmo_CompNameLinkable_Unlink_Debug_Desc>
+	<Teleporting_Gizmo_CompNameLinkable_MakeLink_Debug_Label>(Godmode)\nLink Name</Teleporting_Gizmo_CompNameLinkable_MakeLink_Debug_Label>
+	<Teleporting_Gizmo_CompNameLinkable_MakeLink_Debug_Desc>(Godmode)\nMake link to named thing by entering the name</Teleporting_Gizmo_CompNameLinkable_MakeLink_Debug_Desc>
+	<Teleporting_Gizmo_CompNameLinkable_MakeLinkTarget_Debug_Label>(Godmode)\nLink Target</Teleporting_Gizmo_CompNameLinkable_MakeLinkTarget_Debug_Label>
+	<Teleporting_Gizmo_CompNameLinkable_MakeLinkTarget_Debug_Desc>(Godmode)\nMake link to named thing by targetting it</Teleporting_Gizmo_CompNameLinkable_MakeLinkTarget_Debug_Desc>
+	
+	<!-- CompTeleportApparel.cs -->
+	<Teleporting_Message_CompNameLinkable_MakeLinkTarget_Unnamed>Link target has no name</Teleporting_Message_CompNameLinkable_MakeLinkTarget_Unnamed>
+	<Teleporting_Message_CompNameLinkable_MakeLinkTarget_NotLinkable>Not a linkable thing</Teleporting_Message_CompNameLinkable_MakeLinkTarget_NotLinkable>
+	<Teleporting_CompTeleportApparel_CooldownRemaining_FMT>On cooldown for {0} more second(s)</Teleporting_CompTeleportApparel_CooldownRemaining_FMT>
+	<Teleporting_CompTeleportApparel_FuelRemaining_FMT>{0} fuel remaining</Teleporting_CompTeleportApparel_FuelRemaining_FMT>
+	<Teleporting_Gizmo_TeleportApparel_ShortRange_Label>Short-range teleport</Teleporting_Gizmo_TeleportApparel_ShortRange_Label>
+	<Teleporting_Gizmo_TeleportApparel_LongRange_Label>Long-range teleport</Teleporting_Gizmo_TeleportApparel_LongRange_Label>
+	<Teleporting_Gizmo_TeleportApparel_TeleportToLink_Label>Tele to Link</Teleporting_Gizmo_TeleportApparel_TeleportToLink_Label>
+	<Teleporting_Gizmo_TeleportApparel_TeleportToLink_Desc>Teleport to linked thing</Teleporting_Gizmo_TeleportApparel_TeleportToLink_Desc>
+	<Teleporting_CompNameLinkable_NotLinked>Link broken</Teleporting_CompNameLinkable_NotLinked>
+	<Teleporting_Gizmo_TeleportApparel_Unlink_Label>Unlink</Teleporting_Gizmo_TeleportApparel_Unlink_Label>
+	<Teleporting_Gizmo_TeleportApparel_Unlink_Desc>Unlink from named thing</Teleporting_Gizmo_TeleportApparel_Unlink_Desc>
+	<Teleporting_Gizmo_TeleportApparel_MakeLink_Name_Label>Link Name</Teleporting_Gizmo_TeleportApparel_MakeLink_Name_Label>
+	<Teleporting_Gizmo_TeleportApparel_MakeLink_Name_Desc>Make link to named thing by entering the name</Teleporting_Gizmo_TeleportApparel_MakeLink_Name_Desc>
+	<Teleporting_Gizmo_TeleportApparel_MakeLink_Target_Label>Link Target</Teleporting_Gizmo_TeleportApparel_MakeLink_Target_Label>
+	<Teleporting_Gizmo_TeleportApparel_MakeLink_Target_Desc>Make link to named thing by targetting it</Teleporting_Gizmo_TeleportApparel_MakeLink_Target_Desc>
+	<Teleporting_Gizmo_TeleportApparel_FillFuel_Debug_Label>(Godmode)\nReset Uses</Teleporting_Gizmo_TeleportApparel_FillFuel_Debug_Label>
+	<Teleporting_Gizmo_TeleportApparel_FillFuel_Debug_Desc>(Godmode)\nRefill Fuel to initial quantuty / reset uses</Teleporting_Gizmo_TeleportApparel_FillFuel_Debug_Desc>
+	
+	<!-- TeleportBehavior.cs -->
+	<Teleporting_TeleportBehavior_Global_OutofRange>Outside of range limit</Teleporting_TeleportBehavior_Global_OutofRange>
+	<Teleporting_TeleportBehavior_Global_FuelCost_FMT>Fuel cost: {0} of {1}</Teleporting_TeleportBehavior_Global_FuelCost_FMT>
+	<Teleporting_TeleportBehavior_Global_NotEnoughFuel>Not enough fuel</Teleporting_TeleportBehavior_Global_NotEnoughFuel>
+	
+	<!-- TeleportingModSettings.cs -->
+	<Teleporting_resetTheseSettings>Reset Settings</Teleporting_resetTheseSettings>
+	<Teleporting_enableCooldown>Enable Cooldowns</Teleporting_enableCooldown>
+	<Teleporting_enableCooldown_tooltip>When enabled, after an object is used it will be on "cooldown" for a period of time and cannot be used again until the cooldown is finished.</Teleporting_enableCooldown_tooltip>
+	<Teleporting_enableCooldown_Console>    Teleport Console Cooldown</Teleporting_enableCooldown_Console>
+	<Teleporting_enableCooldown_Console_tooltip>When disabled, the Teleport Console won't have a cooldown period after being used.</Teleporting_enableCooldown_Console_tooltip>
+	<Teleporting_enableCooldown_ApparelComp>    Teleport Apparel Cooldown</Teleporting_enableCooldown_ApparelComp>
+	<Teleporting_enableCooldown_ApparelComp_tooltip>When disabled, teleport apparel, such as belts, won't have a cooldown period after being used.</Teleporting_enableCooldown_ApparelComp_tooltip>
+	<Teleporting_enableCooldown_Platform>    Teleport Platform Cooldown</Teleporting_enableCooldown_Platform>
+	<Teleporting_enableCooldown_Platform_tooltip>When disabled, teleport platforms won't have a cooldown period after being used.</Teleporting_enableCooldown_Platform_tooltip>
+	<Teleporting_cooldownDurationsSection>    Cooldown durations:</Teleporting_cooldownDurationsSection>
+	<Teleporting_nameLinkable_CooldownDuration>Linked teleports  </Teleporting_nameLinkable_CooldownDuration>
+	<Teleporting_shortRange_CooldownDuration>Short-range teleports  </Teleporting_shortRange_CooldownDuration>
+	<Teleporting_longRange_CooldownDuration>Long-range teleports  </Teleporting_longRange_CooldownDuration>
+	<Teleporting_enableConsoleIntelectDivisor>    Enable Intelect Divisor</Teleporting_enableConsoleIntelectDivisor>
+	<Teleporting_enableConsoleIntelectDivisor_tooltip>When enabled, the cooldown period of the teleport console's teleports will be affected by the operating pawn's intelectual stat.\n\nFormula:\n Cd = dur - (dur * (level / divisor))\n\nExample: level 20, divisor 21\n(20/21) = 0.95 = 95% reduction\n30s * 0.95 = 28.5s\nCooldown = 30s - 28.5s = 1.5s</Teleporting_enableConsoleIntelectDivisor_tooltip>
+	<Teleporting_consoleIntelectDivisor>Intelect Divisor  </Teleporting_consoleIntelectDivisor>
+	<Teleporting_enableFuel>Enable Fuel</Teleporting_enableFuel>
+	<Teleporting_enableFuel_tooltip>When enabled, some types of teleporting will consume fuel.</Teleporting_enableFuel_tooltip>
+	<Teleporting_enableApparelFuel>    Consumable Teleport Apparel</Teleporting_enableApparelFuel>
+	<Teleporting_enableApparelFuel_tooltip>When disabled, teleport apparel, such as belts, will have unlimited uses.</Teleporting_enableApparelFuel_tooltip>
+	<Teleporting_enablePlatformUnlinkFuelCost>    Consume When Unlinking Platform</Teleporting_enablePlatformUnlinkFuelCost>
+	<Teleporting_enablePlatformUnlinkFuelCost_tooltip>When disabled, unlinking a teleport platform won't consume teleport cartridges.</Teleporting_enablePlatformUnlinkFuelCost_tooltip>
+	<Teleporting_shortRange_FuelCost>Short range fuel cost  </Teleporting_shortRange_FuelCost>
+	<Teleporting_longRange_FuelCost>Long range fuel cost  </Teleporting_longRange_FuelCost>
+	<Teleporting_longRange_FuelDistance>Long range fuel distance  </Teleporting_longRange_FuelDistance>
+	<teleporting_longRange_FuelDistance_FixedMsg_FMT>always consume {0} fuel</teleporting_longRange_FuelDistance_FixedMsg_FMT>
+	<teleporting_longRange_FuelDistance_ScalesMsg_FMT>Consumes {0} cartridges\nfor every {1} tiles</teleporting_longRange_FuelDistance_ScalesMsg_FMT>
+	<Teleporting_enableGlobalRangeLimit>Enable Long-range Range Limit</Teleporting_enableGlobalRangeLimit>
+	<Teleporting_enableGlobalRangeLimit_tooltip>Set a range limit for long-range teleports</Teleporting_enableGlobalRangeLimit_tooltip>
+	<Teleporting_globalRangeLimit>Range limit (in tiles)  </Teleporting_globalRangeLimit>
+	<Teleporting_enableDebugGizmosInGodmode>Enable Godmode Buttons</Teleporting_enableDebugGizmosInGodmode>
+	<Teleporting_enableDebugGizmosInGodmode_tooltip>When enabled, cheat and debug buttons will appear when in Godmode.</Teleporting_enableDebugGizmosInGodmode_tooltip>
+	<Teleporting_enableDebugLogging>Enable Debug Logging</Teleporting_enableDebugLogging>
+	<Teleporting_enableDebugLogging_tooltip>When enabled, debug messages will be logged. This is noisy and laggy.\n\nRecommended: Disabled.</Teleporting_enableDebugLogging_tooltip>
+	<Teleporting_enableDebugLoggingVerbose>Enable Verbose Logging</Teleporting_enableDebugLoggingVerbose>
+	<Teleporting_enableDebugLoggingVerbose_tooltip>When enabled, extensive debug messages and details will be logged. This is extremely noisy and laggy.\n\nRecommended: Disabled.</Teleporting_enableDebugLoggingVerbose_tooltip>
+	<Teleporting_testDebugLogging>Test Log Messages</Teleporting_testDebugLogging>
+	
+</LanguageData>
