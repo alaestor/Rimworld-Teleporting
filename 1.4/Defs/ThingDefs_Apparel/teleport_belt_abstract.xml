@@ -19,6 +19,7 @@
 			<bodyPartGroups><li>Waist</li></bodyPartGroups>
 			<layers><li>Belt</li></layers>
 		</apparel>
+		<smeltable>false</smeltable>
 	</ThingDef>
 
 </Defs>
