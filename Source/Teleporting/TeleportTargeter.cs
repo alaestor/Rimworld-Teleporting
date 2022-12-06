@@ -85,7 +85,7 @@ namespace alaestor_teleporting
 			CameraJumper.TryJump(startingFrom);
 			Find.WorldSelector.ClearSelection();
 
-			Find.WorldTargeter.BeginTargeting_NewTemp(
+			Find.WorldTargeter.BeginTargeting(
 				action: ChoseGlobalTarget_Callback,
 				canTargetTiles: canTargetTiles,
 				mouseAttachment: mouseAttachment,

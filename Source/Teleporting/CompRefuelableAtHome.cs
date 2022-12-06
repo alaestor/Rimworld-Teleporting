@@ -238,7 +238,7 @@ namespace alaestor_teleporting
 			}
 		}
 
-		public float FuelMultiplierCurrentDifficulty => factorByDifficulty ? fuelMultiplier / Find.Storyteller.difficultyValues.maintenanceCostFactor : fuelMultiplier;
+		public float FuelMultiplierCurrentDifficulty => factorByDifficulty ? fuelMultiplier / Find.Storyteller.difficulty.maintenanceCostFactor : fuelMultiplier;
 
 		public CompProperties_RefuelableAtHome() => compClass = typeof(CompRefuelableAtHome);
 

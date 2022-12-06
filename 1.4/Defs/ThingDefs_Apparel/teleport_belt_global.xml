@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-	
+
 	<ThingDef ParentName="alaestor_teleporting_Apparel_belts_Base">
 		<defName>alaestor_teleporting_Apparel_TeleportBelt_Global</defName>
 		<label>> teleport belt (LR)</label>
@@ -21,7 +21,7 @@
 			</li>
 		</comps>
 	</ThingDef>
-	
+
 	<RecipeDef ParentName="alaestor_teleporting_recipe_belt">
 		<defName>alaestor_teleporting_recipe_Apparel_TeleportBelt_Global</defName>
 		<label>> Teleport Belt (LR)</label>
@@ -40,5 +40,5 @@
 			<Intellectual>15</Intellectual>
 		</skillRequirements>
 	</RecipeDef>
-	
+
 </Defs>

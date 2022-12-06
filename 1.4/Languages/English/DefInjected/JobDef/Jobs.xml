@@ -4,7 +4,7 @@
 	<!-- Defs/JobDefs/Jobs_TeleportConsole.xml -->
 	<alaestor_teleporting_UseTeleportConsole_ShortRange.reportString>Teleporting short-range via console.</alaestor_teleporting_UseTeleportConsole_ShortRange.reportString>
 	<alaestor_teleporting_UseTeleportConsole_LongRange.reportString>Teleporting long-range via console.</alaestor_teleporting_UseTeleportConsole_LongRange.reportString>
-	
+
 	<!-- Defs/JobDefs/Jobs_TeleportPlatform.xml -->
 	<alaestor_teleporting_UseTeleportPlatform_TeleportToLink.reportString>Teleporting via platform.</alaestor_teleporting_UseTeleportPlatform_TeleportToLink.reportString>
 	<alaestor_teleporting_UseTeleportPlatform_MakeLinkName.reportString>Linking teleport platform.</alaestor_teleporting_UseTeleportPlatform_MakeLinkName.reportString>

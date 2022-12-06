@@ -5,7 +5,7 @@
 	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.label>Teleport Belt (SR)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.label>
 	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.description>Make a short range teleport belt</alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.description>
 	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.jobString>Making a teleport belt (SR)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Local.jobString>
-	
+
 	<!-- Defs/ThingDefs_Apparel/teleport_belt_global.xml -->
 	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.label>Teleport Belt (LR)</alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.label>
 	<alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.description>Make a long range teleport belt</alaestor_teleporting_recipe_Apparel_TeleportBelt_Global.description>
