@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<ThingDef Abstract="True" Name="alaestor_AbstractCheatBelt" ParentName="ApparelNoQualityBase">
+		<tickerType>Normal</tickerType>
+		<thingCategories><li>ApparelUtility</li></thingCategories>
+		<techLevel>Archotech</techLevel>
+		<apparel>
+			<scoreOffset>4</scoreOffset>
+			<careIfWornByCorpse>false</careIfWornByCorpse>
+			<careIfDamaged>false</careIfDamaged>
+			<wearPerDay>0</wearPerDay>
+			<bodyPartGroups><li>Waist</li></bodyPartGroups>
+			<layers><li>Belt</li></layers>
+		</apparel>
+		<statBases>
+			<!--
+			<MarketValue>-1</MarketValue>
+			-->
+			<Mass>0</Mass>
+			<WorkToMake>140000</WorkToMake>
+			<Flammability>0.4</Flammability>
+			<EquipDelay>2</EquipDelay>
+			<MaxHitPoints>500</MaxHitPoints>
+		</statBases>
+		<!--thingSetMakerTags><li>SingleUseWeapon</li></thingSetMakerTags>
+		<verbs>
+			<li>
+			<verbClass>Verb_PowerBeam</verbClass>
+				<hasStandardCommand>true</hasStandardCommand>
+				<warmupTime>3</warmupTime>
+				<ai_AvoidFriendlyFireRadius>15</ai_AvoidFriendlyFireRadius>
+				<range>44.9</range>
+				<burstShotCount>1</burstShotCount>
+				<soundAiming>OrbitalTargeter_Aiming</soundAiming>
+				<soundCast>OrbitalTargeter_Fire</soundCast>
+				<onlyManualCast>true</onlyManualCast>
+				<targetParams><canTargetLocations>true</canTargetLocations></targetParams>
+			</li>
+		</verbs-->
+		<comps>
+			<li Class="CompProperties_Biocodable"/>
+			<li Class="alaestor_teleporting.CompProperties_NameLinkable">
+				<canBeLinked>true</canBeLinked>
+				<canBeNamed>false</canBeNamed>
+				<showDebugGizmos>false</showDebugGizmos>
+			</li>
+			<!--li Class="CompProperties_Reloadable">
+				<maxCharges>99</maxCharges>
+				<destroyOnEmpty>false</destroyOnEmpty>
+				<hotKey>Misc4</hotKey>
+				<chargeNoun>charge</chargeNoun>
+				<displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+			</li>
+			<li Class="alaestor_teleporting.CompProperties_Cooldown"/>
+			<li Class="alaestor_teleporting_cheatbelt.CompProperties_RescueApparel"/-->
+		</comps>
+		<smeltable>false</smeltable>
+		<burnableByRecipe>true</burnableByRecipe>
+	</ThingDef>
+	
+	
+	<ThingDef ParentName="alaestor_AbstractCheatBelt">
+		<defName>alaestor_teleporting_Apparel_TeleportBelt_Cheat</defName>
+		<label>OmniBelt (Advanced)</label>
+		<description>Advanced technology beyond comprehension</description>
+		<graphicData><texPath>Things/Apparel/alaestor_teleporting_belt_teleport_CheatBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<thingClass>alaestor_teleporting.CheatBelt</thingClass>
+		<statBases>
+			<EnergyShieldRechargeRate>0.33</EnergyShieldRechargeRate>
+			<EnergyShieldEnergyMax>1.0</EnergyShieldEnergyMax>
+			<ArmorRating_Sharp>1.1</ArmorRating_Sharp>
+			<ArmorRating_Blunt>1.1</ArmorRating_Blunt>
+			<Insulation_Cold>50</Insulation_Cold>
+			<Insulation_Heat>50</Insulation_Heat>
+		</statBases>
+		<comps>
+			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
+				<shortRange>true</shortRange>
+				<longRange>true</longRange>
+				<useNameLinkable>true</useNameLinkable>
+				<useCooldown>false</useCooldown>
+				<canTeleportOthers>true</canTeleportOthers>
+			</li>
+		</comps>
+	</ThingDef>
+	
+	<ThingDef ParentName="alaestor_AbstractCheatBelt">
+		<defName>alaestor_teleporting_Apparel_TeleportBelt_Weak</defName>
+		<label>OmniBelt</label>
+		<description>Advanced technology beyond comprehension</description>
+		<graphicData><texPath>Things/Apparel/alaestor_teleporting_belt_teleport_CheatBelt</texPath><graphicClass>Graphic_Single</graphicClass></graphicData>
+		<thingClass>alaestor_teleporting.WeakBelt</thingClass>
+		<statBases>
+			<EnergyShieldRechargeRate>0.20</EnergyShieldRechargeRate>
+			<EnergyShieldEnergyMax>0.5</EnergyShieldEnergyMax>
+			<ArmorRating_Sharp>1.1</ArmorRating_Sharp>
+			<ArmorRating_Blunt>1.1</ArmorRating_Blunt>
+			<Insulation_Cold>50</Insulation_Cold>
+			<Insulation_Heat>50</Insulation_Heat>
+		</statBases>
+		<comps>
+			<li Class="alaestor_teleporting.CompProperties_TeleportApparel">
+				<shortRange>true</shortRange>
+				<longRange>true</longRange>
+				<useNameLinkable>true</useNameLinkable>
+				<useCooldown>false</useCooldown>
+				<canTeleportOthers>false</canTeleportOthers>
+			</li>
+		</comps>
+	</ThingDef>
+	
+</Defs>

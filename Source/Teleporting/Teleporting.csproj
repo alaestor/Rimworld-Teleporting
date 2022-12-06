@@ -48,13 +48,18 @@
       <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractShootyBelt.cs" />
     <Compile Include="Building_TeleportPlatform.cs" />
+    <Compile Include="CompRescueApparel.cs" />
     <Compile Include="CompCooldown.cs" />
     <Compile Include="CompNameLinkable.cs" />
     <Compile Include="CompRefuelableAtHome.cs" />
